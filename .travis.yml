@@ -17,4 +17,5 @@ matrix:
               - '8'
           before_script:
               - cd server/
+          script:
               - node index.js
