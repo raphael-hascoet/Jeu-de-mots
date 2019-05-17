@@ -8,6 +8,7 @@ matrix:
           before_script:
               - cd Client/
               - npm install -g @angular/cli
+              - npm install
           script:
               - ng build
 
