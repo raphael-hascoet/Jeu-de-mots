@@ -7,7 +7,6 @@ matrix:
               - cd Client/
               - npm install -g @angular/cli
           script:
-              - ng lint
               - ng build
 
         - language: node_js
