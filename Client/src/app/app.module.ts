@@ -12,6 +12,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatNativeDateModule } from "@angular/material";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import {MatButtonModule} from '@angular/material/button'; 
 
 @NgModule({
   declarations: [AppComponent, JeuSoloComponent],
@@ -23,7 +24,8 @@ import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatButtonModule
   ],
   exports: [
     TextFieldModule,
@@ -32,7 +34,8 @@ import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
