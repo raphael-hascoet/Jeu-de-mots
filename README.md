@@ -16,3 +16,8 @@ Par défaut npm est installé avec node.js
 **installer angular** : Dans le terminal executer `npm install -g @angular/cli`
 
 Enfin **Lancer le serveur de l'application** : Dans le terminal, ce placer dans le dossier de l'application (en l'occurence le dossier *Client*) et executer `ng serve --open`
+
+##Liens utils
+
+**Tutoriel Angular** : https://angular.io/guide/quickstart
+**Liste des composants material Angular** : https://material.angular.io/components/categories
