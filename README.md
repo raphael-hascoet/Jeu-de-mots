@@ -8,7 +8,7 @@ npm install
 
 ## Lancement du projet Angular
 
-Il est nécessaire d'avoir node.js et npm d'installés (Pour le vérifier, executer `node -v` et `npm -v` dans le terminal)
+Il est nécessaire d'avoir node.js et npm d'installés (Pour le vérifier, executer `node -v` et `npm -v` dans le terminal, la version des modules doit s'afficher)
 
 **installer node.js** : https://nodejs.org/en/
 Par défaut npm est installé avec node.js
