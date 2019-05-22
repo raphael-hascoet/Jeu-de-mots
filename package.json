@@ -4,7 +4,7 @@
   "description": ":books: Projet Semestre 2 FILA1",
   "scripts": {
     "postinstall": "concurrently -n \"Client,Server\" -c \"yello.bold, cyan.bold\" \"cd Client/ && npm install\" \"cd server/ && npm install\"",
-    "solo": "concurrently -k -n \"Client,Server\" -c \"yello.bold, cyan.bold\" \"cd Client/ && ng serve --open\" \"cd server/ && npm run start\"",
+    "solo": "concurrently -k -n \"Client,Server\" -c \"yello.bold, cyan.bold\" \"cd Client/ && npm start --open\" \"cd server/ && npm run start\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
