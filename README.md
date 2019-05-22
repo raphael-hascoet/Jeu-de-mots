@@ -4,3 +4,6 @@
 Pour le client et pour la partie Serveur : 
 
 `npm install`
+
+Pour un compilateur automatique :
+`npm run watch`
