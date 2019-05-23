@@ -1,0 +1,21 @@
+matrix:
+    include:
+        - language: node_js
+          node_js:
+              - '8'
+          dist: trusty
+          sudo: required
+          before_script:
+              - cd Client/
+              - npm install -g @angular/cli
+              - npm install
+          script:
+              - ng build
+
+        - language: node_js
+          node_js:
+              - '8'
+          before_script:
+              - cd server/
+          script:
+              - node index.js
