@@ -33,8 +33,6 @@ matrix:
             sonarcloud:
               organization: "raphael-hascoet-github"
           before_script:
-            - sudo add-apt-repository ppa:webupd8team/java -y
-            - sudo apt update
-            - sudo apt install oracle-java8-installer
+            - sudo apt install openjdk-8-jre-headless -y
           script:
             - sonar-scanner -X
