@@ -1,21 +1,33 @@
 # Jeu-de-mots
+
 :books: Projet Semestre 2 FILA1
 
-**NB** : Pour executer les commandes sur environnements windows il est conseillé de passer par un terminal style unix tel __git bash__
+**NB** : Pour exécuter les commandes sur environnements windows il est conseillé de passer par un terminal style unix tel **git bash**
 
+## Dépendences
 
-npm install
+-   **Node.js et npm** :
+
+    https://nodejs.org/en/
+
+    Par défaut npm est installé avec Node.js.
+
+    Pour vérifier que Node.js et npm sont bien installés, exécuter `node -v` et `npm -v` dans le terminal, la version des modules doit s'afficher.
+
+-   **Angular** :
+
+    Exécuter `npm install -g @angular/cli`
 
 ## Lancement du projet Angular (Client de l'application)
 
-Il est nécessaire d'avoir node.js et npm d'installés (Pour le vérifier, executer `node -v` et `npm -v` dans le terminal, la version des modules doit s'afficher)
+Afin d'installer les dépendences npm du projet,
+se placer dans le dossier de l'application et exécuter `npm install`
 
-**installer node.js** : https://nodejs.org/en/
-Par défaut npm est installé avec node.js
+Après l'installation, l'application solo peut être lancée avec la commande `npm run solo`
 
-**installer angular** : Dans le terminal executer `npm install -g @angular/cli`
+## Développement
 
-Il faut ensuite ce placer dans le dossier de l'application Angular (dossier Client du projet) et executer `ng install`
+Pour lancer le serveur en mode développement, aller dans le dossier `server/` et exécuter `npm run watch`
 
 Enfin **Lancer le serveur de l'application** : Dans le terminal, dans le dossier de l'application et executer `ng serve --open`
 
@@ -25,3 +37,6 @@ Enfin **Lancer le serveur de l'application** : Dans le terminal, dans le dossier
 
 **Tutoriel Angular** : https://angular.io/guide/quickstart
 **Liste des composants material Angular** : https://material.angular.io/components/categories
+
+**Tutoriel socket.io** : https://socket.io/get-started/chat/?fbclid=IwAR0dng-HjPJqIdVcrmOpu3eDv0VaOHvA88C4gHwVw-h5Tkcs--NlXEVEWnw
+**Utilisation des socket avec angular** : https://alligator.io/angular/socket-io/?fbclid=IwAR0pZP9JD5oRopRzUoOavYPeemBoeRkhQFJQanK9tfUe07tlAeruz34JOVo
