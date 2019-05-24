@@ -1,7 +1,7 @@
 import { Game } from './src/Game';
 import { calculateWordScore } from './src/gameUtils';
 import { GameConfiguration } from './src/GameConfiguration';
-import { createGame } from "./src/gameUtils";
+import { createGame } from './src/gameUtils';
 import { Player } from './src/Player';
 
 const app = require('express')();
@@ -12,13 +12,28 @@ io.on('connection', function(socket: any) {
     console.log('a user connected');
 
     socket.on('startGame', function(gameConfig: any) {
-        Game.getInstance(new Player(gameConfig.hostName, gameConfig.hostTeam), gameConfig.gameDifficulty)
+        Game.getInstance(
+            new Player(gameConfig.hostName, gameConfig.hostTeam),
+            gameConfig.gameDifficulty
+        );
         console.log('Game started with config :');
         console.log(JSON.stringify(gameConfig));
 
-        console.log("hostName : "+Game.getInstance().getHost().getName());
-        console.log("hostTeam : "+Game.getInstance().getHost().getTeam());
-        console.log("difficultyLevel : "+Game.getInstance().getDifficultyLevel());
+        console.log(
+            'hostName : ' +
+                Game.getInstance()
+                    .getHost()
+                    .getName()
+        );
+        console.log(
+            'hostTeam : ' +
+                Game.getInstance()
+                    .getHost()
+                    .getTeam()
+        );
+        console.log(
+            'difficultyLevel : ' + Game.getInstance().getDifficultyLevel()
+        );
     });
     socket.on('proposition', function(msg: string) {
         console.log('Mot proposé :');
@@ -28,10 +43,11 @@ io.on('connection', function(socket: any) {
     });
 });
 
-const server = http.listen(3000, () => {
+const server = http.listen(3000, async () => {
     console.log('server is running on port', server.address().port);
-
-    console.log("Resultat attendu 3 : " + calculateWordScore('boom', 'bimbamboom'));
-    console.log("Resultat attendu 3 : " + calculateWordScore('bim', 'biim'));
-    console.log("Resultat attendu 0 : " + calculateWordScore('', 'rien'));
+    console.log(
+        'Resultat attendu 3 : ' + calculateWordScore('boom', 'bimbamboom')
+    );
+    console.log('Resultat attendu 3 : ' + calculateWordScore('bim', 'biim'));
+    console.log('Resultat attendu 0 : ' + calculateWordScore('', 'rien'));
 });
