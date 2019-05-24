@@ -10,26 +10,33 @@ export class JeuSoloComponent implements OnInit {
     title = 'app';
     incomingmsg = [];
     msg = 'First Protocol';
+    @ViewChild('box') input: ElementRef;
+
+    @ViewChild('response') response: ElementRef;
     constructor(private socketService: SocketService) {}
 
     ngOnInit() {
         this.socketService.getScore().subscribe(msg => {
-            console.log(msg);
+            this.response.nativeElement.value =
+                msg[0] +
+                ' : ' +
+                msg[1] +
+                '\n' +
+                this.response.nativeElement.value;
         });
-        //this.sendProposition(this.msg);
     }
 
     sendProposition(proposition) {
-        console.log('sdsd', proposition);
         this.socketService.sendProposition(proposition);
     }
-
-    @ViewChild('box') input: ElementRef;
 
     value = '';
     enterValue(value: string) {
         this.value = value;
         this.input.nativeElement.value = '';
-        this.sendProposition(value);
+        //Check pour les string vide
+        if (value.replace(/\s/g, '').length != 0) {
+            this.sendProposition(value);
+        }
     }
 }
