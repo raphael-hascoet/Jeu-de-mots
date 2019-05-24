@@ -30,3 +30,5 @@ matrix:
               - npm install
           script:
               - npm run build
+script:
+  - sonar-scanner
