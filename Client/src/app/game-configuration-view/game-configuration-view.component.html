@@ -1,0 +1,22 @@
+<form>
+    <mat-form-field>
+        <mat-label>Pseudonyme</mat-label>
+        <input #hostName matInput />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Nom d'équipe</mat-label>
+        <input #hostTeam matInput />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Niveau de difficulté</mat-label>
+        <input #gameDifficulty matInput />
+    </mat-form-field>
+    <button
+        (click)="
+            createGame(hostName.value, hostTeam.value, gameDifficulty.value)
+        "
+        mat-raised-button
+    >
+        Valider
+    </button>
+</form>
