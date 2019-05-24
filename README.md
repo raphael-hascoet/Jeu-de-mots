@@ -29,7 +29,7 @@ Après l'installation, l'application solo peut être lancée avec la commande `n
 
 Pour lancer le serveur en mode développement, aller dans le dossier `server/` et exécuter `npm run watch`
 
-##Liens utils
+## Liens utils
 
 **KanbanFlow** : https://kanbanflow.com/board/sL8RYT
 
