@@ -8,10 +8,13 @@ import { Player } from './Player';
  */
 export class Game {
     /**
-     * @param wordSrc - Permet de mettre à jour le mot lors de la recherche dans le dictionnaire
-     * @param wordObserver - Permet de récupérer le mot de manière asynchrone
+     * Permet de mettre à jour le mot lors de la recherche dans le dictionnaire
      */
     private wordSrc = new BehaviorSubject<string>('');
+
+    /**
+     * Permet de récupérer le mot de manière asynchrone
+     */
     public wordObserver = this.wordSrc.asObservable();
 
     /**

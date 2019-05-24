@@ -1,4 +1,5 @@
 import { Game } from './src/Game';
+import { GameConfiguration } from './src/GameConfiguration';
 
 const app = require('express')();
 var http = require('http').createServer(app);
