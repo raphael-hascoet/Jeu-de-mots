@@ -19,7 +19,7 @@ Il faut ensuite ce placer dans le dossier de l'application Angular (dossier Clie
 
 Enfin **Lancer le serveur de l'application** : Dans le terminal, dans le dossier de l'application et executer `ng serve --open`
 
-##Liens utils
+## Liens utils
 
 **KanbanFlow** : https://kanbanflow.com/board/sL8RYT
 
