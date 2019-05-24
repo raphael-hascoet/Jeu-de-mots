@@ -1,9 +1,15 @@
+addons:
+  sonarcloud:
+    organization: "raphael-hascoet-github"
 matrix:
     include:
         - language: node_js
           node_js:
               - '8'
           dist: trusty
+          cache:
+              directories:
+                  - 'node_modules'
           sudo: required
           before_script:
               - cd Client/
@@ -15,7 +21,11 @@ matrix:
         - language: node_js
           node_js:
               - '8'
+          cache:
+              directories:
+                  - "node_modules"
           before_script:
               - cd server/
+              - npm install
           script:
-              - node index.js
+              - npm run build
