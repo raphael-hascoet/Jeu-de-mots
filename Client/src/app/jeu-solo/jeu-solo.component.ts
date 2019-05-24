@@ -13,15 +13,15 @@ export class JeuSoloComponent implements OnInit {
     constructor(private socketService: SocketService) {}
 
     ngOnInit() {
-        this.socketService.getMessage().subscribe(msg => {
+        this.socketService.getScore().subscribe(msg => {
             console.log(msg);
         });
-        this.sendMsg(this.msg);
+        //this.sendProposition(this.msg);
     }
 
-    sendMsg(msg) {
-        console.log('sdsd', msg);
-        this.socketService.sendMessage(msg);
+    sendProposition(proposition) {
+        console.log('sdsd', proposition);
+        this.socketService.sendProposition(proposition);
     }
 
     @ViewChild('box') input: ElementRef;
@@ -30,5 +30,6 @@ export class JeuSoloComponent implements OnInit {
     enterValue(value: string) {
         this.value = value;
         this.input.nativeElement.value = '';
+        this.sendProposition(value);
     }
 }

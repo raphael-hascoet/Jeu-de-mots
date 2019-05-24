@@ -7,11 +7,11 @@ import { Socket } from 'ngx-socket-io';
 export class SocketService {
     constructor(public socket: Socket) {}
 
-    getMessage() {
-        return this.socket.fromEvent('msg');
+    getScore() {
+        return this.socket.fromEvent('score');
     }
 
-    sendMessage(msg: string) {
-        this.socket.emit('msg', msg);
+    sendProposition(msg: string) {
+        this.socket.emit('proposition', msg);
     }
 }
