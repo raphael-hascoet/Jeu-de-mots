@@ -28,11 +28,13 @@ matrix:
           script:
               - npm run build
         - language: minimal
+          sudo: required
           addons:
             sonarcloud:
               organization: "raphael-hascoet-github"
-            apt:
-              packages:
-                - default-jre
+          before_script:
+            - sudo add-apt-repository ppa:webupd8team/java
+            - sudo apt update
+            - sudo apt install oracle-java8-installer
           script:
-          - sonar-scanner -X
+            - sonar-scanner -X
