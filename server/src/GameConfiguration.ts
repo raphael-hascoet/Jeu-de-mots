@@ -1,22 +1,25 @@
 import fs from 'fs';
-import { BehaviorSubject } from 'rxjs';
 
 export class GameConfiguration {
-    /**
-     * Permet de mettre à jour l'intervalle de niveaux disponibles
-     */
-    private intervalSrc = new BehaviorSubject<[number, number]>([0, 0]);
-
-    /**
-     * Permet de récupérer le mot de manière asynchrone
-     */
-    private intervalObserver = this.intervalSrc.asObservable();
     private levelInterval = [0, 0];
 
-    constructor() {
-        this.intervalObserver.subscribe(data => {
-            this.levelInterval = data;
-        });
+    constructor() {}
+
+    /**
+     * Méthode permettant d'initialiser l'intervalle de difficulté maximal.
+     * Permet d'attendre que l'intervalle soit trouvé en lisant le dictionnaire (méthode searchInterval)
+     * avant de continuer : à appeler dans une méthode 'async' en faisant
+     * await gameConfiguration.calculLevelInterval();
+     */
+    public calculLevelInterval() {
+        return this.searchInterval().then(
+            data => {
+                this.levelInterval = data;
+            },
+            error => {
+                throw new Error(error);
+            }
+        );
     }
 
     /**
@@ -24,24 +27,40 @@ export class GameConfiguration {
      * (en fonction de la taille des mots présents dans le fichier texte)
      * @returns [borne inférieure, borne supérieure]
      */
-    getLevelInterval(): void {
+    async searchInterval(): Promise<[number, number]> {
         let minLength = 9999;
         let maxLength = 0;
-        fs.readFile('resources/liste_francais.txt', 'utf8', (err, data) => {
-            if (err) throw err;
-            let words: string[] = data.toString().split('\n');
-            words.forEach(word => {
-                if (word.trim().length != 0) {
-                    let wordLength = word.trim().length;
-                    if (wordLength < minLength) {
-                        minLength = wordLength;
+        return new Promise((resolve, reject) => {
+            fs.readFile('resources/liste_francais.txt', 'utf8', (err, data) => {
+                if (err) throw err;
+                let words: string[] = data.toString().split('\n');
+                words.forEach(word => {
+                    if (word.trim().length != 0) {
+                        let wordLength = word.trim().length;
+                        if (wordLength < minLength) {
+                            minLength = wordLength;
+                        }
+                        if (wordLength > maxLength) {
+                            maxLength = wordLength;
+                        }
                     }
-                    if (wordLength > maxLength) {
-                        maxLength = wordLength;
-                    }
-                }
+                });
+                resolve([minLength, maxLength]);
             });
-            this.intervalSrc.next([minLength, maxLength]);
         });
+    }
+
+    /**
+     * Permet de connaître la difficulté minimale que le jeu peut avoir
+     */
+    getMinimalDifficulty(): number {
+        return this.levelInterval[0];
+    }
+
+    /**
+     * Permet de connaître la difficulté maximale que le jeu peut avoir
+     */
+    getMaximalDifficulty(): number {
+        return this.levelInterval[1];
     }
 }

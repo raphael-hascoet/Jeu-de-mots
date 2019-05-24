@@ -80,7 +80,8 @@ export class Game {
     async readDictionnary(): Promise<string> {
         let difficulty = this.difficultyLevel;
         if (difficulty == 0) {
-            //A améliorer avec l'intervalle
+            //if(difficulty < gameConfiguration.getMinimalDifficulty() || difficulty > gameConfiguration.getMaximalDifficulty())
+            //ligne ci-dessus à décommenter dans tout sera mis en place
             throw new Error("La difficulté n'est pas valide.");
         }
         let word = '';
@@ -110,11 +111,11 @@ export class Game {
         return this.wordToFind;
     }
 
-    getHost() : Player{
+    getHost(): Player {
         return this.host;
     }
 
-    getDifficultyLevel() : number{
+    getDifficultyLevel(): number {
         return this.difficultyLevel;
     }
 
