@@ -31,6 +31,8 @@ matrix:
           script:
               - npm run build
         - language: minimal
-          sudo: required
+          apt:
+            packages:
+              - oracle-java8-set-default
           script:
           - sonar-scanner -X
