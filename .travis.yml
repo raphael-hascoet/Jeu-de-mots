@@ -4,6 +4,9 @@ matrix:
           node_js:
               - '8'
           dist: trusty
+          cache:
+              directories:
+                  - 'node_modules'
           sudo: required
           before_script:
               - cd Client/
@@ -15,7 +18,9 @@ matrix:
         - language: node_js
           node_js:
               - '8'
+          cache:
+              directories:
+                  - "node_modules"
           before_script:
               - cd server/
-          script:
-              - npm start
+              - npm install
