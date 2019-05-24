@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { Player } from './Player';
 import { Game } from './Game';
 
