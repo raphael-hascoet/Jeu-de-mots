@@ -19,6 +19,8 @@ io.on('connection', function(socket: any) {
         console.log("hostName : "+Game.getInstance().getHost().getName());
         console.log("hostTeam : "+Game.getInstance().getHost().getTeam());
         console.log("difficultyLevel : "+Game.getInstance().getDifficultyLevel());
+        
+        
     });
     socket.on('proposition', function(msg: string) {
         console.log('Mot proposé :');
