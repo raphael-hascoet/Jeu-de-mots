@@ -31,7 +31,7 @@ export class Game {
     public wordObserver = this.wordSrc.asObservable();
 
     /**
-     * hebergeur de la partie
+     * Hebergeur de la partie
      */
     private host: Player;
 
@@ -84,5 +84,13 @@ export class Game {
 
     getWordToFind(): string {
         return this.wordToFind;
+    }
+
+    getHost() : Player{
+        return this.host;
+    }
+
+    getDifficultyLevel() : number{
+        return this.difficultyLevel;
     }
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { GameService } from '../service/game.service';
+import { GameConfig } from "../model/game-config/game-config";
 
 @Component({
   selector: 'app-game-configuration-view',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameConfigurationViewComponent implements OnInit {
 
-  constructor() { }
+  constructor(private gameService: GameService) { }
 
   ngOnInit() {
+  }
+
+  createGame(hostName : string, hostTeam : string, gameDifficulty : number) : void{
+    this.gameService.createGame(new GameConfig(hostName, hostTeam, gameDifficulty));
   }
 
 }

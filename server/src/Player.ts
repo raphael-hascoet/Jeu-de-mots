@@ -6,4 +6,12 @@ export class Player {
         this.name = name;
         this.team = team;
     }
+
+    getName(): string{
+        return this.name;
+    }
+
+    getTeam(): string {
+        return this.team;
+    }
 }
