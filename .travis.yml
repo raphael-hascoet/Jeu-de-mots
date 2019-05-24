@@ -1,3 +1,6 @@
+addons:
+  sonarcloud:
+    organization: "raphael-hascoet-github"
 matrix:
     include:
         - language: node_js
