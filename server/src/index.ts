@@ -1,7 +1,5 @@
 import { Game } from '../src/Game';
 import { calculateWordScore } from '../src/gameUtils';
-import { GameConfiguration } from '../src/GameConfiguration';
-import { createGame } from "../src/gameUtils";
 import { Player } from '../src/Player';
 
 const app = require('express')();
@@ -12,10 +10,14 @@ io.on('connection', function(socket: any) {
     console.log('a user connected');
 
     socket.on('startGame', function(gameConfig: any) {
-        Game.getInstance(new Player(gameConfig.hostName, gameConfig.hostTeam), gameConfig.gameDifficulty)
         console.log('Game started with config :');
+        console.log(gameConfig);
         console.log(JSON.stringify(gameConfig));
+        console.log(gameConfig.hostName);
+        console.log(gameConfig.hostTeam);
+        console.log(gameConfig.gameDifficulty);
 
+        Game.getInstance(new Player(gameConfig.hostName, gameConfig.hostTeam), gameConfig.gameDifficulty)
         console.log("hostName : "+Game.getInstance().getHost().getName());
         console.log("hostTeam : "+Game.getInstance().getHost().getTeam());
         console.log("difficultyLevel : "+Game.getInstance().getDifficultyLevel());
@@ -36,6 +38,5 @@ const server = http.listen(3000, async () => {
     console.log("Resultat attendu 3 : " + calculateWordScore('boom', 'bimbamboom'));
     console.log("Resultat attendu 3 : " + calculateWordScore('bim', 'biim'));
     console.log("Resultat attendu 0 : " + calculateWordScore('', 'rien'));
-    await Game.getInstance().startGame();
     console.log(Game.getInstance().getWordToFind());
 });

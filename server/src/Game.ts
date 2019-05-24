@@ -9,11 +9,18 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 export class Game {
     private static instance: Game;
 
+    /**
+     * Méthode du design pattern singleton, permet de créer ou de récupérer la partie jouée sur le serveur
+     * 
+     * @param host hébergeur de la partie, remplir pour créer une nouvelle partie
+     * @param difficulty  difficulté de la partie, remplir pour créer une nouvelle partie
+     * 
+     */
     static getInstance(
         host = new Player('null', 'null'),
         difficulty = 4
     ): Game {
-        if (!Game.instance) {
+        if (!Game.instance || host.getName()!=null) {
             Game.instance = new Game(host, difficulty);
         }
 
