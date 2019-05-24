@@ -1,6 +1,5 @@
 import fs from 'fs';
 import { latinise } from './stringUtil';
-import { BehaviorSubject } from 'rxjs';
 import { Player } from './Player';
 
 /**
@@ -11,7 +10,7 @@ export class Game {
 
     static getInstance(
         host = new Player('null', 'null'),
-        difficulty = 0
+        difficulty = 4
     ): Game {
         if (!Game.instance) {
             Game.instance = new Game(host, difficulty);
@@ -19,13 +18,6 @@ export class Game {
 
         return Game.instance;
     }
-
-    /**
-     * @param wordSrc - Permet de mettre à jour le mot lors de la recherche dans le dictionnaire
-     * @param wordObserver - Permet de récupérer le mot de manière asynchrone
-     */
-    private wordSrc = new BehaviorSubject<string>('');
-    public wordObserver = this.wordSrc.asObservable();
 
     /**
      * hebergeur de la partie
@@ -52,34 +44,67 @@ export class Game {
         this.players = new Array<Player>();
         this.players.push(this.host);
         this.difficultyLevel = difficultyLevel;
+    }
 
-        // Méthode qui s'exécute une fois que findWord est fini
-        this.wordObserver.subscribe(data => {
-            if (data.trim().length != 0) {
+    /**
+     * Méthode permettant de démarrer le jeu.
+     * Permet d'attendre que le mot dans le dictionnaire soit trouvé (méthode readDictionnary)
+     * avant de continuer : à appeler dans une méthode 'async' en faisant
+     * await Game.getInstance().startGame();
+     */
+    public startGame() {
+        return this.readDictionnary().then(
+            data => {
                 this.wordToFind = data;
+                console.log('hello ' + this.wordToFind);
+            },
+            error => {
+                throw new Error(error);
             }
-        });
-        this.findWord();
+        );
     }
 
     /**
      * Méthode permettant de trouver un mot dans le dictionnaire pour démarrer une partie
      */
-    findWord() {
+    async readDictionnary(): Promise<string> {
+        let difficulty = this.difficultyLevel;
+        if (difficulty == 0) {
+            //A améliorer avec l'intervalle
+            throw new Error("La difficulté n'est pas valide.");
+        }
         let word = '';
-        fs.readFile('resources/liste_francais.txt', 'utf8', (err, data) => {
-            if (err) throw err;
-            let words: string[] = data.toString().split('\n');
-            while (word.length != this.difficultyLevel) {
-                let random: number = Math.floor(Math.random() * words.length);
-                word = words[random].trim();
+        return new Promise(
+            (resolve, reject): void => {
+                fs.readFile(
+                    'resources/liste_francais.txt',
+                    'utf8',
+                    (err, data) => {
+                        if (err) throw err;
+                        let words: string[] = data.toString().split('\n');
+                        while (word.length != difficulty) {
+                            let random: number = Math.floor(
+                                Math.random() * words.length
+                            );
+                            word = words[random].trim();
+                        }
+                        word = latinise(word.toLocaleLowerCase());
+                        resolve(word);
+                    }
+                );
             }
-            word = latinise(word.toLocaleLowerCase());
-            this.wordSrc.next(word); // Met à jour le mot
-        });
+        );
     }
 
     getWordToFind(): string {
         return this.wordToFind;
+    }
+
+    wait(ms: number): void {
+        var start = new Date().getTime();
+        var end = start;
+        while (end < start + ms) {
+            end = new Date().getTime();
+        }
     }
 }
