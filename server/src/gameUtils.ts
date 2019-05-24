@@ -1,3 +1,17 @@
+import { Player } from './Player';
+import { Game } from './Game';
+
+export function createGame(
+    hostName: string,
+    hostTeam: string,
+    difficultyLevel: number
+): Game {
+    let host = new Player(hostName, hostTeam);
+    let game = new Game(host, difficultyLevel);
+
+    return game;
+}
+
 /**
  * Cette fonction calcul le score d'un mot proposé par les joueur en le comparant avec le mot à trouver
  *
