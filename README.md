@@ -18,7 +18,7 @@ Il est aussi necessaire de posséder le package buil-angular : ce placer dans le
 
 Enfin **Lancer le serveur de l'application** : Dans le terminal, ce placer dans le dossier de l'application et executer `ng serve --open`
 
-##Liens utils
+## Liens utils
 
 **KanbanFlow** : https://kanbanflow.com/board/sL8RYT
 
