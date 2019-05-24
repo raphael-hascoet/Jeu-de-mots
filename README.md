@@ -6,7 +6,7 @@
 
 npm install
 
-## Lancement du projet Angular
+## Lancement du projet Angular (Client de l'application)
 
 Il est nécessaire d'avoir node.js et npm d'installés (Pour le vérifier, executer `node -v` et `npm -v` dans le terminal, la version des modules doit s'afficher)
 
@@ -14,9 +14,10 @@ Il est nécessaire d'avoir node.js et npm d'installés (Pour le vérifier, execu
 Par défaut npm est installé avec node.js
 
 **installer angular** : Dans le terminal executer `npm install -g @angular/cli`
-Il est aussi necessaire de posséder le package buil-angular : ce placer dans le dossier du projet (en l'occurence le dossier *Client*) et executer : `npm install --save-dev @angular-devkit/build-angular`
 
-Enfin **Lancer le serveur de l'application** : Dans le terminal, ce placer dans le dossier de l'application et executer `ng serve --open`
+Il faut ensuite ce placer dans le dossier de l'application Angular (dossier Client du projet) et executer `ng install`
+
+Enfin **Lancer le serveur de l'application** : Dans le terminal, dans le dossier de l'application et executer `ng serve --open`
 
 ##Liens utils
 
