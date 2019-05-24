@@ -33,6 +33,6 @@ matrix:
               organization: "raphael-hascoet-github"
             apt:
               packages:
-                - oracle-java8-set-default
+                - oracle-java8-installer
           script:
           - sonar-scanner -X
