@@ -20,7 +20,7 @@ export class Game {
         host = new Player('null', 'null'),
         difficulty = 4
     ): Game {
-        if (!Game.instance || host.getName()!=null) {
+        if (!Game.instance || host.getName()!='null') {
             Game.instance = new Game(host, difficulty);
         }
 
