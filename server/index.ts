@@ -22,7 +22,7 @@ io.on('connection', function(socket: any) {
 const server = http.listen(3000, () => {
     console.log('server is running on port', server.address().port);
 
-    console.log(calculateWordScore('boom', 'bimbamboom'));
-    console.log(calculateWordScore('bim', 'biim'));
-    console.log(calculateWordScore('', 'rien'));
+    console.log("Resultat attendu 3 : " + calculateWordScore('boom', 'bimbamboom'));
+    console.log("Resultat attendu 3 : " + calculateWordScore('bim', 'biim'));
+    console.log("Resultat attendu 0 : " + calculateWordScore('', 'rien'));
 });
