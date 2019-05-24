@@ -10,6 +10,11 @@ io.on('connection', function(socket: any) {
         console.log('Game started with config :');
         console.log(JSON.stringify(gameConfig));
     });
+    socket.on('msg', function(msg: string) {
+        console.log('Mot proposé :');
+        console.log(msg);
+        socket.emit('msg', msg);
+    });
 });
 
 const server = http.listen(3000, () => {

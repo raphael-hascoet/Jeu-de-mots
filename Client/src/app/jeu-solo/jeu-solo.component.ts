@@ -1,18 +1,28 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { SocketService } from '../socket.service';
+
 @Component({
     selector: 'app-jeu-solo',
     templateUrl: './jeu-solo.component.html',
     styleUrls: ['./jeu-solo.component.css'],
 })
-const config: SocketIoConfig = { url: 'http://localhost:4444', options: {} };
-
 export class JeuSoloComponent implements OnInit {
-    socket: SocketIOClient.Socket;
+    title = 'app';
+    incomingmsg = [];
+    msg = 'First Protocol';
+    constructor(private socketService: SocketService) {}
 
-    constructor() {}
+    ngOnInit() {
+        this.socketService.getMessage().subscribe(msg => {
+            console.log(msg);
+        });
+        this.sendMsg(this.msg);
+    }
 
-    ngOnInit() {}
+    sendMsg(msg) {
+        console.log('sdsd', msg);
+        this.socketService.sendMessage(msg);
+    }
 
     @ViewChild('box') input: ElementRef;
 
