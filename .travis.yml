@@ -1,7 +1,4 @@
 
-addons:
-    sonarcloud:
-        organization: "raphael-hascoet-github"
 matrix:
     include:
         - language: node_js
@@ -31,8 +28,11 @@ matrix:
           script:
               - npm run build
         - language: minimal
-          apt:
-            packages:
-              - oracle-java8-set-default
+          addons:
+            sonarcloud:
+              organization: "raphael-hascoet-github"
+            apt:
+              packages:
+                - oracle-java8-set-default
           script:
           - sonar-scanner -X
