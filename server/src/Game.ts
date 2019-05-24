@@ -56,7 +56,6 @@ export class Game {
         return this.readDictionnary().then(
             data => {
                 this.wordToFind = data;
-                console.log('hello ' + this.wordToFind);
             },
             error => {
                 throw new Error(error);

@@ -23,6 +23,6 @@ io.on('connection', function(socket: any) {
 
 const server = http.listen(3000, async () => {
     console.log('server is running on port', server.address().port);
-    await Game.getInstance().findWord();
-    console.log('hey' + Game.getInstance().getWordToFind());
+    await Game.getInstance().startGame();
+    console.log(Game.getInstance().getWordToFind());
 });
