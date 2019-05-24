@@ -1,4 +1,7 @@
 
+addons:
+    sonarcloud:
+        organization: "raphael-hascoet-github"
 matrix:
     include:
         - language: node_js
@@ -9,9 +12,6 @@ matrix:
               directories:
                   - 'node_modules'
           sudo: required
-          addons:
-            sonarcloud:
-              organization: "raphael-hascoet-github"
           before_script:
               - cd Client/
               - npm install -g @angular/cli
