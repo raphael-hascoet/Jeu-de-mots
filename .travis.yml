@@ -31,5 +31,6 @@ matrix:
           script:
               - npm run build
         - language: minimal
+          sudo: required
           script:
           - sonar-scanner -X
