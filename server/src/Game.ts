@@ -7,6 +7,19 @@ import { Player } from './Player';
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
  */
 export class Game {
+    private static instance: Game;
+
+    static getInstance(
+        host = new Player('null', 'null'),
+        difficulty = 0
+    ): Game {
+        if (!Game.instance) {
+            Game.instance = new Game(host, difficulty);
+        }
+
+        return Game.instance;
+    }
+
     /**
      * @param wordSrc - Permet de mettre à jour le mot lors de la recherche dans le dictionnaire
      * @param wordObserver - Permet de récupérer le mot de manière asynchrone
@@ -29,10 +42,12 @@ export class Game {
      */
     private difficultyLevel: number;
 
+    private wordToFind = '';
+
     /**
      * Constructeur d'une partie
      */
-    constructor(host: Player, difficultyLevel: number) {
+    private constructor(host: Player, difficultyLevel: number) {
         this.host = host;
         this.players = new Array<Player>();
         this.players.push(this.host);
@@ -41,7 +56,7 @@ export class Game {
         // Méthode qui s'exécute une fois que findWord est fini
         this.wordObserver.subscribe(data => {
             if (data.trim().length != 0) {
-                console.log(data);
+                this.wordToFind = data;
             }
         });
         this.findWord();
@@ -62,5 +77,9 @@ export class Game {
             word = latinise(word.toLocaleLowerCase());
             this.wordSrc.next(word); // Met à jour le mot
         });
+    }
+
+    getWordToFind(): string {
+        return this.wordToFind;
     }
 }
