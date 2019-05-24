@@ -33,7 +33,7 @@ matrix:
             sonarcloud:
               organization: "raphael-hascoet-github"
           before_script:
-            - sudo apt install default-jre
+            - sudo apt-get install default-jre
             - java -version
           script:
             - sonar-scanner -X
