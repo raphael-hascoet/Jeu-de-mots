@@ -1,5 +1,6 @@
 import fs from 'fs';
 
+
 export class GameConfiguration {
     private levelInterval = [0, 0];
 

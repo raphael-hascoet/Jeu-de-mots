@@ -9,7 +9,7 @@
     </mat-form-field>
     <mat-form-field>
         <mat-label>Niveau de difficulté</mat-label>
-        <input #gameDifficulty matInput />
+        <input #gameDifficulty matInput type="number" min="{{getMinDifficulty()}}" max="{{getMaxDifficulty()}}"/>
     </mat-form-field>
     <button
         (click)="

@@ -1,10 +1,13 @@
 import { Game } from '../src/Game';
 import { calculateWordScore } from '../src/gameUtils';
 import { Player } from '../src/Player';
+import { GameConfiguration } from "./GameConfiguration";
 
 const app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
+var gameConfiguration = new GameConfiguration();
+gameConfiguration.calculLevelInterval();
 
 io.on('connection', function(socket: any) {
     console.log('a user connected');
@@ -26,6 +29,16 @@ io.on('connection', function(socket: any) {
         var score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
         socket.emit('score', [msg, score]);
     });
+
+    socket.on('getMinimalDifficulty', function(){
+        gameConfiguration.calculLevelInterval();
+        socket.emit('minDifficulty', gameConfiguration.getMinimalDifficulty())
+    })
+
+    socket.on('getMaximalDifficulty', function(){
+        gameConfiguration.calculLevelInterval();
+        socket.emit('maxDifficulty', gameConfiguration.getMaximalDifficulty())
+    })
 });
 
 const server = http.listen(3000, async () => {
