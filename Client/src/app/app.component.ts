@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Jeu de Mots';
-  componentToDisplay:string = "jeu-solo"; 
+  componentToDisplay:string = "game-config"; 
 
   displayJeuSolo(): boolean{
     return this.componentToDisplay=="jeu-solo";
@@ -15,5 +15,9 @@ export class AppComponent {
 
   changerComposant():void{
     this.componentToDisplay = "autre";
+  }
+
+  displayGameConfig() : boolean {
+    return this.componentToDisplay == "game-config";
   }
 }

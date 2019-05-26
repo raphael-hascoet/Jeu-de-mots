@@ -14,10 +14,12 @@ import { MatNativeDateModule } from '@angular/material';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { MatButtonModule } from '@angular/material/button';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { GameCommandComponent } from './game-command/game-command.component';
+import { GameConfigurationViewComponent } from './game-configuration-view/game-configuration-view.component';
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
-    declarations: [AppComponent, JeuSoloComponent],
+    declarations: [AppComponent, JeuSoloComponent, GameCommandComponent, GameConfigurationViewComponent],
     imports: [
         BrowserModule,
         TextFieldModule,
