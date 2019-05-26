@@ -27,6 +27,8 @@ export class GameConfigurationViewComponent implements OnInit {
 
   createGame(hostName : string, hostTeam : string, gameDifficulty : number) : void{
     this.gameService.createGame(new GameConfig(hostName, hostTeam, gameDifficulty));
+
+    this.changeViewToGame();
   }
 
   changeViewToGame(){

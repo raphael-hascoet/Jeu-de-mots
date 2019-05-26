@@ -4,4 +4,6 @@
     {{ title }}
   </h1>
   <app-game-configuration-view *ngIf='displayGameConfig()' [parent]="getAppComponent()"></app-game-configuration-view>
+  <app-game-view *ngIf='displayGame()' [parent]="getAppComponent()">
+  </app-game-view>
 </div>
