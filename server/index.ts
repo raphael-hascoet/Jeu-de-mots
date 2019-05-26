@@ -15,14 +15,13 @@ io.on('connection', function(socket: any) {
     socket.on('proposition', function(msg: string) {
         console.log('Mot proposé :');
         console.log(msg);
-        socket.emit('score', '0');
+        var score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
+        socket.emit('score', [msg, score]);
     });
 });
 
-const server = http.listen(3000, () => {
+const server = http.listen(3000, async () => {
     console.log('server is running on port', server.address().port);
-
-    console.log(calculateWordScore('boom', 'bimbamboom'));
-    console.log(calculateWordScore('bim', 'biim'));
-    console.log(calculateWordScore('', 'rien'));
+    await Game.getInstance().startGame();
+    console.log(Game.getInstance().getWordToFind());
 });

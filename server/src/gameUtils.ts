@@ -7,7 +7,7 @@ export function createGame(
     difficultyLevel: number
 ): Game {
     let host = new Player(hostName, hostTeam);
-    let game = new Game(host, difficultyLevel);
+    let game = Game.getInstance(host, difficultyLevel);
 
     return game;
 }
