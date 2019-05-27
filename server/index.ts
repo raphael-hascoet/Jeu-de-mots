@@ -16,7 +16,7 @@ io.on('connection', function(socket: any) {
         console.log('Mot proposé :');
         console.log(msg);
         var score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
-        Game.getInstance().addProposedWord(msg);
+        Game.getInstance().addProposedWord(msg, score);
         socket.emit('score', [msg, score]);
     });
     socket.on('getWords', function() {

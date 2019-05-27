@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { latinise } from './stringUtil';
 import { Player } from './Player';
-import { stringify } from 'querystring';
+import TsMap from 'ts-map';
 
 /**
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
@@ -37,7 +37,7 @@ export class Game {
     /**
      * Liste des mots proposés par les joueurs
      */
-    private proposedWords: Array<string /*, number*/>;
+    private proposedWords: TsMap<string, number>;
 
     private wordToFind = '';
 
@@ -49,7 +49,7 @@ export class Game {
         this.players = new Array<Player>();
         this.players.push(this.host);
         this.difficultyLevel = difficultyLevel;
-        this.proposedWords = new Array<string /*, number*/>();
+        this.proposedWords = new TsMap<string, number>();
     }
 
     /**
@@ -105,12 +105,12 @@ export class Game {
         return this.wordToFind;
     }
 
-    addProposedWord(word: string /*, score: number*/) {
-        this.proposedWords.push(word /*, score*/);
+    addProposedWord(word: string, score: number) {
+        this.proposedWords.set(word, score);
     }
 
-    getProposedWords(): Array<string> {
-        /*let sortedWords = new Array(
+    getProposedWords(): TsMap<string, number> {
+        let sortedWords = new Array(
             Array.from(this.proposedWords).sort((a, b) => {
                 return a[1] - b[1];
             })
@@ -122,7 +122,10 @@ export class Game {
                 sortedWords[i],
                 this.proposedWords.get(sortedWords[i]))
             );
-        }*/
+        }
+        /*this.proposedWords.forEach((key, value) => {
+            console.log('---------' + key + '=' + value);
+        });*/
         return this.proposedWords;
     }
 }
