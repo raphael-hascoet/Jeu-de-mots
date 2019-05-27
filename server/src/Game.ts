@@ -1,7 +1,6 @@
 import fs from 'fs';
 import { latinise } from './stringUtil';
 import { Player } from './Player';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 /**
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
@@ -51,6 +50,10 @@ export class Game {
      * Niveau de difficulté de la partie
      */
     private difficultyLevel: number;
+    /**
+     * Liste des mots proposés par les joueurs
+     */
+    private proposedWords: Array<string /*, number*/>;
 
     private wordToFind = '';
 
@@ -62,6 +65,7 @@ export class Game {
         this.players = new Array<Player>();
         this.players.push(this.host);
         this.difficultyLevel = difficultyLevel;
+        this.proposedWords = new Array<string /*, number*/>();
     }
 
     /**
@@ -118,6 +122,8 @@ export class Game {
         return this.wordToFind;
     }
 
+    addProposedWord(word: string /*, score: number*/) {
+        this.proposedWords.push(word /*, score*/);
     getHost(): Player {
         return this.host;
     }
@@ -125,12 +131,22 @@ export class Game {
     getDifficultyLevel(): number {
         return this.difficultyLevel;
     }
+    }
 
-    wait(ms: number): void {
-        var start = new Date().getTime();
-        var end = start;
-        while (end < start + ms) {
-            end = new Date().getTime();
-        }
+    getProposedWords(): Array<string> {
+        /*let sortedWords = new Array(
+            Array.from(this.proposedWords).sort((a, b) => {
+                return a[1] - b[1];
+            })
+        );
+        let wordsToReturn = new Map<string, number>();
+        let nbWordsToReturn = 5;
+        for (let i = 0; i < nbWordsToReturn; i++) {
+            wordsToReturn.set(
+                sortedWords[i],
+                this.proposedWords.get(sortedWords[i]))
+            );
+        }*/
+        return this.proposedWords;
     }
 }
