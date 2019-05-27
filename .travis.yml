@@ -36,4 +36,4 @@ matrix:
             - git fetch origin ${TRAVIS_BRANCH}
             - npm install
           script:
-            - sonar-scanner -X
+            - sonar-scanner
