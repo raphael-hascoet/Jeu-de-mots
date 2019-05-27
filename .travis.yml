@@ -27,13 +27,12 @@ matrix:
               - npm install
           script:
               - npm run build
-        - language: minimal
+        - language: java
           sudo: required
           addons:
             sonarcloud:
               organization: "raphael-hascoet-github"
           before_script:
-            - sudo apt-get install default-jre
             - java -version
           script:
             - sonar-scanner -X
