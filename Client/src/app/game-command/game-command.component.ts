@@ -11,22 +11,20 @@ export class GameCommandComponent implements OnInit {
     constructor(private socketService: SocketService) {}
 
     ngOnInit() {
-        this.socketService
-            .getWords()
-            .subscribe((msg: TsMap<string, number>) => {
-                console.log('getwords trouvé');
-                let words = '';
-                console.log('---foreach-----');
-                /*msg[0].forEach((key, value) => {
-                    console.log('---------' + key + '=' + value);
-                });*/
-                let keys = msg[0]['keyStore'];
-                let value = msg[0]['valueStore'];
-                for (let i = 0; i < msg[0]['valueStore'].length; i++) {
-                    words += keys[i] + ' = ' + value[i] + '\n';
-                }
-                alert(words);
-            });
+        this.socketService.getWords().subscribe(msg => {
+            console.log(msg);
+            let msgToShow =
+                'Les 5 mots ayant rapporté le plus de points sont : \n';
+            let words: string[] = msg[0];
+            for (let i = 0; i < words.length; i++) {
+                msgToShow +=
+                    words[i]['word'] + ' = ' + words[i]['score'] + '\n';
+            }
+            if (words.length == 0) {
+                msgToShow = "Votre équipe n'a encore rentré aucun mot.";
+            }
+            alert(msgToShow);
+        });
     }
 
     onShowWords() {
