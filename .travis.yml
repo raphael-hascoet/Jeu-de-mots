@@ -33,6 +33,6 @@ matrix:
             sonarcloud:
               organization: "raphael-hascoet-github"
           before_script:
-            - java -version
+            - npm install -g typescript
           script:
             - sonar-scanner -X
