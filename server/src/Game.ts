@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { latinise } from './stringUtil';
 import { Player } from './Player';
-import TsMap from 'ts-map';
+import { ProposedWord } from './ProposedWord';
 
 /**
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
@@ -37,7 +37,7 @@ export class Game {
     /**
      * Liste des mots proposés par les joueurs
      */
-    private proposedWords: TsMap<string, number>;
+    private proposedWords: Array<ProposedWord>;
 
     private wordToFind = '';
 
@@ -49,7 +49,7 @@ export class Game {
         this.players = new Array<Player>();
         this.players.push(this.host);
         this.difficultyLevel = difficultyLevel;
-        this.proposedWords = new TsMap<string, number>();
+        this.proposedWords = new Array<ProposedWord>();
     }
 
     /**
@@ -106,26 +106,19 @@ export class Game {
     }
 
     addProposedWord(word: string, score: number) {
-        this.proposedWords.set(word, score);
+        this.proposedWords.push(new ProposedWord(word, score));
     }
 
-    getProposedWords(): TsMap<string, number> {
-        let sortedWords = new Array(
-            Array.from(this.proposedWords).sort((a, b) => {
-                return a[1] - b[1];
-            })
+    getProposedWords(): Array<ProposedWord> {
+        let sortedWords: Array<ProposedWord> = this.proposedWords.sort(
+            (a, b) => {
+                return b.getScore() - a.getScore();
+            }
         );
-        let wordsToReturn = new Map<string, number>();
-        let nbWordsToReturn = 5;
-        for (let i = 0; i < nbWordsToReturn; i++) {
-            wordsToReturn.set(
-                sortedWords[i],
-                this.proposedWords.get(sortedWords[i]))
-            );
+        let wordsToReturn = new Array<ProposedWord>();
+        for (let i = 0; i < 5 && i < sortedWords.length; i++) {
+            wordsToReturn.push(sortedWords[i]);
         }
-        /*this.proposedWords.forEach((key, value) => {
-            console.log('---------' + key + '=' + value);
-        });*/
-        return this.proposedWords;
+        return wordsToReturn;
     }
 }
