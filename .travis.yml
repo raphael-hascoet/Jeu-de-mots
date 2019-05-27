@@ -27,7 +27,8 @@ matrix:
               - npm install
           script:
               - npm run build
-        - language: java
+        - if: type != pull_request
+          language: java
           sudo: required
           addons:
             sonarcloud:
