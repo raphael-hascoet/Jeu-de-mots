@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from '../socket.service';
+import TsMap from 'ts-map';
 
 @Component({
     selector: 'app-game-command',
@@ -12,9 +13,19 @@ export class GameCommandComponent implements OnInit {
     ngOnInit() {
         this.socketService
             .getWords()
-            .subscribe((msg: Array<string /*, number*/>) => {
+            .subscribe((msg: TsMap<string, number>) => {
                 console.log('getwords trouvé');
-                alert(msg.toString());
+                let words = '';
+                console.log('---foreach-----');
+                /*msg[0].forEach((key, value) => {
+                    console.log('---------' + key + '=' + value);
+                });*/
+                let keys = msg[0]['keyStore'];
+                let value = msg[0]['valueStore'];
+                for (let i = 0; i < msg[0]['valueStore'].length; i++) {
+                    words += keys[i] + ' = ' + value[i] + '\n';
+                }
+                alert(words);
             });
     }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
+import TsMap from 'ts-map';
 
 @Injectable({
     providedIn: 'root',
@@ -21,7 +22,6 @@ export class SocketService {
     }
 
     getWords() {
-        console.log('words');
         return this.socket.fromEvent('words');
     }
 }
