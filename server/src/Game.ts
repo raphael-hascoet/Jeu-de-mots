@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { latinise } from './stringUtil';
 import { Player } from './Player';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 /**
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
@@ -8,11 +9,18 @@ import { Player } from './Player';
 export class Game {
     private static instance: Game;
 
+    /**
+     * Méthode du design pattern singleton, permet de créer ou de récupérer la partie jouée sur le serveur
+     * 
+     * @param host hébergeur de la partie, remplir pour créer une nouvelle partie
+     * @param difficulty  difficulté de la partie, remplir pour créer une nouvelle partie
+     * 
+     */
     static getInstance(
         host = new Player('null', 'null'),
         difficulty = 4
     ): Game {
-        if (!Game.instance) {
+        if (!Game.instance || host.getName()!='null') {
             Game.instance = new Game(host, difficulty);
         }
 
@@ -20,7 +28,17 @@ export class Game {
     }
 
     /**
-     * hebergeur de la partie
+     * Permet de mettre à jour le mot lors de la recherche dans le dictionnaire
+     */
+    private wordSrc = new BehaviorSubject<string>('');
+
+    /**
+     * Permet de récupérer le mot de manière asynchrone
+     */
+    public wordObserver = this.wordSrc.asObservable();
+
+    /**
+     * Hebergeur de la partie
      */
     private host: Player;
 
@@ -69,7 +87,8 @@ export class Game {
     async readDictionnary(): Promise<string> {
         let difficulty = this.difficultyLevel;
         if (difficulty == 0) {
-            //A améliorer avec l'intervalle
+            //if(difficulty < gameConfiguration.getMinimalDifficulty() || difficulty > gameConfiguration.getMaximalDifficulty())
+            //ligne ci-dessus à décommenter dans tout sera mis en place
             throw new Error("La difficulté n'est pas valide.");
         }
         let word = '';
@@ -97,6 +116,14 @@ export class Game {
 
     getWordToFind(): string {
         return this.wordToFind;
+    }
+
+    getHost(): Player {
+        return this.host;
+    }
+
+    getDifficultyLevel(): number {
+        return this.difficultyLevel;
     }
 
     wait(ms: number): void {

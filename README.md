@@ -40,3 +40,6 @@ Enfin **Lancer le serveur de l'application** : Dans le terminal, dans le dossier
 
 **Tutoriel Angular** : https://angular.io/guide/quickstart
 **Liste des composants material Angular** : https://material.angular.io/components/categories
+
+**Tutoriel socket.io** : https://socket.io/get-started/chat/?fbclid=IwAR0dng-HjPJqIdVcrmOpu3eDv0VaOHvA88C4gHwVw-h5Tkcs--NlXEVEWnw
+**Utilisation des socket avec angular** : https://alligator.io/angular/socket-io/?fbclid=IwAR0pZP9JD5oRopRzUoOavYPeemBoeRkhQFJQanK9tfUe07tlAeruz34JOVo
