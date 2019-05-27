@@ -33,6 +33,7 @@ matrix:
             sonarcloud:
               organization: "raphael-hascoet-github"
           before_script:
+            - git fetch origin ${TRAVIS_BRANCH}
             - npm install
           script:
             - sonar-scanner -X
