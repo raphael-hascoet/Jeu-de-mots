@@ -1,5 +1,5 @@
-import { Game } from './src/Game';
-import { calculateWordScore } from './src/gameUtils';
+import { Game } from './Game';
+import { calculateWordScore } from './gameUtils';
 
 const app = require('express')();
 var http = require('http').createServer(app);
