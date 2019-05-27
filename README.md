@@ -1,5 +1,7 @@
 # Jeu-de-mots
 
+[![Build Status](https://travis-ci.com/raphael-hascoet/Jeu-de-mots.png)](https://travis-ci.com/raphael-hascoet/Jeu-de-mots)
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Jeu-de-mots&metric=alert_status)](https://sonarcloud.io/dashboard?id=Jeu-de-mots)
 :books: Projet Semestre 2 FILA1
 
 **NB** : Pour exécuter les commandes sur environnements windows il est conseillé de passer par un terminal style unix tel **git bash**
