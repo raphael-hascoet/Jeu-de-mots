@@ -20,7 +20,7 @@
 
     Exécuter `npm install -g @angular/cli`
 
-## Lancement du projet
+## Lancement du projet Angular (Client de l'application)
 
 Afin d'installer les dépendences npm du projet,
 se placer dans le dossier de l'application et exécuter `npm install`
@@ -30,6 +30,8 @@ Après l'installation, l'application solo peut être lancée avec la commande `n
 ## Développement
 
 Pour lancer le serveur en mode développement, aller dans le dossier `server/` et exécuter `npm run watch`
+
+Enfin **Lancer le serveur de l'application** : Dans le terminal, dans le dossier de l'application et executer `ng serve --open`
 
 ## Liens utils
 
