@@ -24,4 +24,7 @@ export class SocketService {
     getWords() {
         return this.socket.fromEvent('words');
     }
+    hasWon() {
+        return this.socket.fromEvent('fin');
+    }
 }
