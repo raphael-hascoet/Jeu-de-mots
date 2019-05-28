@@ -14,4 +14,8 @@ export class SocketService {
     sendProposition(msg: string) {
         this.socket.emit('proposition', msg);
     }
+
+    hasWon() {
+        return this.socket.fromEvent('fin');
+    }
 }
