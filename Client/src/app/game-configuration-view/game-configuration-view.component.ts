@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { GameService } from '../service/game.service';
 import { GameConfig } from '../model/game-config/game-config';
 import { AppComponent } from '../app.component';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-game-configuration-view',
@@ -14,6 +15,8 @@ export class GameConfigurationViewComponent implements OnInit {
     maxDifficulty: number;
     minDifficulty: number;
 
+    difficulty = new FormControl(1, [Validators.required]);
+
     constructor(private gameService: GameService) {}
 
     ngOnInit() {
@@ -23,8 +26,6 @@ export class GameConfigurationViewComponent implements OnInit {
         this.gameService
             .getMaxDifficulty()
             .subscribe(value => (this.maxDifficulty = value));
-
-        console.log(this.parent);
     }
 
     createGame(
@@ -32,15 +33,11 @@ export class GameConfigurationViewComponent implements OnInit {
         hostTeam: string,
         gameDifficulty: number
     ): void {
-        if (gameDifficulty) {
-            this.gameService.createGame(
-                new GameConfig(hostName, hostTeam, gameDifficulty)
-            );
+        this.gameService.createGame(
+            new GameConfig(hostName, hostTeam, gameDifficulty)
+        );
 
-            this.changeViewToGame();
-        } else {
-            alert('Saisir un niveau de difficulté!');
-        }
+        this.changeViewToGame();
     }
 
     changeViewToGame() {
