@@ -113,6 +113,7 @@ export class Game {
         return this.wordToFind;
     }
 
+<<<<<<< HEAD
     getHost(): Player {
         return this.host;
     }
@@ -121,6 +122,8 @@ export class Game {
         return this.difficultyLevel;
     }
 
+=======
+>>>>>>> e34e7b3a301bd2159c27e679c43fa0883136b475
     addProposedWord(word: string, score: number) {
         this.proposedWords.push(new ProposedWord(word, score));
     }
