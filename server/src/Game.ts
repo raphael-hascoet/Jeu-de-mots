@@ -11,31 +11,21 @@ export class Game {
 
     /**
      * Méthode du design pattern singleton, permet de créer ou de récupérer la partie jouée sur le serveur
-     * 
+     *
      * @param host hébergeur de la partie, remplir pour créer une nouvelle partie
      * @param difficulty  difficulté de la partie, remplir pour créer une nouvelle partie
-     * 
+     *
      */
     static getInstance(
         host = new Player('null', 'null'),
         difficulty = 4
     ): Game {
-        if (!Game.instance || host.getName()!='null') {
+        if (!Game.instance || host.getName() != 'null') {
             Game.instance = new Game(host, difficulty);
         }
 
         return Game.instance;
     }
-
-    /**
-     * Permet de mettre à jour le mot lors de la recherche dans le dictionnaire
-     */
-    private wordSrc = new BehaviorSubject<string>('');
-
-    /**
-     * Permet de récupérer le mot de manière asynchrone
-     */
-    public wordObserver = this.wordSrc.asObservable();
 
     /**
      * Hebergeur de la partie
@@ -123,10 +113,16 @@ export class Game {
         return this.wordToFind;
     }
 
-    addProposedWord(word: string, score: number) {
-        this.proposedWords.push(new ProposedWord(word, score));
     getHost(): Player {
         return this.host;
+    }
+
+    getDifficultyLevel(): number {
+        return this.difficultyLevel;
+    }
+
+    addProposedWord(word: string, score: number) {
+        this.proposedWords.push(new ProposedWord(word, score));
     }
 
     getProposedWords(): Array<ProposedWord> {
@@ -134,9 +130,6 @@ export class Game {
             (a, b) => {
                 return b.getScore() - a.getScore();
             }
-    getDifficultyLevel(): number {
-        return this.difficultyLevel;
-    }
         );
         let wordsToReturn = new Array<ProposedWord>();
         for (let i = 0; i < 5 && i < sortedWords.length; i++) {

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SocketService } from '../socket.service';
-import TsMap from 'ts-map';
+import { SocketService } from '../service/socket.service';
 
 @Component({
     selector: 'app-game-command',

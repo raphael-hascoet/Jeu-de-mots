@@ -1,17 +1,18 @@
+<app-game-command></app-game-command>
 <form>
-  <mat-form-field>
-      <mat-label>Réponse</mat-label>
-      <input #box matInput />
-  </mat-form-field>
-  <button (click)="enterValue(box.value)" mat-raised-button>Valider</button>
-  <div>
-      <textarea
-          id="response"
-          matInput
-          readonly
-          #response
-          rows="50"
-          cols="15"
-      ></textarea>
-  </div>
+    <mat-form-field>
+        <mat-label>Réponse</mat-label>
+        <input #box matInput />
+    </mat-form-field>
+    <button (click)="enterValue(box.value)" mat-raised-button>Valider</button>
+    <div>
+        <textarea
+            id="response"
+            matInput
+            readonly
+            #response
+            rows="50"
+            cols="15"
+        ></textarea>
+    </div>
 </form>
