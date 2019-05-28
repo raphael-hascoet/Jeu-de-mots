@@ -1,57 +1,46 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GameService } from '../service/game.service';
-import { GameConfig } from '../model/game-config/game-config';
+import { GameConfig } from "../model/game-config/game-config";
 import { AppComponent } from '../app.component';
 
 @Component({
-    selector: 'app-game-configuration-view',
-    templateUrl: './game-configuration-view.component.html',
-    styleUrls: ['./game-configuration-view.component.css'],
+  selector: 'app-game-configuration-view',
+  templateUrl: './game-configuration-view.component.html',
+  styleUrls: ['./game-configuration-view.component.css']
 })
 export class GameConfigurationViewComponent implements OnInit {
-    @Input() parent: AppComponent;
 
-    maxDifficulty: number;
-    minDifficulty: number;
+  @Input() parent: AppComponent;
 
-    constructor(private gameService: GameService) {}
+  maxDifficulty : number;
+  minDifficulty : number;
 
-    ngOnInit() {
-        this.gameService
-            .getMinDifficulty()
-            .subscribe(value => (this.minDifficulty = value));
-        this.gameService
-            .getMaxDifficulty()
-            .subscribe(value => (this.maxDifficulty = value));
+  constructor(private gameService: GameService) { }
 
-        console.log(this.parent);
-    }
+  ngOnInit() {
+    this.gameService.getMinDifficulty().subscribe(value => this.minDifficulty=value);
+    this.gameService.getMaxDifficulty().subscribe(value => this.maxDifficulty=value);
 
-    createGame(
-        hostName: string,
-        hostTeam: string,
-        gameDifficulty: number
-    ): void {
-        if (gameDifficulty) {
-            this.gameService.createGame(
-                new GameConfig(hostName, hostTeam, gameDifficulty)
-            );
+    console.log(this.parent);
 
-            this.changeViewToGame();
-        } else {
-            alert('Saisir un niveau de difficulté!');
-        }
-    }
+  }
 
-    changeViewToGame() {
-        this.parent.changeViewToGame();
-    }
+  createGame(hostName : string, hostTeam : string, gameDifficulty : number) : void{
+    this.gameService.createGame(new GameConfig(hostName, hostTeam, gameDifficulty));
 
-    getMinDifficulty(): number {
-        return this.minDifficulty;
-    }
+    this.changeViewToGame();
+  }
 
-    getMaxDifficulty(): number {
-        return this.maxDifficulty;
-    }
+  changeViewToGame(){
+    this.parent.changeViewToGame();
+  }
+
+  getMinDifficulty(): number{
+    return this.minDifficulty;
+  }
+
+  getMaxDifficulty(): number{
+    return this.maxDifficulty; 
+  }
+
 }
