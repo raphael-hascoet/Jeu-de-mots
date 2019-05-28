@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { latinise } from './stringUtil';
 import { Player } from './Player';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { ProposedWord } from './ProposedWord';
 
 /**
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
@@ -11,31 +11,21 @@ export class Game {
 
     /**
      * Méthode du design pattern singleton, permet de créer ou de récupérer la partie jouée sur le serveur
-     * 
+     *
      * @param host hébergeur de la partie, remplir pour créer une nouvelle partie
      * @param difficulty  difficulté de la partie, remplir pour créer une nouvelle partie
-     * 
+     *
      */
     static getInstance(
         host = new Player('null', 'null'),
         difficulty = 4
     ): Game {
-        if (!Game.instance || host.getName()!='null') {
+        if (!Game.instance || host.getName() != 'null') {
             Game.instance = new Game(host, difficulty);
         }
 
         return Game.instance;
     }
-
-    /**
-     * Permet de mettre à jour le mot lors de la recherche dans le dictionnaire
-     */
-    private wordSrc = new BehaviorSubject<string>('');
-
-    /**
-     * Permet de récupérer le mot de manière asynchrone
-     */
-    public wordObserver = this.wordSrc.asObservable();
 
     /**
      * Hebergeur de la partie
@@ -51,6 +41,10 @@ export class Game {
      * Niveau de difficulté de la partie
      */
     private difficultyLevel: number;
+    /**
+     * Liste des mots proposés par les joueurs
+     */
+    private proposedWords: Array<ProposedWord>;
 
     private wordToFind = '';
 
@@ -62,6 +56,7 @@ export class Game {
         this.players = new Array<Player>();
         this.players.push(this.host);
         this.difficultyLevel = difficultyLevel;
+        this.proposedWords = new Array<ProposedWord>();
     }
 
     /**
@@ -126,11 +121,20 @@ export class Game {
         return this.difficultyLevel;
     }
 
-    wait(ms: number): void {
-        var start = new Date().getTime();
-        var end = start;
-        while (end < start + ms) {
-            end = new Date().getTime();
+    addProposedWord(word: string, score: number) {
+        this.proposedWords.push(new ProposedWord(word, score));
+    }
+
+    getProposedWords(): Array<ProposedWord> {
+        let sortedWords: Array<ProposedWord> = this.proposedWords.sort(
+            (a, b) => {
+                return b.getScore() - a.getScore();
+            }
+        );
+        let wordsToReturn = new Array<ProposedWord>();
+        for (let i = 0; i < 5 && i < sortedWords.length; i++) {
+            wordsToReturn.push(sortedWords[i]);
         }
+        return wordsToReturn;
     }
 }

@@ -42,6 +42,7 @@ io.on('connection', function(socket: any) {
         console.log('Mot proposé :');
         console.log(msg);
         var score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
+        Game.getInstance().addProposedWord(msg, score);
         socket.emit('score', [msg, score]);
 
         if (
@@ -50,6 +51,11 @@ io.on('connection', function(socket: any) {
         ) {
             socket.emit('fin');
         }
+    });
+
+    socket.on('getWords', function() {
+        console.log('getWords');
+        socket.emit('words', [Game.getInstance().getProposedWords()]);
     });
 
     socket.on('getMinimalDifficulty', function() {
