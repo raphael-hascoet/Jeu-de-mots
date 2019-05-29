@@ -56,16 +56,17 @@ io.on('connection', function(socket: any) {
     });
 
     socket.on('getMinimalDifficulty', function() {
-        gameConfiguration.calculLevelInterval();
         socket.emit('minDifficulty', gameConfiguration.getMinimalDifficulty());
     });
 
     socket.on('getMaximalDifficulty', function() {
-        gameConfiguration.calculLevelInterval();
         socket.emit('maxDifficulty', gameConfiguration.getMaximalDifficulty());
     });
 });
 
 const server = http.listen(3000, async () => {
     console.log('server is running on port', server.address().port);
+
+    //Initialisation des niveaux de difficulté
+    gameConfiguration.calculLevelInterval();
 });
