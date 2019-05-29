@@ -136,7 +136,7 @@ export class Game {
      */
     getBestProposedWords(nb: number): Array<ProposedWord> {
         let sortedWords: Array<ProposedWord> = this.proposedWords;
-        sortedWords = sortedWords.sort((a, b) => {
+        sortedWords.sort((a, b) => {
             return b.getScore() - a.getScore();
         });
         let wordsToReturn = new Array<ProposedWord>();
