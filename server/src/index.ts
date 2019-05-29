@@ -45,10 +45,7 @@ io.on('connection', function(socket: any) {
         Game.getInstance().addProposedWord(msg, score);
         socket.emit('score', [msg, score]);
 
-        if (
-            score == Game.getInstance().getDifficultyLevel() &&
-            msg == Game.getInstance().getWordToFind()
-        ) {
+        if (msg == Game.getInstance().getWordToFind()) {
             socket.emit('fin');
         }
     });
