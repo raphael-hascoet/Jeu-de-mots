@@ -52,7 +52,7 @@ io.on('connection', function(socket: any) {
 
     socket.on('getWords', function() {
         console.log('getWords');
-        socket.emit('words', [Game.getInstance().getProposedWords()]);
+        socket.emit('words', [Game.getInstance().getBestProposedWords(5)]);
     });
 
     socket.on('getMinimalDifficulty', function() {
