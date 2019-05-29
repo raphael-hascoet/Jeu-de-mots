@@ -68,10 +68,4 @@ io.on('connection', function(socket: any) {
 
 const server = http.listen(3000, async () => {
     console.log('server is running on port', server.address().port);
-
-    console.log(
-        'Resultat attendu 3 : ' + calculateWordScore('boom', 'bimbamboom')
-    );
-    console.log('Resultat attendu 3 : ' + calculateWordScore('bim', 'biim'));
-    console.log('Resultat attendu 0 : ' + calculateWordScore('', 'rien'));
 });
