@@ -121,18 +121,26 @@ export class Game {
         return this.difficultyLevel;
     }
 
+    /**
+     * Méthode permettant d'ajouter un mot à la liste des mots proposés
+     * @param word - Mot à ajouter
+     * @param score - Score correspondant à ce mot (dépend du mot à trouver)
+     */
     addProposedWord(word: string, score: number) {
         this.proposedWords.push(new ProposedWord(word, score));
     }
 
-    getProposedWords(): Array<ProposedWord> {
-        let sortedWords: Array<ProposedWord> = this.proposedWords.sort(
-            (a, b) => {
-                return b.getScore() - a.getScore();
-            }
-        );
+    /**
+     * Méthode permettant de récupérer la liste des nb meilleurs mots proposés (en fonction de leur score)
+     * @param nb - Nombre de mots à récupérer
+     */
+    getBestProposedWords(nb: number): Array<ProposedWord> {
+        let sortedWords: Array<ProposedWord> = this.proposedWords;
+        sortedWords = sortedWords.sort((a, b) => {
+            return b.getScore() - a.getScore();
+        });
         let wordsToReturn = new Array<ProposedWord>();
-        for (let i = 0; i < 5 && i < sortedWords.length; i++) {
+        for (let i = 0; i < nb && i < sortedWords.length; i++) {
             wordsToReturn.push(sortedWords[i]);
         }
         return wordsToReturn;
