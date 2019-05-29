@@ -68,5 +68,5 @@ const server = http.listen(3000, async () => {
     console.log('server is running on port', server.address().port);
 
     //Initialisation des niveaux de difficulté
-    gameConfiguration.calculLevelInterval();
+    await gameConfiguration.calculLevelInterval();
 });

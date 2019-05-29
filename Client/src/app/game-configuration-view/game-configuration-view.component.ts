@@ -15,17 +15,27 @@ export class GameConfigurationViewComponent implements OnInit {
     maxDifficulty: number;
     minDifficulty: number;
 
-    difficulty = new FormControl(1, [Validators.required]);
+    difficulty: FormControl = new FormControl(1, [Validators.required]);
 
     constructor(private gameService: GameService) {}
 
     ngOnInit() {
-        this.gameService
-            .getMinDifficulty()
-            .subscribe(value => (this.minDifficulty = value));
-        this.gameService
-            .getMaxDifficulty()
-            .subscribe(value => (this.maxDifficulty = value));
+        this.gameService.getMinDifficulty().subscribe(value => {
+            this.minDifficulty = value;
+            this.difficulty.setValidators([
+                Validators.required,
+                Validators.min(this.minDifficulty),
+                Validators.max(this.maxDifficulty),
+            ]);
+        });
+        this.gameService.getMaxDifficulty().subscribe(value => {
+            this.maxDifficulty = value;
+            this.difficulty.setValidators([
+                Validators.required,
+                Validators.min(this.minDifficulty),
+                Validators.max(this.maxDifficulty),
+            ]);
+        });
     }
 
     createGame(
