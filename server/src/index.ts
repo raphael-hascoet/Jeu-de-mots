@@ -45,26 +45,21 @@ io.on('connection', function(socket: any) {
         Game.getInstance().addProposedWord(msg, score);
         socket.emit('score', [msg, score]);
 
-        if (
-            score == Game.getInstance().getDifficultyLevel() &&
-            msg == Game.getInstance().getWordToFind()
-        ) {
+        if (msg == Game.getInstance().getWordToFind()) {
             socket.emit('fin');
         }
     });
 
     socket.on('getWords', function() {
         console.log('getWords');
-        socket.emit('words', [Game.getInstance().getProposedWords()]);
+        socket.emit('words', [Game.getInstance().getBestProposedWords(5)]);
     });
 
     socket.on('getMinimalDifficulty', function() {
-        gameConfiguration.calculLevelInterval();
         socket.emit('minDifficulty', gameConfiguration.getMinimalDifficulty());
     });
 
     socket.on('getMaximalDifficulty', function() {
-        gameConfiguration.calculLevelInterval();
         socket.emit('maxDifficulty', gameConfiguration.getMaximalDifficulty());
     });
 });
@@ -72,9 +67,6 @@ io.on('connection', function(socket: any) {
 const server = http.listen(3000, async () => {
     console.log('server is running on port', server.address().port);
 
-    console.log(
-        'Resultat attendu 3 : ' + calculateWordScore('boom', 'bimbamboom')
-    );
-    console.log('Resultat attendu 3 : ' + calculateWordScore('bim', 'biim'));
-    console.log('Resultat attendu 0 : ' + calculateWordScore('', 'rien'));
+    //Initialisation des niveaux de difficulté
+    await gameConfiguration.calculLevelInterval();
 });
