@@ -1,26 +1,37 @@
 <h2>
-  Configuration de la partie
+    Configuration de la partie
 </h2>
 <form>
-  <mat-form-field>
-    <mat-label>Pseudonyme</mat-label>
-    <input #hostName matInput />
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Nom d'équipe</mat-label>
-    <input #hostTeam matInput />
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Niveau de difficulté</mat-label>
-    <input #gameDifficulty matInput type="number" min="{{getMinDifficulty()}}" max="{{getMaxDifficulty()}}"
-      [formControl]="difficulty" />
-    <mat-error *ngIf="difficulty.invalid">
-      Entrez un niveau de difficulté
-    </mat-error>
-  </mat-form-field>
-  <button (click)="
+    <mat-form-field>
+        <mat-label>Pseudonyme</mat-label>
+        <input #hostName matInput />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Nom d'équipe</mat-label>
+        <input #hostTeam matInput />
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Niveau de difficulté</mat-label>
+        <input
+            #gameDifficulty
+            matInput
+            type="number"
+            min="{{ getMinDifficulty() }}"
+            max="{{ getMaxDifficulty() }}"
+            [formControl]="difficulty"
+        />
+        <mat-error *ngIf="difficulty.invalid">
+            Entrez un niveau de difficulté entre {{ getMinDifficulty() }} et
+            {{ getMaxDifficulty() }}
+        </mat-error>
+    </mat-form-field>
+    <button
+        (click)="
             createGame(hostName.value, hostTeam.value, gameDifficulty.value)
-        " mat-raised-button [disabled]="difficulty.invalid">
-    Valider
-  </button>
+        "
+        mat-raised-button
+        [disabled]="difficulty.invalid"
+    >
+        Valider
+    </button>
 </form>
