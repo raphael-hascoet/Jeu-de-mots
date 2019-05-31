@@ -1,46 +1,50 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'Jeu de Mots';
-  componentToDisplay:string = "game-config"; 
+    title = 'Jeu de Mots';
+    componentToDisplay: string = 'dash-board';
 
-  /**
-   * Méthode indiquant d'afficher la vue de la partie
-   */
-  changeViewToGame():void{
-    this.componentToDisplay = "game";
-  }
+    /**
+     * Méthode indiquant d'afficher la vue de la partie
+     */
+    changeViewToGame(): void {
+        this.componentToDisplay = 'game';
+    }
 
-  /**
-   * Méthode retournant un Booléan indiquant s'il faut afficher la vue de la partie
-   */
-  displayGame(): boolean{
-    return this.componentToDisplay=="game";
-  }
+    displayDashBoard(): boolean {
+        return this.componentToDisplay == 'dash-board';
+    }
 
-  /**
-   * Méthode indiquant d'afficher la vue de configuration de partie
-   */
-  changeViewToGameConfig():void{
-    this.componentToDisplay = "game-config";
-  }
+    /**
+     * Méthode retournant un Booléan indiquant s'il faut afficher la vue de la partie
+     */
+    displayGame(): boolean {
+        return this.componentToDisplay == 'game';
+    }
 
-  /**
-   * Méthode retournant un Booléan indiquant s'il faut afficher la vue de configuration de la partie
-   */
-  displayGameConfig() : boolean {
-    return this.componentToDisplay == "game-config";
-  }
+    /**
+     * Méthode indiquant d'afficher la vue de configuration de partie
+     */
+    changeViewToGameConfig(): void {
+        this.componentToDisplay = 'game-config';
+    }
 
-  /**
-   * Méthode récupérent le composant app pour le transmettre aux autres vues
-   */
-  getAppComponent() : AppComponent{
-    return this;
-  }
+    /**
+     * Méthode retournant un Booléan indiquant s'il faut afficher la vue de configuration de la partie
+     */
+    displayGameConfig(): boolean {
+        return this.componentToDisplay == 'game-config';
+    }
+
+    /**
+     * Méthode récupérent le composant app pour le transmettre aux autres vues
+     */
+    getAppComponent(): AppComponent {
+        return this;
+    }
 }

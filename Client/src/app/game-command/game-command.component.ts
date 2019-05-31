@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SocketService } from '../service/socket.service';
+import { GameService } from '../service/game.service';
 
 @Component({
     selector: 'app-game-command',
@@ -7,10 +7,10 @@ import { SocketService } from '../service/socket.service';
     styleUrls: ['./game-command.component.css'],
 })
 export class GameCommandComponent implements OnInit {
-    constructor(private socketService: SocketService) {}
+    constructor(private gameService: GameService) {}
 
     ngOnInit() {
-        this.socketService.getWords().subscribe(msg => {
+        this.gameService.getWords().subscribe(msg => {
             console.log(msg);
             let msgToShow =
                 'Les 5 mots ayant rapporté le plus de points sont : \n';
@@ -27,6 +27,6 @@ export class GameCommandComponent implements OnInit {
     }
 
     onShowWords() {
-        this.socketService.askForWords();
+        this.gameService.askForWords();
     }
 }

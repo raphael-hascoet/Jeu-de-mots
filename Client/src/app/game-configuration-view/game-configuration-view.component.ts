@@ -1,8 +1,16 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { GameService } from '../service/game.service';
 import { GameConfig } from '../model/game-config/game-config';
 import { AppComponent } from '../app.component';
 import { FormControl, Validators } from '@angular/forms';
+
+declare global {
+    interface Window {
+        RTCPeerConnection: RTCPeerConnection;
+        mozRTCPeerConnection: RTCPeerConnection;
+        webkitRTCPeerConnection: RTCPeerConnection;
+    }
+}
 
 @Component({
     selector: 'app-game-configuration-view',
@@ -12,14 +20,18 @@ import { FormControl, Validators } from '@angular/forms';
 export class GameConfigurationViewComponent implements OnInit {
     @Input() parent: AppComponent;
 
+    localIp: string =
+        sessionStorage.getItem('LOCAL_IP') + ':' + window.location.port;
+
     maxDifficulty: number;
     minDifficulty: number;
 
     difficulty: FormControl = new FormControl(1, [Validators.required]);
 
-    constructor(private gameService: GameService) {}
+    constructor(private gameService: GameService, private zone: NgZone) {}
 
     ngOnInit() {
+        this.determineLocalIp();
         this.gameService.getMinDifficulty().subscribe(value => {
             this.minDifficulty = value;
             this.difficulty.setValidators([
@@ -60,5 +72,46 @@ export class GameConfigurationViewComponent implements OnInit {
 
     getMaxDifficulty(): number {
         return this.maxDifficulty;
+    }
+
+    /**
+     * Récupération de l'ip local
+     */
+
+    private ipRegex = new RegExp(
+        /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/
+    );
+
+    private determineLocalIp() {
+        window.RTCPeerConnection = this.getRTCPeerConnection();
+
+        const pc = new RTCPeerConnection({ iceServers: [] });
+        pc.createDataChannel('');
+        pc.createOffer().then(pc.setLocalDescription.bind(pc));
+
+        pc.onicecandidate = ice => {
+            this.zone.run(() => {
+                if (!ice || !ice.candidate || !ice.candidate.candidate) {
+                    return;
+                }
+
+                this.localIp =
+                    this.ipRegex.exec(ice.candidate.candidate)[1] +
+                    ':' +
+                    window.location.port;
+                sessionStorage.setItem('LOCAL_IP', this.localIp);
+
+                pc.onicecandidate = () => {};
+                pc.close();
+            });
+        };
+    }
+
+    private getRTCPeerConnection() {
+        return (
+            window.RTCPeerConnection ||
+            window.mozRTCPeerConnection ||
+            window.webkitRTCPeerConnection
+        );
     }
 }
