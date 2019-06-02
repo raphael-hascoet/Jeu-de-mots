@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SocketService } from '../service/socket.service';
 import { MatDialog } from '@angular/material';
 import { GiveupDialogComponent } from './giveup-dialog/giveup-dialog.component';
+import { AppComponent } from '../app.component';
 
 @Component({
     selector: 'app-game-command',
@@ -12,6 +13,16 @@ import { GiveupDialogComponent } from './giveup-dialog/giveup-dialog.component';
  * Classe représentant les commandes disponibles durant le jeu
  */
 export class GameCommandComponent implements OnInit {
+    /**
+     * Parent de la classe
+     */
+    @Input() parent: AppComponent;
+
+    /**
+     * Constructeur des boutons du jeu
+     * @param socketService - Service permettant de gérer les sockets avec le serveur
+     * @param giveUpDialog - Boite de dialogue d'abandon de la partie
+     */
     constructor(
         private socketService: SocketService,
         public giveUpDialog: MatDialog
@@ -32,6 +43,9 @@ export class GameCommandComponent implements OnInit {
             }
             alert(msgToShow);
         });
+        this.socketService.getAnswer().subscribe(msg => {
+            alert('Le mot à trouver était "' + msg[0] + '"');
+        });
     }
 
     /**
@@ -47,7 +61,10 @@ export class GameCommandComponent implements OnInit {
     onGiveUp() {
         const dialogRef = this.giveUpDialog.open(GiveupDialogComponent);
         dialogRef.afterClosed().subscribe(result => {
-            console.log('$result');
+            if (result) {
+                this.parent.changeViewToGameConfig();
+                this.socketService.askForAnswer();
+            }
         });
     }
 }

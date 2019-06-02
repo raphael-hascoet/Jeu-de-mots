@@ -45,7 +45,9 @@ export class Game {
      * Liste des mots proposés par les joueurs
      */
     private proposedWords: Array<ProposedWord>;
-
+    /**
+     * Mot que les joueurs doivent trouver
+     */
     private wordToFind = '';
 
     /**

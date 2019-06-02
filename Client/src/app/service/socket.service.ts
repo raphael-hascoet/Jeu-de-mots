@@ -17,13 +17,34 @@ export class SocketService {
         this.socket.emit('proposition', msg);
     }
 
+    /**
+     * Méthode permettant de demander la liste des meilleurs mots proposés par les joueurs au serveur
+     */
     askForWords() {
         this.socket.emit('getWords');
     }
 
+    /**
+     * Méthode permettant de traiter le retour de la liste des meilleurs mots proposés par les joueurs
+     */
     getWords() {
         return this.socket.fromEvent('words');
     }
+
+    /**
+     * Méthode permettant de demander au serveur la réponse qu'il fallait trouver
+     */
+    askForAnswer() {
+        this.socket.emit('getAnswer');
+    }
+
+    /**
+     * Méthode permettant de traiter la réception du mot à trouver par les joueurs
+     */
+    getAnswer() {
+        return this.socket.fromEvent('answer');
+    }
+
     hasWon() {
         return this.socket.fromEvent('fin');
     }
