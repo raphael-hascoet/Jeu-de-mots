@@ -8,7 +8,7 @@ export function createGame(
     difficultyLevel: number
 ): Game {
     let host = new Player(hostName, hostTeam);
-    let game = new Game(host, difficultyLevel);
+    let game = Game.getInstance(host, difficultyLevel);
 
     return game;
 }
@@ -26,11 +26,16 @@ export function calculateWordScore(
     wordToFind: string
 ): number {
     let score = 0;
+    let countedLetter = new Array<string>();
 
     //On ajoute un point pour chaque lettre commune aux deux mots
     for (let i = 0; i < proposedWord.length; i++) {
-        if (wordToFind.search(proposedWord.charAt(i)) != -1) {
+        if (
+            countedLetter.indexOf(proposedWord.charAt(i)) == -1 &&
+            wordToFind.search(proposedWord.charAt(i)) != -1
+        ) {
             score++;
+            countedLetter.push(proposedWord.charAt(i));
         }
     }
 
