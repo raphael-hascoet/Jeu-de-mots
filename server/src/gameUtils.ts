@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { Player } from './Player';
 import { Game } from './Game';
+import { Score } from './Score';
 
 export function createGame(
     hostName: string,
@@ -24,9 +25,26 @@ export function createGame(
 export function calculateWordScore(
     proposedWord: string,
     wordToFind: string
-): number {
-    let score = 0;
-    let countedLetter = new Array<string>();
+): Score {
+    let correctPlace = 0;
+    let correctLetter = 0;
+
+    for (let i = 0; i < proposedWord.length; i++) {
+        if (wordToFind.charAt(i) == proposedWord.charAt(i)) {
+            console.log('passe same');
+
+            correctPlace++;
+        } else if (wordToFind.includes(proposedWord.charAt(i))) {
+            console.log('passe exists');
+
+            correctLetter++;
+        }
+    }
+
+    let score = new Score(correctPlace, correctLetter);
+
+    /**
+     * let countedLetter = new Array<string>();
 
     //On ajoute un point pour chaque lettre commune aux deux mots
     for (let i = 0; i < proposedWord.length; i++) {
@@ -38,6 +56,7 @@ export function calculateWordScore(
             countedLetter.push(proposedWord.charAt(i));
         }
     }
+     */
 
     return score;
 }
