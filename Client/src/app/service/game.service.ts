@@ -67,4 +67,18 @@ export class GameService {
     hasWon() {
         return this.socket.fromEvent('fin');
     }
+
+    /**
+     * Méthode permettant de demander au serveur la réponse qu'il fallait trouver
+     */
+    askForAnswer() {
+        this.socket.emit('getAnswer');
+    }
+
+    /**
+     * Méthode permettant de traiter la réception du mot à trouver par les joueurs
+     */
+    getAnswer() {
+        return this.socket.fromEvent('answer');
+    }
 }
