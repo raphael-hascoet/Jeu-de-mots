@@ -17,7 +17,12 @@ export class GameCommandComponent implements OnInit {
             let words: string[] = msg[0];
             for (let i = 0; i < words.length; i++) {
                 msgToShow +=
-                    words[i]['word'] + ' = ' + words[i]['score'] + '\n';
+                    words[i]['word'] +
+                    ' = ' +
+                    words[i]['score']['correctPlace'] +
+                    ' , ' +
+                    words[i]['score']['correctLetter'] +
+                    '\n';
             }
             if (words.length == 0) {
                 msgToShow = "Votre équipe n'a encore rentré aucun mot.";

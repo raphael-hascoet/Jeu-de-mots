@@ -31,12 +31,8 @@ export function calculateWordScore(
 
     for (let i = 0; i < proposedWord.length; i++) {
         if (wordToFind.charAt(i) == proposedWord.charAt(i)) {
-            console.log('passe same');
-
             correctPlace++;
-        } else if (wordToFind.includes(proposedWord.charAt(i))) {
-            console.log('passe exists');
-
+        } else if (wordToFind.includes(proposedWord.charAt(i) + '')) {
             correctLetter++;
         }
     }
