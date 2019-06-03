@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
     title = 'Jeu de Mots';
     componentToDisplay: string = 'dash-board';
+    userName = "Inconnu";
 
     /**
      * Méthode indiquant d'afficher la vue de la partie
@@ -46,5 +47,13 @@ export class AppComponent {
      */
     getAppComponent(): AppComponent {
         return this;
+    }
+
+    setUserName(userName: string): void{
+        this.userName = userName;
+    }
+
+    getUserName(): string {
+        return this.userName;
     }
 }

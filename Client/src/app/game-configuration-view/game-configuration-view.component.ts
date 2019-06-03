@@ -19,6 +19,7 @@ declare global {
 })
 export class GameConfigurationViewComponent implements OnInit {
     @Input() parent: AppComponent;
+    @Input() hostName: string;
 
     localIp: string =
         sessionStorage.getItem('LOCAL_IP') + ':' + window.location.port;
@@ -51,12 +52,11 @@ export class GameConfigurationViewComponent implements OnInit {
     }
 
     createGame(
-        hostName: string,
         hostTeam: string,
         gameDifficulty: number
     ): void {
         this.gameService.createGame(
-            new GameConfig(hostName, hostTeam, gameDifficulty)
+            new GameConfig(this.hostName, hostTeam, gameDifficulty)
         );
 
         this.changeViewToGame();

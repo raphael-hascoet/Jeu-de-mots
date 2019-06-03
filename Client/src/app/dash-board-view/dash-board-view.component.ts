@@ -13,7 +13,8 @@ export class DashBoardViewComponent implements OnInit {
 
     ngOnInit() {}
 
-    goToGameConfig(): void {
+    goToGameConfig(userName : string): void {
+        this.parent.setUserName(userName); 
         this.parent.changeViewToGameConfig();
     }
 }
