@@ -47,4 +47,11 @@ export class GameViewComponent implements OnInit {
             this.sendProposition(value);
         }
     }
+
+    /**
+     * Méthode permettant de transmettre l'appComponent aux autres modeles
+     */
+    getAppComponent(): AppComponent {
+        return this.parent;
+    }
 }

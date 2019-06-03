@@ -70,6 +70,10 @@ io.on('connection', function(socket: any) {
         }
     });
 
+    socket.on('getAnswer', function() {
+        socket.emit('answer', [Game.getInstance().getWordToFind()]);
+    });
+
     /**
      * Récupération des meilleurs mots proposés
      */
