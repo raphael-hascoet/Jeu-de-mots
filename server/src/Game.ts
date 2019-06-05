@@ -96,7 +96,7 @@ export class Game {
                         if (err) throw err;
                         let words: string[] = data.toString().split('\n');
                         while (word.length != difficulty&&
-                            word.search('(.*-.*)*') != -1) {
+                            word.includes('-')) {
                             let random: number = Math.floor(
                                 Math.random() * words.length
                             );
