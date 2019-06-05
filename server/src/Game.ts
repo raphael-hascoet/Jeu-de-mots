@@ -43,10 +43,12 @@ export class Game {
      */
     private difficultyLevel: number;
     /**
-     * Liste des mots proposés par les joueurs
+     * Liste des mots proposés par tous les joueurs
      */
     private proposedWords: Array<ProposedWord>;
-
+    /**
+     * Mot à trouver
+     */
     private wordToFind = '';
 
     /**
@@ -123,12 +125,15 @@ export class Game {
     }
 
     /**
-     * Méthode permettant d'ajouter un mot à la liste des mots proposés
+     * Méthode permettant d'ajouter un mot à la liste des mots proposés globalement ainsi que la liste personnelle des joueurs
      * @param word - Mot à ajouter
      * @param score - Score correspondant à ce mot (dépend du mot à trouver)
+     * @param player - Joueur qui a proposé le mot
      */
-    addProposedWord(word: string, score: Score) {
-        this.proposedWords.push(new ProposedWord(word, score));
+    addProposedWord(word: string, score: Score, player: Player) {
+        let proposedWord = new ProposedWord(word, score);
+        this.proposedWords.push(proposedWord);
+        player.addProposedWord(proposedWord);
     }
 
     /**
@@ -145,5 +150,12 @@ export class Game {
             wordsToReturn.push(sortedWords[i]);
         }
         return wordsToReturn;
+    }
+
+    /**
+     * Permet de connaître le nombre d'essais effectués par l'équipe
+     */
+    getTryNumber(): number {
+        return this.proposedWords.length;
     }
 }
