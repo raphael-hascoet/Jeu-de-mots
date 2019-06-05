@@ -42,7 +42,11 @@ io.on('connection', function(socket: any) {
         console.log('Mot proposé :');
         console.log(msg);
         let score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
-        Game.getInstance().addProposedWord(msg, score);
+        Game.getInstance().addProposedWord(
+            msg,
+            score,
+            Game.getInstance().getHost()
+        ); //temporaire, après il faudra mettre le joueur qui a proposé le mot
         socket.emit('score', [
             msg,
             score.getcorrectPlace(),
