@@ -30,6 +30,7 @@ export class GameCommandComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        console.log('init', this);
         this.socketService.getWords().subscribe(msg => {
             console.log(msg);
             let msgToShow =
@@ -46,7 +47,6 @@ export class GameCommandComponent implements OnInit {
         });
         this.socketService.getAnswer().subscribe(msg => {
             this.matDialog.open(AnswerDialogComponent, {
-                width: '250px',
                 data: { answer: msg[0] },
             });
         });
