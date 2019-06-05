@@ -19,12 +19,14 @@ export function createGame(
  *
  * @param proposedWord le mot proposé par le joueur
  * @param wordToFind le mot à trouver
+ * @param player le joueur qui a proposé le mot
  *
  * @return le score du mot proposé
  */
 export function calculateWordScore(
     proposedWord: string,
-    wordToFind: string
+    wordToFind: string,
+    player: Player
 ): Score {
     let correctPlace = 0;
     let correctLetter = 0;
@@ -40,6 +42,7 @@ export function calculateWordScore(
     }
 
     let score = new Score(correctPlace, correctLetter);
+    player.updateScore(proposedWord);
 
     return score;
 }

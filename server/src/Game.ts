@@ -3,6 +3,7 @@ import { latinise } from './stringUtil';
 import { Player } from './Player';
 import { ProposedWord } from './ProposedWord';
 import { Score } from './Score';
+import TsMap from 'ts-map';
 
 /**
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
