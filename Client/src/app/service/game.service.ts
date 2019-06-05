@@ -31,7 +31,6 @@ export class GameService {
 
     getHostIsConnected(): Observable<boolean> {
         this.socket.emit('getHostIsConnected');
-        console.log('envois de requête getHostIsConnected');
         return this.hostIsConnected;
     }
 

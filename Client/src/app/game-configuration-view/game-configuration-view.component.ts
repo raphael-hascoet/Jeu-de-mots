@@ -27,7 +27,7 @@ export class GameConfigurationViewComponent implements OnInit {
     maxDifficulty: number;
     minDifficulty: number;
 
-    difficulty: FormControl = new FormControl(1, [Validators.required]);
+    difficultyFormControl: FormControl = new FormControl(1, [Validators.required]);
 
     constructor(private gameService: GameService, private zone: NgZone) {}
 
@@ -36,7 +36,7 @@ export class GameConfigurationViewComponent implements OnInit {
         this.determineLocalIp();
         this.gameService.getMinDifficulty().subscribe(value => {
             this.minDifficulty = value;
-            this.difficulty.setValidators([
+            this.difficultyFormControl.setValidators([
                 Validators.required,
                 Validators.min(this.minDifficulty),
                 Validators.max(this.maxDifficulty),
@@ -44,7 +44,7 @@ export class GameConfigurationViewComponent implements OnInit {
         });
         this.gameService.getMaxDifficulty().subscribe(value => {
             this.maxDifficulty = value;
-            this.difficulty.setValidators([
+            this.difficultyFormControl.setValidators([
                 Validators.required,
                 Validators.min(this.minDifficulty),
                 Validators.max(this.maxDifficulty),

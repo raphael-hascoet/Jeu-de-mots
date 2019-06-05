@@ -164,7 +164,7 @@ io.on('connection', function(socket: any) {
             console.log('host ' + userId + ' disconnected');
             io.emit('hostIsConnected', false);
 
-            if (Game.gameIsLaunched()) {
+            if (!Game.gameIsLaunched()) {
                 console.log('configuration de la partie annulée');
                 Game.resetInstance();
                 io.emit('denyConfig');
