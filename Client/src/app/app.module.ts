@@ -16,10 +16,11 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { GameCommandComponent } from './game-command/game-command.component';
 import { GameConfigurationViewComponent } from './game-configuration-view/game-configuration-view.component';
 import { GameViewComponent } from './game-view/game-view.component';
+import { GameStatsViewComponent } from './game-stats-view/game-stats-view.component';
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
-    declarations: [AppComponent, GameCommandComponent, GameConfigurationViewComponent, GameViewComponent],
+    declarations: [AppComponent, GameCommandComponent, GameConfigurationViewComponent, GameViewComponent, GameStatsViewComponent],
     imports: [
         BrowserModule,
         TextFieldModule,

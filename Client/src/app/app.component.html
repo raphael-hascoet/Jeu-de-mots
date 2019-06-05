@@ -9,4 +9,8 @@
     ></app-game-configuration-view>
     <app-game-view *ngIf="displayGame()" [parent]="getAppComponent()">
     </app-game-view>
+    <app-game-stats-view
+        *ngIf="displayStatsConfig()"
+        [parent]="getAppComponent()"
+    ></app-game-stats-view>
 </div>
