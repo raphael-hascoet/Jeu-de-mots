@@ -31,6 +31,7 @@ export class GameViewComponent implements OnInit {
         this.socketService.hasWon().subscribe(msg => {
             this.response.nativeElement.value =
                 'Gagné ! ' + '\n' + this.response.nativeElement.value;
+            this.changeViewToGameStats();
         });
     }
 
@@ -46,5 +47,9 @@ export class GameViewComponent implements OnInit {
         if (value.replace(/\s/g, '').length != 0) {
             this.sendProposition(value);
         }
+    }
+
+    changeViewToGameStats() {
+        this.parent.changeViewToGameStats();
     }
 }
