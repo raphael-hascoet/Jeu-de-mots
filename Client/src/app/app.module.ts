@@ -18,9 +18,16 @@ import { GameConfigurationViewComponent } from './game-configuration-view/game-c
 import { GameViewComponent } from './game-view/game-view.component';
 import { GameStatsViewComponent } from './game-stats-view/game-stats-view.component';
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
-    declarations: [AppComponent, GameCommandComponent, GameConfigurationViewComponent, GameViewComponent, GameStatsViewComponent],
+    declarations: [
+        AppComponent,
+        GameCommandComponent,
+        GameConfigurationViewComponent,
+        GameViewComponent,
+        GameStatsViewComponent,
+    ],
     imports: [
         BrowserModule,
         TextFieldModule,
@@ -32,6 +39,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
         MatNativeDateModule,
         MatButtonModule,
         SocketIoModule.forRoot(config),
+        ChartsModule,
     ],
     exports: [
         TextFieldModule,
