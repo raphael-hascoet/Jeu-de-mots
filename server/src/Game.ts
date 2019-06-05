@@ -2,6 +2,7 @@ import fs from 'fs';
 import { latinise } from './stringUtil';
 import { Player } from './Player';
 import { ProposedWord } from './ProposedWord';
+import { Score } from './Score';
 
 /**
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
@@ -126,7 +127,7 @@ export class Game {
      * @param word - Mot à ajouter
      * @param score - Score correspondant à ce mot (dépend du mot à trouver)
      */
-    addProposedWord(word: string, score: number) {
+    addProposedWord(word: string, score: Score) {
         this.proposedWords.push(new ProposedWord(word, score));
     }
 
@@ -137,7 +138,7 @@ export class Game {
     getBestProposedWords(nb: number): Array<ProposedWord> {
         let sortedWords: Array<ProposedWord> = this.proposedWords;
         sortedWords.sort((a, b) => {
-            return b.getScore() - a.getScore();
+            return b.getScore().getTotalScore() - a.getScore().getTotalScore();
         });
         let wordsToReturn = new Array<ProposedWord>();
         for (let i = 0; i < nb && i < sortedWords.length; i++) {
