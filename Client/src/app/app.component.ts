@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
     styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+    
     title = 'Jeu de Mots';
     componentToDisplay: string = 'dash-board';
     userName = "Inconnu";
@@ -40,6 +41,14 @@ export class AppComponent {
      */
     displayGameConfig(): boolean {
         return this.componentToDisplay == 'game-config';
+    }
+
+    changeViewToGameLobby(): void {
+        this.componentToDisplay = 'game-lobby';
+    }
+
+    displayGameLobby(): boolean {
+        return this.componentToDisplay == 'game-lobby';
     }
 
     /**

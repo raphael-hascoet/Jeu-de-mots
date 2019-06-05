@@ -32,6 +32,7 @@ export class GameConfigurationViewComponent implements OnInit {
     constructor(private gameService: GameService, private zone: NgZone) {}
 
     ngOnInit() {
+        this.connectHost();
         this.determineLocalIp();
         this.gameService.getMinDifficulty().subscribe(value => {
             this.minDifficulty = value;
@@ -49,6 +50,10 @@ export class GameConfigurationViewComponent implements OnInit {
                 Validators.max(this.maxDifficulty),
             ]);
         });
+    }
+
+    connectHost() {
+        this.gameService.connectHost(this.hostName);
     }
 
     createGame(

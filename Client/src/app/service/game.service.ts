@@ -2,22 +2,49 @@ import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { GameConfig } from '../model/game-config/game-config';
 import { Observable } from 'rxjs';
+import { Player } from '../model/player/player';
 
 @Injectable({
     providedIn: 'root',
 })
 export class GameService {
-    maxDifficulty = this.socket.fromEvent<number>('maxDifficulty');
-    minDifficulty = this.socket.fromEvent<number>('minDifficulty');
+    maxDifficulty: Observable<number> = this.socket.fromEvent<number>('maxDifficulty');
+    minDifficulty: Observable<number> = this.socket.fromEvent<number>('minDifficulty');
+    hostIsConnected: Observable<boolean> = this.socket.fromEvent<boolean>('hostIsConnected');
+    connectedPlayers: Observable<Player[]> = this.socket.fromEvent<Player[]>('connectedPlayers');
 
     constructor(private socket: Socket) {}
+
+    /**
+     * Le premier utilisateur à ce connecter deviens l'host, cette méthode permet d'envoyer le nom de l'host au serveur
+     * et d'initialiser la configuration de la partie
+     *
+     * @param hostname nom de l'host
+     */
+    connectHost(hostname: string): void {
+        this.socket.emit('connectHost', hostname);
+    }
+
+    connectPlayer(playerName: string): void {
+        this.socket.emit('connectPlayer', playerName);
+    }
+
+    getHostIsConnected(): Observable<boolean> {
+        this.socket.emit('getHostIsConnected');
+        console.log('envois de requête getHostIsConnected');
+        return this.hostIsConnected;
+    }
+
+    getConnectedPlayers(): Observable<Player[]> {
+        return this.connectedPlayers;
+    }
 
     /**
      * Création d'une partie
      *
      * @param config nom de l'host, nom de l'équipe et niveau de difficulté sélectionné
      */
-    createGame(config: GameConfig) {
+    createGame(config: GameConfig): void {
         this.socket.emit('startGame', config);
     }
 

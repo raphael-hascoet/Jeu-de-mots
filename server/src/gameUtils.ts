@@ -8,8 +8,8 @@ export function createGame(
     hostTeam: string,
     difficultyLevel: number
 ): Game {
-    let host = new Player(hostName, hostTeam);
-    let game = Game.getInstance(host, difficultyLevel);
+    let host = new Player(hostName);
+    let game = Game.getInstance(host, hostTeam, difficultyLevel);
 
     return game;
 }

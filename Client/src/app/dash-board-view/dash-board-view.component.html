@@ -1,9 +1,10 @@
 <form>
     <mat-form-field>
         <mat-label>Pseudonyme</mat-label>
-        <input #hostName matInput />
+        <input #name matInput />
     </mat-form-field>
-    <button (click)="goToGameConfig(hostName.value)" mat-raised-button>
+    <button *ngIf="!hostIsConnected" (click)="goToGameConfig(name.value)" mat-raised-button>
         Créer une partie
     </button>
+    <button *ngIf="hostIsConnected" (click)="goToGameLobby(name.value)" mat-raised-button>Rejoindre une partie</button>
 </form>
