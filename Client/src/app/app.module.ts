@@ -17,12 +17,20 @@ import { GameCommandComponent } from './game-command/game-command.component';
 import { GameConfigurationViewComponent } from './game-configuration-view/game-configuration-view.component';
 import { GameViewComponent } from './game-view/game-view.component';
 import { GiveupDialogComponent } from './game-command/giveup-dialog/giveup-dialog.component';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AnswerDialogComponent } from './game-command/answer-dialog/answer-dialog.component';
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
-    declarations: [AppComponent, GameCommandComponent, GameConfigurationViewComponent, GameViewComponent, GiveupDialogComponent],
-    entryComponents:[GiveupDialogComponent],
+    declarations: [
+        AppComponent,
+        GameCommandComponent,
+        GameConfigurationViewComponent,
+        GameViewComponent,
+        GiveupDialogComponent,
+        AnswerDialogComponent,
+    ],
+    entryComponents: [GiveupDialogComponent, AnswerDialogComponent],
     imports: [
         BrowserModule,
         TextFieldModule,
@@ -45,7 +53,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
         ReactiveFormsModule,
         MatNativeDateModule,
         MatButtonModule,
-        MatDialogModule
+        MatDialogModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

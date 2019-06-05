@@ -3,6 +3,7 @@ import { SocketService } from '../service/socket.service';
 import { MatDialog } from '@angular/material';
 import { GiveupDialogComponent } from './giveup-dialog/giveup-dialog.component';
 import { AppComponent } from '../app.component';
+import { AnswerDialogComponent } from './answer-dialog/answer-dialog.component';
 
 @Component({
     selector: 'app-game-command',
@@ -21,11 +22,11 @@ export class GameCommandComponent implements OnInit {
     /**
      * Constructeur des boutons du jeu
      * @param socketService - Service permettant de gérer les sockets avec le serveur
-     * @param giveUpDialog - Boite de dialogue d'abandon de la partie
+     * @param matDialog - Boite de dialogue d'abandon de la partie
      */
     constructor(
         private socketService: SocketService,
-        public giveUpDialog: MatDialog
+        public matDialog: MatDialog
     ) {}
 
     ngOnInit() {
@@ -44,7 +45,10 @@ export class GameCommandComponent implements OnInit {
             alert(msgToShow);
         });
         this.socketService.getAnswer().subscribe(msg => {
-            alert('Le mot à trouver était "' + msg[0] + '"');
+            this.matDialog.open(AnswerDialogComponent, {
+                width: '250px',
+                data: { answer: msg[0] },
+            });
         });
     }
 
@@ -59,7 +63,7 @@ export class GameCommandComponent implements OnInit {
      * Méthode permettant d'ouvrir une boîte de dialogue pour quitter la partie
      */
     onGiveUp() {
-        const dialogRef = this.giveUpDialog.open(GiveupDialogComponent);
+        const dialogRef = this.matDialog.open(GiveupDialogComponent);
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.parent.changeViewToGameConfig();
