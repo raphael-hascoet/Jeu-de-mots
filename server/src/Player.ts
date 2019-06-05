@@ -46,4 +46,15 @@ export class Player {
     getTryNumber(): number {
         return this.proposedWords.length;
     }
+
+    /**
+     * Indique l'efficacité d'un joueur (= somme des score des mots proposés / nb de mots proposés)
+     */
+    getEfficacy(): number {
+        let efficacy = 0;
+        this.proposedWords.forEach(word => {
+            efficacy += word.getScore().getTotalScore();
+        });
+        return efficacy / this.getTryNumber();
+    }
 }
