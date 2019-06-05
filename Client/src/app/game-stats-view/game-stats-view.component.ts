@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AppComponent } from '../app.component';
-import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
-import { Label } from 'ng2-charts';
+
+import * as Highcharts from 'highcharts';
 
 @Component({
     selector: 'app-game-stats-view',
@@ -10,71 +10,187 @@ import { Label } from 'ng2-charts';
 })
 export class GameStatsViewComponent implements OnInit {
     @Input() parent: AppComponent;
-
-    public barChartOptions: ChartOptions = {
-        responsive: true,
-        // We use these empty structures as placeholders for dynamic theming.
-        scales: { xAxes: [{}], yAxes: [{}] },
-        plugins: {
-            datalabels: {
-                anchor: 'end',
-                align: 'end',
-            },
-        },
-    };
-    public barChartLabels: Label[] = [
-        '2006',
-        '2007',
-        '2008',
-        '2009',
-        '2010',
-        '2011',
-        '2012',
-    ];
-    public barChartType: ChartType = 'bar';
-    public barChartLegend = true;
-
-    public barChartData: ChartDataSets[] = [
-        { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-        { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
-    ];
+    highcharts = Highcharts;
+    chronologie = {};
+    barChart = {};
 
     constructor() {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.barChart = {
+            chart: {
+                type: 'column',
+            },
+            title: {
+                text: 'Monthly Average Rainfall',
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com',
+            },
+            xAxis: {
+                categories: [
+                    'Jan',
+                    'Feb',
+                    'Mar',
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep',
+                    'Oct',
+                    'Nov',
+                    'Dec',
+                ],
+                crosshair: true,
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Rainfall (mm)',
+                },
+            },
+            tooltip: {
+                headerFormat:
+                    '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat:
+                    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true,
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0,
+                },
+            },
+            series: [
+                {
+                    name: 'Tokyo',
+                    data: [
+                        49.9,
+                        71.5,
+                        106.4,
+                        129.2,
+                        144.0,
+                        176.0,
+                        135.6,
+                        148.5,
+                        216.4,
+                        194.1,
+                        95.6,
+                        54.4,
+                    ],
+                },
+                {
+                    name: 'New York',
+                    data: [
+                        83.6,
+                        78.8,
+                        98.5,
+                        93.4,
+                        106.0,
+                        84.5,
+                        105.0,
+                        104.3,
+                        91.2,
+                        83.5,
+                        106.6,
+                        92.3,
+                    ],
+                },
+                {
+                    name: 'London',
+                    data: [
+                        48.9,
+                        38.8,
+                        39.3,
+                        41.4,
+                        47.0,
+                        48.3,
+                        59.0,
+                        59.6,
+                        52.4,
+                        65.2,
+                        59.3,
+                        51.2,
+                    ],
+                },
+                {
+                    name: 'Berlin',
+                    data: [
+                        42.4,
+                        33.2,
+                        34.5,
+                        39.7,
+                        52.6,
+                        75.5,
+                        57.4,
+                        60.4,
+                        47.6,
+                        39.1,
+                        46.8,
+                        51.1,
+                    ],
+                },
+            ],
+        };
 
-    // events
-    public chartClicked({
-        event,
-        active,
-    }: {
-        event: MouseEvent;
-        active: {}[];
-    }): void {
-        console.log(event, active);
-    }
-
-    public chartHovered({
-        event,
-        active,
-    }: {
-        event: MouseEvent;
-        active: {}[];
-    }): void {
-        console.log(event, active);
-    }
-
-    public randomize(): void {
-        // Only Change 3 values
-        const data = [
-            Math.round(Math.random() * 100),
-            59,
-            80,
-            Math.random() * 100,
-            56,
-            Math.random() * 100,
-            40,
-        ];
-        this.barChartData[0].data = data;
+        this.chronologie = {
+            chart: {
+                type: 'spline',
+            },
+            title: {
+                text: 'Chronologie de la partie',
+            },
+            subtitle: {
+                text: 'Tout est une question de temps',
+            },
+            xAxis: {
+                categories: [
+                    'a',
+                    'aa',
+                    'aab',
+                    'c',
+                    'z',
+                    'azer',
+                    'azert',
+                    'zer',
+                    'zetyu',
+                    'fgd',
+                    'fxcvg',
+                    'fdcxv',
+                ],
+            },
+            yAxis: {
+                title: {
+                    text: 'Score du mot',
+                },
+            },
+            tooltip: {
+                valueSuffix: ' pts',
+            },
+            series: [
+                {
+                    name: '',
+                    data: [
+                        7.0,
+                        6.9,
+                        9.5,
+                        14.5,
+                        18.2,
+                        21.5,
+                        25.2,
+                        26.5,
+                        23.3,
+                        18.3,
+                        13.9,
+                        9.6,
+                    ],
+                },
+            ],
+        };
     }
 }

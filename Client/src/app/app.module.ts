@@ -18,7 +18,7 @@ import { GameConfigurationViewComponent } from './game-configuration-view/game-c
 import { GameViewComponent } from './game-view/game-view.component';
 import { GameStatsViewComponent } from './game-stats-view/game-stats-view.component';
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
-import { ChartsModule } from 'ng2-charts';
+import { HighchartsChartComponent } from 'highcharts-angular';
 
 @NgModule({
     declarations: [
@@ -27,6 +27,7 @@ import { ChartsModule } from 'ng2-charts';
         GameConfigurationViewComponent,
         GameViewComponent,
         GameStatsViewComponent,
+        HighchartsChartComponent,
     ],
     imports: [
         BrowserModule,
@@ -39,7 +40,6 @@ import { ChartsModule } from 'ng2-charts';
         MatNativeDateModule,
         MatButtonModule,
         SocketIoModule.forRoot(config),
-        ChartsModule,
     ],
     exports: [
         TextFieldModule,

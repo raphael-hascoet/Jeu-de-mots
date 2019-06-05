@@ -1,23 +1,9 @@
-<div>
-    <div>
-        <div style="display: block">
-            <canvas
-                baseChart
-                [datasets]="barChartData"
-                [labels]="barChartLabels"
-                [options]="barChartOptions"
-                [legend]="barChartLegend"
-                [chartType]="barChartType"
-            >
-            </canvas>
-        </div>
-        <button
-            mat-button
-            mat-raised-button
-            color="primary"
-            (click)="randomize()"
-        >
-            Update
-        </button>
+<div id="main">
+    <div id="players"></div>
+    <div id="global">
+        <highcharts-chart [Highcharts]="highcharts" [options]="chronologie">
+        </highcharts-chart>
+        <highcharts-chart [Highcharts]="highcharts" [options]="barChart">
+        </highcharts-chart>
     </div>
 </div>
