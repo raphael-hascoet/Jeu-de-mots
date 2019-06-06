@@ -74,7 +74,7 @@ export class Game {
     public startGame() {
         return this.readDictionnary().then(
             data => {
-                this.wordToFind = new WordToFind('epee' /*data*/);
+                this.wordToFind = new WordToFind(data);
             },
             error => {
                 throw new Error(error);
