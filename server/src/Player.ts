@@ -40,6 +40,10 @@ export class Player {
         return this.proposedWords;
     }
 
+    getScore(): number {
+        return this.score;
+    }
+
     /**
      * Ajoute un mot à la liste des mots proposés par le joueur
      * @param word - Mot accompagné de son score
@@ -67,10 +71,11 @@ export class Player {
     }
 
     /**
-     * Méthode permettant de mettre à jour le score du joueur en fonction du mot qu'il a proposé
-     * @param proposedWord - Mot proposé par le joueur
+     * Méthode permettant d'ajouter des points au score du joueur
+     * @param points - Points à ajouter au score
      */
-    updateScore(proposedWord: string) {
-        throw new Error('Réfléchir comment faire');
+    addToScore(points: number) {
+        this.score += points;
+        console.log('Nouveau score du joueur : ' + this.score);
     }
 }

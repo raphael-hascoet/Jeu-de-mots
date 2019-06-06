@@ -4,6 +4,7 @@ import { Player } from './Player';
 import { ProposedWord } from './ProposedWord';
 import { Score } from './Score';
 import TsMap from 'ts-map';
+import { WordToFind } from './WordToFind';
 
 /**
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
@@ -50,7 +51,7 @@ export class Game {
     /**
      * Mot à trouver
      */
-    private wordToFind = '';
+    private wordToFind: WordToFind;
 
     /**
      * Constructeur d'une partie
@@ -61,6 +62,7 @@ export class Game {
         this.players.push(this.host);
         this.difficultyLevel = difficultyLevel;
         this.proposedWords = new Array<ProposedWord>();
+        this.wordToFind = new WordToFind('');
     }
 
     /**
@@ -72,7 +74,7 @@ export class Game {
     public startGame() {
         return this.readDictionnary().then(
             data => {
-                this.wordToFind = data;
+                this.wordToFind = new WordToFind('epee' /*data*/);
             },
             error => {
                 throw new Error(error);
@@ -114,7 +116,7 @@ export class Game {
     }
 
     getWordToFind(): string {
-        return this.wordToFind;
+        return this.wordToFind.getWord();
     }
 
     getHost(): Player {
@@ -158,5 +160,14 @@ export class Game {
      */
     getTryNumber(): number {
         return this.proposedWords.length;
+    }
+
+    /**
+     * Méthode permettant de calculer le score du joueur en fonction du mot qu'il a proposé
+     * @param player - Joueur ayant proposé un mot
+     * @param word - Mot proposé
+     */
+    calculatePlayerScore(player: Player, word: string) {
+        player.addToScore(this.wordToFind.calculatePlayerScore(word));
     }
 }
