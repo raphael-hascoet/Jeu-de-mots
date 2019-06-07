@@ -193,10 +193,5 @@ export class WordToFind {
                 }
             }
         });
-        console.log('Etat des variables :');
-        this.nbLettersFound.forEach((number, letter) => {
-            console.log(letter + ' : ' + number);
-        });
-        console.log('Etat du mot : ' + this.wordState);
     }
 }

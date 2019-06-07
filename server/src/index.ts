@@ -1,5 +1,5 @@
 import { Game } from '../src/Game';
-import { calculateWordScore } from '../src/gameUtils';
+import { calculateWordScore, getStatNbLetter } from '../src/gameUtils';
 import { Player } from '../src/Player';
 import { GameConfiguration } from './GameConfiguration';
 
@@ -59,6 +59,7 @@ io.on('connection', function(socket: any) {
 
         if (msg == Game.getInstance().getWordToFind()) {
             socket.emit('fin');
+            socket.emit('nbLetters', [getStatNbLetter()]);
         }
     });
 
