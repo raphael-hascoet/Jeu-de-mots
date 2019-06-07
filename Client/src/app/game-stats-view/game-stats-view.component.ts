@@ -13,7 +13,26 @@ export class GameStatsViewComponent implements OnInit {
     highcharts = Highcharts;
     chronologie = {};
     barChart = {};
-
+    teamName = 'Equiiiipe';
+    players: {
+        name: string;
+        score: number;
+        efficiency: number;
+        tries: number;
+    }[] = [
+        {
+            name: 'Océane',
+            score: 15,
+            efficiency: 12,
+            tries: 40,
+        },
+        {
+            name: 'Léa',
+            score: 15,
+            efficiency: 12,
+            tries: 40,
+        },
+    ];
     constructor() {}
 
     ngOnInit() {

@@ -1,0 +1,26 @@
+#main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+#players {
+    padding: 1vw;
+    text-align: center;
+}
+.player {
+    border-radius: 10px 100px / 120px;
+    border-style: solid;
+    border-width: medium;
+    margin-bottom: 1vh;
+    max-width: 400px;
+    min-width: 200px;
+}
+
+.name {
+    font-weight: bold;
+}
+
+#header {
+    font-size: 3vh;
+    font-weight: bolder;
+    padding: 2vh;
+}
