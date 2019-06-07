@@ -1,5 +1,13 @@
+<div id="header">Equipe : {{ teamName }}</div>
 <div id="main">
-    <div id="players"></div>
+    <div id="players">
+        <div *ngFor="let player of players" class="player">
+            <p class="name playerInfo">{{ player.name }}</p>
+            <p class="score playerInfo">{{ player.score }} points</p>
+            <p class="efficiency playerInfo">{{ player.efficiency }}%</p>
+            <p class="tries playerInfo">{{ player.tries }} essais</p>
+        </div>
+    </div>
     <div id="global">
         <highcharts-chart [Highcharts]="highcharts" [options]="chronologie">
         </highcharts-chart>
