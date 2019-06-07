@@ -130,6 +130,10 @@ export class Game {
         return this.difficultyLevel;
     }
 
+    getProposedWords(): Array<ProposedWord> {
+        return this.proposedWords;
+    }
+
     /**
      * Méthode permettant d'ajouter un mot à la liste des mots proposés globalement ainsi que la liste personnelle des joueurs
      * @param word - Mot à ajouter
@@ -183,6 +187,17 @@ export class Game {
             }
         }
         return [minLength, maxLength];
+    }
+
+    /**
+     * Méthode permettant de récupérer le score de la partie
+     */
+    getScore(): number {
+        let score = 0;
+        for (let player of this.players) {
+            score += player.getTotalWordScore();
+        }
+        return score;
     }
 
     /**

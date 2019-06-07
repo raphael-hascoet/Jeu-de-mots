@@ -22,6 +22,10 @@ export class ProposedWord {
         return this.score;
     }
 
+    getWord() {
+        return this.word;
+    }
+
     /**
      * Méthode permettant de connaître la taille du mot
      */

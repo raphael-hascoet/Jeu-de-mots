@@ -45,6 +45,17 @@ export class Player {
     }
 
     /**
+     * Méthode permettant de récupérer le total des scores de tous les mots
+     */
+    getTotalWordScore(): number {
+        let score = 0;
+        for (let word of this.proposedWords) {
+            score += word.getScore().getTotalScore();
+        }
+        return score;
+    }
+
+    /**
      * Ajoute un mot à la liste des mots proposés par le joueur
      * @param word - Mot accompagné de son score
      */
@@ -91,7 +102,7 @@ export class Player {
             stats.push(0);
         }
         for (let word of this.proposedWords) {
-            stats[word.getLength() - 1]++;
+            stats[word.getLength() - minLength]++;
         }
         return stats;
     }
