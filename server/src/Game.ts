@@ -3,7 +3,6 @@ import { latinise } from './stringUtil';
 import { Player } from './Player';
 import { ProposedWord } from './ProposedWord';
 import { Score } from './Score';
-import TsMap from 'ts-map';
 import { WordToFind } from './WordToFind';
 
 /**
@@ -123,6 +122,10 @@ export class Game {
         return this.host;
     }
 
+    getPlayers(): Array<Player> {
+        return this.players;
+    }
+
     getDifficultyLevel(): number {
         return this.difficultyLevel;
     }
@@ -160,6 +163,26 @@ export class Game {
      */
     getTryNumber(): number {
         return this.proposedWords.length;
+    }
+
+    /**
+     * Permet de connaître l'intervalle de tailles des mots proposés par les joueurs
+     * @returns index 0 : taille minimale trouvée
+     *          index 1 : taille maximale trouvée
+     */
+    getWordLengthInterval(): [number, number] {
+        let minLength = 999999;
+        let maxLength = 0;
+        for (let word of this.proposedWords) {
+            let length = word.getLength();
+            if (length < minLength) {
+                minLength = length;
+            }
+            if (length > maxLength) {
+                maxLength = length;
+            }
+        }
+        return [minLength, maxLength];
     }
 
     /**

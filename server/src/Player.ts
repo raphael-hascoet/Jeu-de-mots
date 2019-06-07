@@ -78,4 +78,21 @@ export class Player {
         this.score += points;
         console.log('Nouveau score du joueur : ' + this.score);
     }
+
+    /**
+     * Méthode permettant de récupérer le nombre de mots proposés en fonction de leur taille
+     * @param interval - Intervalle de tailles entre lequel les tailles des mots doivent être comprises
+     */
+    getNbWordByLength(interval: [number, number]): Array<number> {
+        let stats = new Array<number>();
+        let minLength = interval[0];
+        let maxLength = interval[1];
+        for (let length = minLength; length <= maxLength; length++) {
+            stats.push(0);
+        }
+        for (let word of this.proposedWords) {
+            stats[word.getLength() - 1]++;
+        }
+        return stats;
+    }
 }
