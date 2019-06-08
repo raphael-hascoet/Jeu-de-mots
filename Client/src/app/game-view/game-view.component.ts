@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { AppComponent } from '../app.component';
-import { SocketService } from '../service/socket.service';
+import { GameService } from '../service/game.service';
 
 @Component({
     selector: 'app-game-view',
@@ -16,10 +16,10 @@ export class GameViewComponent implements OnInit {
     @ViewChild('box') input: ElementRef;
 
     @ViewChild('response') response: ElementRef;
-    constructor(private socketService: SocketService) {}
+    constructor(private gameService: GameService) {}
 
     ngOnInit() {
-        this.socketService.getScore().subscribe(msg => {
+        this.gameService.getScore().subscribe(msg => {
             this.response.nativeElement.value =
                 msg[0] +
                 ' : ' +
@@ -30,14 +30,14 @@ export class GameViewComponent implements OnInit {
                 this.response.nativeElement.value;
         });
 
-        this.socketService.hasWon().subscribe(msg => {
+        this.gameService.hasWon().subscribe(msg => {
             this.response.nativeElement.value =
                 'Gagné ! ' + '\n' + this.response.nativeElement.value;
         });
     }
 
     sendProposition(proposition) {
-        this.socketService.sendProposition(proposition);
+        this.gameService.sendProposition(proposition);
     }
 
     value = '';
@@ -48,5 +48,12 @@ export class GameViewComponent implements OnInit {
         if (value.replace(/\s/g, '').length != 0) {
             this.sendProposition(value);
         }
+    }
+
+    /**
+     * Méthode permettant de transmettre l'appComponent aux autres modeles
+     */
+    getAppComponent(): AppComponent {
+        return this.parent;
     }
 }

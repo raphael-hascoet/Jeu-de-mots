@@ -3,10 +3,17 @@
     <h1>
         {{ title }}
     </h1>
+    <app-dash-board-view
+        *ngIf="displayDashBoard()"
+        [parent]="getAppComponent()"
+    ></app-dash-board-view>
     <app-game-configuration-view
         *ngIf="displayGameConfig()"
         [parent]="getAppComponent()"
+        [hostName]="getUserName()"
     ></app-game-configuration-view>
-    <app-game-view *ngIf="displayGame()" [parent]="getAppComponent()">
-    </app-game-view>
+    <app-game-view
+        *ngIf="displayGame()"
+        [parent]="getAppComponent()"
+    ></app-game-view>
 </div>
