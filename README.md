@@ -32,7 +32,7 @@ Après l'installation, l'application solo peut être lancée avec la commande `n
 
 Pour lancer le serveur en mode développement, aller dans le dossier `server/` et exécuter `npm run watch`
 
-Enfin **Lancer le serveur de l'application** : Dans le terminal, dans le dossier de l'application et executer `ng serve --open`
+Enfin **Lancer le serveur de l'application** : Dans le terminal, aller dans le dossier de l'application et executer `ng serve --host <ip local>`, pour accéder à l'application il faut, depuis un navigateur, requêter l'adresse donnée au port 4200 (ex: 192.168.0.2:4200)
 
 ## Liens utils
 
