@@ -4,7 +4,6 @@ import { MatDialog } from '@angular/material';
 import { GiveupDialogComponent } from './giveup-dialog/giveup-dialog.component';
 import { AppComponent } from '../app.component';
 import { GameService } from '../service/game.service';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-game-command',
@@ -34,7 +33,12 @@ export class GameCommandComponent implements OnInit {
             let words: string[] = msg[0];
             for (let i = 0; i < words.length; i++) {
                 msgToShow +=
-                    words[i]['word'] + ' = ' + words[i]['score'] + '\n';
+                    words[i]['word'] +
+                    ' = ' +
+                    words[i]['score']['correctPlace'] +
+                    ' , ' +
+                    words[i]['score']['correctLetter'] +
+                    '\n';
             }
             if (words.length == 0) {
                 msgToShow = "Votre équipe n'a encore rentré aucun mot.";

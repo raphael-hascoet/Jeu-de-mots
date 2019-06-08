@@ -2,7 +2,6 @@ import { RoutingService } from './../service/routing.service';
 import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { GameService } from '../service/game.service';
 import { GameConfig } from '../model/game-config/game-config';
-import { AppComponent } from '../app.component';
 import { FormControl, Validators } from '@angular/forms';
 
 declare global {

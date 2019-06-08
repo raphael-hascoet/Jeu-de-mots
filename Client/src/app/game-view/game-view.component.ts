@@ -22,6 +22,8 @@ export class GameViewComponent implements OnInit {
                 msg[0] +
                 ' : ' +
                 msg[1] +
+                ' , ' +
+                msg[2] +
                 '\n' +
                 this.response.nativeElement.value;
         });
