@@ -8,8 +8,6 @@ import { GameService } from '../service/game.service';
     styleUrls: ['./game-view.component.css'],
 })
 export class GameViewComponent implements OnInit {
-    @Input() parent: AppComponent;
-
     title = 'app';
     incomingmsg = [];
     msg = 'First Protocol';
@@ -46,12 +44,5 @@ export class GameViewComponent implements OnInit {
         if (value.replace(/\s/g, '').length != 0) {
             this.sendProposition(value);
         }
-    }
-
-    /**
-     * Méthode permettant de transmettre l'appComponent aux autres modeles
-     */
-    getAppComponent(): AppComponent {
-        return this.parent;
     }
 }

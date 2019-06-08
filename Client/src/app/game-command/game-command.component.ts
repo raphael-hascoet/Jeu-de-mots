@@ -1,8 +1,10 @@
+import { RoutingService } from './../service/routing.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { GiveupDialogComponent } from './giveup-dialog/giveup-dialog.component';
 import { AppComponent } from '../app.component';
 import { GameService } from '../service/game.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-game-command',
@@ -14,18 +16,14 @@ import { GameService } from '../service/game.service';
  */
 export class GameCommandComponent implements OnInit {
     /**
-     * Parent de la classe
-     */
-    @Input() parent: AppComponent;
-
-    /**
      * Constructeur des boutons du jeu
      * @param gameService - Service permettant de gérer les sockets avec le serveur
      * @param giveUpDialog - Boite de dialogue d'abandon de la partie
      */
     constructor(
         private gameService: GameService,
-        public giveUpDialog: MatDialog
+        public giveUpDialog: MatDialog,
+        private routingService: RoutingService
     ) {}
 
     ngOnInit() {
@@ -62,7 +60,7 @@ export class GameCommandComponent implements OnInit {
         const dialogRef = this.giveUpDialog.open(GiveupDialogComponent);
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.parent.changeViewToGameConfig();
+                this.routingService.changeViewToGameConfig();
                 this.gameService.askForAnswer();
             }
         });

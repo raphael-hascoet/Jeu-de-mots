@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
     providedIn: 'root',
 })
 export class GameService {
+    private userName: string;
+
     maxDifficulty = this.socket.fromEvent<number>('maxDifficulty');
     minDifficulty = this.socket.fromEvent<number>('minDifficulty');
 
@@ -80,5 +82,13 @@ export class GameService {
      */
     getAnswer() {
         return this.socket.fromEvent('answer');
+    }
+
+    setUserName(userName: string): void {
+        this.userName = userName;
+    }
+
+    getUserName(): string {
+        return this.userName;
     }
 }

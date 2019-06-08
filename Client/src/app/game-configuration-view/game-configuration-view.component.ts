@@ -1,3 +1,4 @@
+import { RoutingService } from './../service/routing.service';
 import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { GameService } from '../service/game.service';
 import { GameConfig } from '../model/game-config/game-config';
@@ -18,8 +19,7 @@ declare global {
     styleUrls: ['./game-configuration-view.component.css'],
 })
 export class GameConfigurationViewComponent implements OnInit {
-    @Input() parent: AppComponent;
-    @Input() hostName: string;
+    private hostName: string;
 
     localIp: string =
         sessionStorage.getItem('LOCAL_IP') + ':' + window.location.port;
@@ -29,9 +29,15 @@ export class GameConfigurationViewComponent implements OnInit {
 
     difficulty: FormControl = new FormControl(1, [Validators.required]);
 
-    constructor(private gameService: GameService, private zone: NgZone) {}
+    constructor(
+        private gameService: GameService,
+        private routingService: RoutingService,
+        private zone: NgZone
+    ) {}
 
     ngOnInit() {
+        this.hostName = this.gameService.getUserName();
+
         this.determineLocalIp();
         this.gameService.getMinDifficulty().subscribe(value => {
             this.minDifficulty = value;
@@ -51,10 +57,7 @@ export class GameConfigurationViewComponent implements OnInit {
         });
     }
 
-    createGame(
-        hostTeam: string,
-        gameDifficulty: number
-    ): void {
+    createGame(hostTeam: string, gameDifficulty: number): void {
         this.gameService.createGame(
             new GameConfig(this.hostName, hostTeam, gameDifficulty)
         );
@@ -63,7 +66,7 @@ export class GameConfigurationViewComponent implements OnInit {
     }
 
     changeViewToGame() {
-        this.parent.changeViewToGame();
+        this.routingService.changeViewToGame();
     }
 
     getMinDifficulty(): number {
