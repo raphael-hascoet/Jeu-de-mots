@@ -2,6 +2,7 @@ import { Game } from '../src/Game';
 import { calculateWordScore } from '../src/gameUtils';
 import { Player } from '../src/Player';
 import { GameConfiguration } from './GameConfiguration';
+import { Lobby } from './Lobby';
 
 const app = require('express')();
 var http = require('http').createServer(app);
@@ -21,40 +22,29 @@ io.on('connection', function(socket: any) {
 
     /**
      * Le premier utilisateur à se connecter deviens l'host et peut configurer la partie
+     * les suivants peuvent voir la config en cours mais pas la modifier
      */
-    socket.on('connectUser', function(hostName: string) {
-        if (Game.hostIsConnected()) {
-            console.log('ERREUR : hôte déjà connecté');
-        } else if (Game.gameIsLaunched()) {
-            console.log('ERREUR : la partie a déjà commencée');
-        } else {
-            io.emit('hostIsConnected', true);
-            Game.getInstance(new Player(hostName));
-            console.log('Hôte connecté sous le pseudonyme ' + hostName);
-            userId = hostName;
-            userIsHost = true;
-            socket.emit('hostConnectionAllowed');
-        }
-    });
-
-    /**
-     * Le utilisateurs se connectants après l'host ne peuvent pas configurer la partie
-     */
-    socket.on('connectPlayer', function(playerName: string) {
+    socket.on('connectUser', function(userName: string) {
         if (Game.gameIsLaunched()) {
             console.log('ERREUR : la partie a déjà commencée');
-        } else if (Game.hostIsConnected()) {
-        /**
-         * Si la partie n'est pas commencée et que l'hôte est connecté
-         * le joueur est ajouté et la liste des joueurs connectés est mise à jour
-         */
-            Game.getInstance().addPlayer(playerName);
-            io.emit('connectedPlayers', Game.getInstance().getPlayers());
-            console.log('Joueur connecté sous le pseudonyme ' + playerName);
-            userId = playerName;
-            socket.emit('playerConnectionAllowed');
+        }else if (Lobby.hostIsConnected()) {
+            /**
+             * Si l'host est déjà connecté, on rajoute uniquement cet utilisateur au lobby
+             */
+            userId = userName;
+            Lobby.getInstance().addPlayer(userId);
+            io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+            console.log('Joueur connecté sous le pseudonyme ' + userId);
         } else {
-            console.log("ERREUR : l'hôte n'est pas connecté");
+            /**
+             * Si c'est le premier utilisateur à se connecter, le lobby est créé et il en devient l'host
+             */
+            io.emit('hostIsConnected', true);
+            userId = userName;
+            Lobby.createLobby(userId);
+            console.log('Hôte connecté sous le pseudonyme ' + userId);
+            userIsHost = true;
+            socket.emit('hostConnectionAllowed');
         }
     });
 
@@ -70,7 +60,11 @@ io.on('connection', function(socket: any) {
      * Cette méthode retourne tous les joueurs de la partie, y compris l'host
      */
     socket.on('getConnectedPlayers', function() {
-        socket.emit('connectedPlayers', Game.getInstance().getPlayers());
+        socket.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+    });
+
+    socket.on('isUserHost', function(){
+        socket.emit('userIsHost', userIsHost);
     });
 
     /**
@@ -156,9 +150,8 @@ io.on('connection', function(socket: any) {
      * Déconnexion de l'utilisateur
      */
     socket.on('disconnect', function() {
-
-        Game.getInstance().removePlayer(userId);
-        io.emit('connectedPlayers', Game.getInstance().getPlayers());
+        Lobby.getInstance().removePlayer(userId);
+        io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
 
         if (userIsHost) {
             console.log('host ' + userId + ' disconnected');
@@ -166,7 +159,8 @@ io.on('connection', function(socket: any) {
 
             if (!Game.gameIsLaunched()) {
                 console.log('configuration de la partie annulée');
-                Game.resetInstance();
+                Lobby.resetInstance();
+
                 io.emit('denyConfig');
             }
         } else {

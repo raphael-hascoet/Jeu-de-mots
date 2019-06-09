@@ -22,7 +22,7 @@ export class GameConfigurationViewComponent implements OnInit {
     @Input() parent: AppComponent;
     @Input() userName: string;
 
-    userIsHost: boolean;
+    userIsHost: boolean = false;
 
     localIp: string =
         sessionStorage.getItem('LOCAL_IP') + ':' + window.location.port;
@@ -37,7 +37,9 @@ export class GameConfigurationViewComponent implements OnInit {
     constructor(private gameService: GameService, private zone: NgZone) {}
 
     ngOnInit() {
-        this.gameService.userIsHost().subscribe(value => this.userIsHost = value);
+        this.gameService.userIsHost().subscribe(value => {
+            this.userIsHost = value;
+        });
         this.gameService.connectUser(this.userName);
         this.determineLocalIp();
         this.gameService.getMinDifficulty().subscribe(value => {
