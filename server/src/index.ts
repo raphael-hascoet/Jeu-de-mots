@@ -20,6 +20,9 @@ io.on('connection', function(socket: any) {
 
     var userIsHost = false;
 
+    var teamName = "";
+    var gameDifficulty = 1;
+
     /**
      * Le premier utilisateur à se connecter deviens l'host et peut configurer la partie
      * les suivants peuvent voir la config en cours mais pas la modifier
@@ -65,6 +68,24 @@ io.on('connection', function(socket: any) {
 
     socket.on('isUserHost', function(){
         socket.emit('userIsHost', userIsHost);
+    });
+
+    socket.on('updateTeamName', function(newTeamName : string){
+        teamName = newTeamName;
+        io.emit('teamName', teamName);
+    });
+
+    socket.on('getTeamName', function(){
+        socket.emit('teamName', teamName);
+    });
+
+    socket.on('updateGameDifficulty', function(newGameDifficulty : number){
+        gameDifficulty = newGameDifficulty;
+        io.emit('gameDifficulty', gameDifficulty);
+    });
+
+    socket.on('getGameDifficulty', function(){
+        socket.emit('gameDifficulty', gameDifficulty);
     });
 
     /**

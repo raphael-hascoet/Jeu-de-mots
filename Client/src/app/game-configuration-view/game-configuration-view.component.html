@@ -6,7 +6,7 @@
     <p>Pseudonyme : {{ hostName }}</p>
     <mat-form-field>
         <mat-label>Nom d'équipe</mat-label>
-        <input #hostTeam matInput [readonly]="!userIsHost" />
+        <input #teamName matInput [readonly]="!userIsHost" value="{{teamNameValue}}" (input)="updateTeamName(teamName.value)"/>
     </mat-form-field>
     <mat-form-field>
         <mat-label>Niveau de difficulté</mat-label>
@@ -18,6 +18,8 @@
             max="{{ getMaxDifficulty() }}"
             [formControl]="difficultyFormControl"
             [readonly]="!userIsHost"
+            value="{{gameDifficultyValue}}"
+            (input)="updateGameDifficulty(gameDifficulty.value)"
         />
         <mat-error *ngIf="difficultyFormControl.invalid">
             Entrez un niveau de difficulté entre {{ getMinDifficulty() }} et
@@ -25,7 +27,7 @@
         </mat-error>
     </mat-form-field>
     <button
-        (click)="createGame(hostTeam.value, gameDifficulty.value)"
+        (click)="createGame(teamName.value, gameDifficulty.value)"
         mat-raised-button
         [disabled]="difficultyFormControl.invalid || !userIsHost"
         *ngIf="userIsHost"

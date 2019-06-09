@@ -14,6 +14,8 @@ export class GameService {
     hostIsConnected: Observable<boolean> = this.socket.fromEvent<boolean>('hostIsConnected');
     connectedPlayers: Observable<Player[]> = this.socket.fromEvent<Player[]>('connectedPlayers');
     valueUserIsHost: Observable<boolean> = this.socket.fromEvent<boolean>('userIsHost');
+    teamName : Observable<string> = this.socket.fromEvent<string>('teamName');
+    gameDifficulty: Observable<number> = this.socket.fromEvent<number>('gameDifficulty');
 
     constructor(private socket: Socket) {}
 
@@ -44,6 +46,24 @@ export class GameService {
     getConnectedPlayers(): Observable<Player[]> {
         this.socket.emit('getConnectedPlayers');
         return this.connectedPlayers;
+    }
+
+    updateTeamName(teamName: string): void {
+        this.socket.emit('updateTeamName', teamName);
+    }
+
+    getTeamName() : Observable<string>{
+        this.socket.emit('getTeamName');
+        return this.teamName;
+    }
+
+    updateGameDifficulty(gameDifficulty: number): void {
+        this.socket.emit('updateGameDifficulty', gameDifficulty);
+    }
+
+    getGameDifficulty() {
+        this.socket.emit('getGameDifficulty');
+        return this.gameDifficulty;
     }
 
     /**

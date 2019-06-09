@@ -32,6 +32,9 @@ export class GameConfigurationViewComponent implements OnInit {
 
     players : Player[];
 
+    teamNameValue : string = "";
+    gameDifficultyValue : number = 1;
+
     difficultyFormControl: FormControl = new FormControl(1, [Validators.required]);
 
     constructor(private gameService: GameService, private zone: NgZone) {}
@@ -58,8 +61,20 @@ export class GameConfigurationViewComponent implements OnInit {
                 Validators.max(this.maxDifficulty),
             ]);
         });
+        this.gameService.getTeamName().subscribe(value => this.teamNameValue = value);
+        this.gameService.getGameDifficulty().subscribe(value => {
+            this.gameDifficultyValue = value;
+        });
 
         this.gameService.getConnectedPlayers().subscribe(players => this.players = players);
+    }
+
+    updateTeamName(teamName: string){
+        this.gameService.updateTeamName(teamName);
+    }
+
+    updateGameDifficulty(gameDifficulty : number){
+        this.gameService.updateGameDifficulty(gameDifficulty);
     }
 
     createGame(
