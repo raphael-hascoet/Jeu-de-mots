@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { GameService } from '../service/game.service';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { FormControl, Validators, FormGroup, AsyncValidator, AsyncValidatorFn, AbstractControl } from '@angular/forms';
 import { Player } from '../model/player/player';
 
 @Component({
@@ -43,11 +43,13 @@ export class DashBoardViewComponent implements OnInit {
             this.parent.setUserName(userName);
             this.parent.changeViewToGameConfig();
         }
+
+        console.log("nameAlreadyUsed : "+this.nameAlreadyUsed);
     }
 
     validateName(userName): boolean{
         if(this.connectedPlayers){
-            console.log(this.connectedPlayers);
+            console.log("Connected players : "+this.connectedPlayers);
             for(let player of this.connectedPlayers){
                 if(player.name.localeCompare(userName)==0){
                     this.nameAlreadyUsed=true;
@@ -56,6 +58,7 @@ export class DashBoardViewComponent implements OnInit {
             }
         }
        
+        this.nameAlreadyUsed=false;
         return true;
     }
 }

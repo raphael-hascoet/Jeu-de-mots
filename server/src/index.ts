@@ -45,6 +45,7 @@ io.on('connection', function(socket: any) {
             io.emit('hostIsConnected', true);
             userId = userName;
             Lobby.createLobby(userId);
+            io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
             console.log('Hôte connecté sous le pseudonyme ' + userId);
             userIsHost = true;
             socket.emit('hostConnectionAllowed');

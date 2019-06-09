@@ -5,8 +5,8 @@
         <mat-error *ngIf="nameFormControl.invalid">
             Entrez un pseudonyme
         </mat-error>
-        <mat-error *ngIf="nameAlreadyUsed">Ce nom est déjà utilisé</mat-error>
     </mat-form-field>
+
     <button
         (click)="goToGameConfig(name.value)"
         mat-raised-button
@@ -14,4 +14,6 @@
     >
         {{buttonText}}
     </button>
+
+    <mat-error *ngIf="nameAlreadyUsed">Ce nom est déjà utilisé</mat-error>
 </form>
