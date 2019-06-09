@@ -3,6 +3,7 @@ import { GameService } from '../service/game.service';
 import { GameConfig } from '../model/game-config/game-config';
 import { AppComponent } from '../app.component';
 import { FormControl, Validators } from '@angular/forms';
+import { Player } from '../model/player/player';
 
 declare global {
     interface Window {
@@ -19,7 +20,9 @@ declare global {
 })
 export class GameConfigurationViewComponent implements OnInit {
     @Input() parent: AppComponent;
-    @Input() hostName: string;
+    @Input() userName: string;
+
+    userIsHost: boolean;
 
     localIp: string =
         sessionStorage.getItem('LOCAL_IP') + ':' + window.location.port;
@@ -27,12 +30,15 @@ export class GameConfigurationViewComponent implements OnInit {
     maxDifficulty: number;
     minDifficulty: number;
 
+    players : Player[];
+
     difficultyFormControl: FormControl = new FormControl(1, [Validators.required]);
 
     constructor(private gameService: GameService, private zone: NgZone) {}
 
     ngOnInit() {
-        this.connectHost();
+        this.gameService.userIsHost().subscribe(value => this.userIsHost = value);
+        this.gameService.connectUser(this.userName);
         this.determineLocalIp();
         this.gameService.getMinDifficulty().subscribe(value => {
             this.minDifficulty = value;
@@ -50,10 +56,8 @@ export class GameConfigurationViewComponent implements OnInit {
                 Validators.max(this.maxDifficulty),
             ]);
         });
-    }
 
-    connectHost() {
-        this.gameService.connectHost(this.hostName);
+        this.gameService.getConnectedPlayers().subscribe(players => this.players = players);
     }
 
     createGame(
@@ -61,7 +65,7 @@ export class GameConfigurationViewComponent implements OnInit {
         gameDifficulty: number
     ): void {
         this.gameService.createGame(
-            new GameConfig(this.hostName, hostTeam, gameDifficulty)
+            new GameConfig(this.userName, hostTeam, gameDifficulty)
         );
 
         this.changeViewToGame();

@@ -33,3 +33,14 @@
         Valider
     </button>
 </form>
+
+<h2>Lobby</h2>
+<p>Pseudonyme : {{ playerName }}</p>
+<p>En attente de la configuration de la partie ...</p>
+<h3>Joueurs connectés</h3>
+<ul>
+    <li *ngFor="let player of players">
+        {{ player.name }}
+    </li>
+</ul>
+

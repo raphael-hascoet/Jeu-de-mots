@@ -22,7 +22,7 @@ io.on('connection', function(socket: any) {
     /**
      * Le premier utilisateur à se connecter deviens l'host et peut configurer la partie
      */
-    socket.on('connectHost', function(hostName: string) {
+    socket.on('connectUser', function(hostName: string) {
         if (Game.hostIsConnected()) {
             console.log('ERREUR : hôte déjà connecté');
         } else if (Game.gameIsLaunched()) {

@@ -19,7 +19,6 @@ import { GameViewComponent } from './game-view/game-view.component';
 import { GiveupDialogComponent } from './game-command/giveup-dialog/giveup-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DashBoardViewComponent } from './dash-board-view/dash-board-view.component';
-import { GameLobbyViewComponent } from './game-lobby-view/game-lobby-view.component';
 
 console.log('window.location.host : ' + window.location.host);
 const config: SocketIoConfig = {
@@ -35,7 +34,6 @@ const config: SocketIoConfig = {
         GameViewComponent,
         GiveupDialogComponent,
         DashBoardViewComponent,
-        GameLobbyViewComponent,
     ],
     entryComponents: [GiveupDialogComponent],
     imports: [

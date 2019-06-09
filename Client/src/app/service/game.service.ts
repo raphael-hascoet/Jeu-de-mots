@@ -8,10 +8,12 @@ import { Player } from '../model/player/player';
     providedIn: 'root',
 })
 export class GameService {
+    
     maxDifficulty: Observable<number> = this.socket.fromEvent<number>('maxDifficulty');
     minDifficulty: Observable<number> = this.socket.fromEvent<number>('minDifficulty');
     hostIsConnected: Observable<boolean> = this.socket.fromEvent<boolean>('hostIsConnected');
     connectedPlayers: Observable<Player[]> = this.socket.fromEvent<Player[]>('connectedPlayers');
+    valueUserIsHost: Observable<boolean> = this.socket.fromEvent<boolean>('userIsHost');
 
     constructor(private socket: Socket) {}
 
@@ -21,12 +23,17 @@ export class GameService {
      *
      * @param hostname nom de l'host
      */
-    connectHost(hostname: string): void {
-        this.socket.emit('connectHost', hostname);
+    connectUser(hostname: string): void {
+        this.socket.emit('connectUser', hostname);
     }
 
-    connectPlayer(playerName: string): void {
-        this.socket.emit('connectPlayer', playerName);
+    /**
+     * Cette méthode revoie True si l'utilisateur connecté sur cette socket est l'host de la partie
+     * False sinon
+     */
+    userIsHost(): Observable<boolean> {
+        this.socket.emit('isUserHost');
+        return this.valueUserIsHost;
     }
 
     getHostIsConnected(): Observable<boolean> {
@@ -35,6 +42,7 @@ export class GameService {
     }
 
     getConnectedPlayers(): Observable<Player[]> {
+        this.socket.emit('getConnectedPlayers');
         return this.connectedPlayers;
     }
 

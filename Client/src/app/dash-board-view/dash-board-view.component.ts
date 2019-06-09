@@ -19,30 +19,29 @@ export class DashBoardViewComponent implements OnInit {
 
     nameFormControl: FormControl = new FormControl('', [Validators.required]);
 
+    buttonText : string;
+
     constructor(private gameService: GameService) {}
 
     ngOnInit() {
         this.gameService
             .getHostIsConnected()
-            .subscribe(value => (this.hostIsConnected = value));
+            .subscribe(hostIsConnected => {
+                if(hostIsConnected){
+                    this.buttonText = "Rejoindre la partie";
+                }else{
+                    this.buttonText = "Créer une partie";
+                }
+            });
 
         this.gameService.getConnectedPlayers().subscribe(players => this.connectedPlayers=players);
     }
 
     goToGameConfig(userName: string): void {
         if(this.validateName(userName)){
-            this.gameService.connectHost(userName);
+            this.gameService.connectUser(userName);
             this.parent.setUserName(userName);
             this.parent.changeViewToGameConfig();
-        }
-        
-    }
-
-    goToGameLobby(userName: string) {
-        if(this.validateName(userName)){
-            this.gameService.connectPlayer(userName);
-            this.parent.setUserName(userName);
-            this.parent.changeViewToGameLobby();
         }
     }
 

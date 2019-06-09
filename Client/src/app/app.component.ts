@@ -43,14 +43,6 @@ export class AppComponent {
         return this.componentToDisplay == 'game-config';
     }
 
-    changeViewToGameLobby(): void {
-        this.componentToDisplay = 'game-lobby';
-    }
-
-    displayGameLobby(): boolean {
-        return this.componentToDisplay == 'game-lobby';
-    }
-
     /**
      * Méthode récupérent le composant app pour le transmettre aux autres vues
      */

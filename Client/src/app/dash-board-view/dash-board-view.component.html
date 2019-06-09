@@ -8,19 +8,10 @@
         <mat-error *ngIf="nameAlreadyUsed">Ce nom est déjà utilisé</mat-error>
     </mat-form-field>
     <button
-        *ngIf="!hostIsConnected"
         (click)="goToGameConfig(name.value)"
         mat-raised-button
         [disabled]="nameFormControl.invalid"
     >
-        Créer une partie
-    </button>
-    <button
-        *ngIf="hostIsConnected"
-        (click)="goToGameLobby(name.value)"
-        mat-raised-button
-        [disabled]="nameFormControl.invalid"
-    >
-        Rejoindre une partie
+        {{buttonText}}
     </button>
 </form>

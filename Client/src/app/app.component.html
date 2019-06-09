@@ -10,13 +10,8 @@
     <app-game-configuration-view
         *ngIf="displayGameConfig()"
         [parent]="getAppComponent()"
-        [hostName]="getUserName()"
+        [userName]="getUserName()"
     ></app-game-configuration-view>
-    <app-game-lobby-view
-        *ngIf="displayGameLobby()"
-        [parent]="getAppComponent()"
-        [playerName]="getUserName()"
-    ></app-game-lobby-view>
     <app-game-view
         *ngIf="displayGame()"
         [parent]="getAppComponent()"
