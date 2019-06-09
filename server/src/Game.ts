@@ -135,8 +135,10 @@ export class Game {
                     (err, data) => {
                         if (err) throw err;
                         let words: string[] = data.toString().split('\n');
-                        while (word.length != difficulty&&
-                            word.search('(.*-.*)*') != -1) {
+                        while (
+                            word.length != difficulty ||
+                            word.includes('-')
+                        ) {
                             let random: number = Math.floor(
                                 Math.random() * words.length
                             );
