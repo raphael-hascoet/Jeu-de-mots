@@ -14,6 +14,9 @@ export class GameStatsViewComponent implements OnInit {
     chronologie = {};
     barChart = {};
     teamName = 'Equiiiipe';
+    globalScore = 100;
+    globalNbTries = 56;
+    gameTime = '11:05';
     players: {
         name: string;
         score: number;

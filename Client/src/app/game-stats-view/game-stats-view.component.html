@@ -1,4 +1,9 @@
-<div id="header">Equipe : {{ teamName }}</div>
+<div id="header">
+    <h1>Equipe : {{ teamName }}</h1>
+    <p>Score total : {{ globalScore }}</p>
+    <p>Nombre d'essais total : {{ globalNbTries }}</p>
+    <p>Temps de partie : {{ gameTime }}</p>
+</div>
 <div id="main">
     <div id="players">
         <div *ngFor="let player of players" class="player">

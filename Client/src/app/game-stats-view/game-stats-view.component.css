@@ -19,8 +19,16 @@
     font-weight: bold;
 }
 
-#header {
-    font-size: 3vh;
+#header > p {
+    font-size: 2vh;
     font-weight: bolder;
+    margin: 0.5vh;
+}
+
+#header > h1 {
+    font-size: 3vh;
+}
+
+#header {
     padding: 2vh;
 }
