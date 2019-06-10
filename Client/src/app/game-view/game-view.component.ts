@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { GameService } from '../service/game.service';
+import { RoutingService } from './../service/routing.service';
 
 @Component({
     selector: 'app-game-view',
@@ -14,7 +15,10 @@ export class GameViewComponent implements OnInit {
     @ViewChild('box') input: ElementRef;
 
     @ViewChild('response') response: ElementRef;
-    constructor(private gameService: GameService) {}
+    constructor(
+        private gameService: GameService,
+        private routingService: RoutingService
+    ) {}
 
     ngOnInit() {
         this.gameService.getScore().subscribe(msg => {
@@ -50,6 +54,6 @@ export class GameViewComponent implements OnInit {
     }
 
     changeViewToGameStats() {
-        this.parent.changeViewToGameStats();
+        this.routingService.changeViewToGameStats();
     }
 }
