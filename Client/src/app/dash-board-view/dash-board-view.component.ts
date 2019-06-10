@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { AppComponent } from '../app.component';
+import { GameService } from './../service/game.service';
+import { Component, OnInit } from '@angular/core';
+import { RoutingService } from '../service/routing.service';
 
 @Component({
     selector: 'app-dash-board-view',
@@ -7,14 +8,15 @@ import { AppComponent } from '../app.component';
     styleUrls: ['./dash-board-view.component.css'],
 })
 export class DashBoardViewComponent implements OnInit {
-    @Input() parent: AppComponent;
-
-    constructor() {}
+    constructor(
+        private gameService: GameService,
+        private routingService: RoutingService
+    ) {}
 
     ngOnInit() {}
 
-    goToGameConfig(userName : string): void {
-        this.parent.setUserName(userName); 
-        this.parent.changeViewToGameConfig();
+    goToGameConfig(userName: string): void {
+        this.gameService.setUserName(userName);
+        this.routingService.changeViewToGameConfig();
     }
 }
