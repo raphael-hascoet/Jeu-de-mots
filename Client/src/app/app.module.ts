@@ -24,7 +24,6 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from 'src/environments/environment';
 
-
 const env = environment;
 console.log(env);
 
@@ -38,9 +37,9 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         GameViewComponent,
         GiveupDialogComponent,
         DashBoardViewComponent,
-    ],
-    entryComponents: [GiveupDialogComponent],
         AnswerDialogComponent,
+    ],
+    entryComponents: [GiveupDialogComponent, AnswerDialogComponent],
     imports: [
         BrowserModule,
         TextFieldModule,
