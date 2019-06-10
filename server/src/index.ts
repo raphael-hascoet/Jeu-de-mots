@@ -119,6 +119,9 @@ io.on('connection', function(socket: any) {
             'difficultyLevel : ' + Game.getInstance().getDifficultyLevel()
         );
         console.log('Mot a trouver : ' + Game.getInstance().getWordToFind());
+
+        io.emit('gameIsLaunched', Game.gameIsLaunched());
+
     });
 
     /**
@@ -131,8 +134,8 @@ io.on('connection', function(socket: any) {
         console.log(msg);
         let score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
         Game.getInstance().addProposedWord(msg, score);
-        socket.emit('score', [
-            msg,
+        io.emit('score', [
+            userId+" a proposé "+msg,
             score.getcorrectPlace(),
             score.getcorrectLetter(),
         ]);
@@ -178,12 +181,13 @@ io.on('connection', function(socket: any) {
         if (userIsHost) {
             console.log('host ' + userId + ' disconnected');
             io.emit('hostIsConnected', false);
+            Lobby.resetInstance();
 
             if (!Game.gameIsLaunched()) {
                 console.log('configuration de la partie annulée');
-                Lobby.resetInstance();
-
                 io.emit('denyConfig');
+            }else{
+                console.log("L'host s'est déconnecté pendant la partie");
             }
         } else {
             console.log(userId + ' disconnected');

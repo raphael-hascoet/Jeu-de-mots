@@ -11,10 +11,7 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./dash-board-view.component.css'],
 })
 export class DashBoardViewComponent implements OnInit {
-    constructor(
-        private gameService: GameService,
-        private routingService: RoutingService
-    ) {}
+
 
     hostIsConnected: boolean;
     nameAlreadyUsed: boolean = false;
@@ -25,7 +22,10 @@ export class DashBoardViewComponent implements OnInit {
 
     buttonText : string;
 
-    constructor(private gameService: GameService) {}
+    constructor(
+        private gameService: GameService,
+        private routingService: RoutingService
+    ) {}
 
     ngOnInit() {
         this.gameService
@@ -39,16 +39,14 @@ export class DashBoardViewComponent implements OnInit {
             });
 
         this.gameService.getConnectedPlayers().subscribe(players => this.connectedPlayers=players);
-    goToGameConfig(userName: string): void {
-        this.gameService.setUserName(userName);
-        this.routingService.changeViewToGameConfig();
+
     }
 
     goToGameConfig(userName: string): void {
         if(this.validateName(userName)){
             this.gameService.connectUser(userName);
-            this.parent.setUserName(userName);
-            this.parent.changeViewToGameConfig();
+            this.gameService.setUserName(userName);
+            this.routingService.changeViewToGameConfig();
         }
 
         console.log("nameAlreadyUsed : "+this.nameAlreadyUsed);

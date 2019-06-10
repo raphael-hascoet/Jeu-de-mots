@@ -32,6 +32,11 @@ export class Lobby{
     }
 
     addPlayer(userId: string): void {
+        for(let player of this.players){
+            if(player.getName().localeCompare(userId)==0){
+                return;
+            }
+        }
         this.players.push(new Player(userId));
     }
 
@@ -40,7 +45,7 @@ export class Lobby{
         for(let player of this.players){
             if(player.getName().localeCompare(userId)!=0){
                 newPlayers.push(player);
-                console.log("player added to newPLayers : "+player.getName())
+                console.log("player added to newPlayers : "+player.getName())
             }
         }
 

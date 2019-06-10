@@ -16,6 +16,7 @@ export class GameService {
     valueUserIsHost: Observable<boolean> = this.socket.fromEvent<boolean>('userIsHost');
     teamName : Observable<string> = this.socket.fromEvent<string>('teamName');
     gameDifficulty: Observable<number> = this.socket.fromEvent<number>('gameDifficulty');
+    gameIsLaunched: Observable<boolean> = this.socket.fromEvent<boolean>('gameIsLaunched');
     private userName: string;
 
     constructor(private socket: Socket) {}
@@ -84,6 +85,15 @@ export class GameService {
     getMinDifficulty(): Observable<number> {
         this.socket.emit('getMinimalDifficulty');
         return this.minDifficulty;
+    }
+
+    getGameIsLaunched(): Observable<boolean> {
+        this.socket.emit('getGameIsLaunched');
+        return this.gameIsLaunched;
+    }
+
+    denyConfig() {
+        return this.socket.fromEvent('denyConfig');
     }
 
     /**

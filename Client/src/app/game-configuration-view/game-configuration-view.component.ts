@@ -19,7 +19,7 @@ declare global {
     styleUrls: ['./game-configuration-view.component.css'],
 })
 export class GameConfigurationViewComponent implements OnInit {
-    @Input() userName: string;
+    userName: string;
 
     userIsHost: boolean = false;
 
@@ -42,7 +42,7 @@ export class GameConfigurationViewComponent implements OnInit {
     teamNameValue : string = "";
 
     ngOnInit() {
-        this.hostName = this.gameService.getUserName();
+        this.userName = this.gameService.getUserName();
 
         this.gameService.userIsHost().subscribe(value => {
             this.userIsHost = value;
@@ -71,6 +71,13 @@ export class GameConfigurationViewComponent implements OnInit {
         });
 
         this.gameService.getConnectedPlayers().subscribe(players => this.players = players);
+
+        this.gameService.getGameIsLaunched().subscribe(gameIsLaunched =>{
+            if(gameIsLaunched){
+                this.changeViewToGame();
+            }
+        });
+        this.gameService.denyConfig().subscribe(value => this.routingService.changeViewToDashboard());
     }
 
     updateTeamName(teamName: string){
@@ -88,8 +95,6 @@ export class GameConfigurationViewComponent implements OnInit {
         this.gameService.createGame(
             new GameConfig(this.userName, hostTeam, gameDifficulty)
         );
-
-        this.changeViewToGame();
     }
 
     changeViewToGame() {
