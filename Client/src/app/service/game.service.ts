@@ -4,27 +4,91 @@ import { GameConfig } from '../model/game-config/game-config';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class GameService {
-  maxDifficulty = this.socket.fromEvent<number>('maxDifficulty');
-  minDifficulty = this.socket.fromEvent<number>('minDifficulty');
+    private userName: string;
 
-  constructor(private socket: Socket) { }
+    maxDifficulty = this.socket.fromEvent<number>('maxDifficulty');
+    minDifficulty = this.socket.fromEvent<number>('minDifficulty');
 
-  createGame(config : GameConfig){
-    this.socket.emit('startGame', config);
-  }
+    constructor(private socket: Socket) {}
 
-  getMaxDifficulty() : Observable<number>{
+    /**
+     * Création d'une partie
+     *
+     * @param config nom de l'host, nom de l'équipe et niveau de difficulté sélectionné
+     */
+    createGame(config: GameConfig) {
+        this.socket.emit('startGame', config);
+    }
 
-    this.socket.emit('getMaximalDifficulty');
-    return this.maxDifficulty;
-  }
+    getMaxDifficulty(): Observable<number> {
+        this.socket.emit('getMaximalDifficulty');
+        return this.maxDifficulty;
+    }
 
-  getMinDifficulty() : Observable<number>{
+    getMinDifficulty(): Observable<number> {
+        this.socket.emit('getMinimalDifficulty');
+        return this.minDifficulty;
+    }
 
-    this.socket.emit('getMinimalDifficulty');
-    return this.minDifficulty;
-  }
+    /**
+     * Réception du score du dernoer mot proposé
+     */
+    getScore() {
+        return this.socket.fromEvent('score');
+    }
+
+    /**
+     * Envois d'une proposition de mot
+     *
+     * @param msg mot proposé
+     */
+    sendProposition(msg: string) {
+        this.socket.emit('proposition', msg);
+    }
+
+    /**
+     * Demande de Récupération des meilleurs mots proposés
+     */
+    askForWords() {
+        this.socket.emit('getWords');
+    }
+
+    /**
+     * Récupération des meilleurs mots proposés
+     */
+    getWords() {
+        return this.socket.fromEvent('words');
+    }
+
+    /**
+     * Récupération de l'event de fin de partie
+     */
+    hasWon() {
+        return this.socket.fromEvent('fin');
+    }
+
+    /**
+     * Méthode permettant de demander au serveur la réponse qu'il fallait trouver
+     */
+    askForAnswer() {
+        this.socket.emit('getAnswer');
+    }
+
+    /**
+     * Méthode permettant de traiter la réception du mot à trouver par les joueurs
+     */
+    getAnswer() {
+        return this.socket.fromEvent('answer');
+    }
+
+    setUserName(userName: string): void {
+        this.userName = userName;
+    }
+
+    getUserName(): string {
+        return this.userName;
+    }
 }

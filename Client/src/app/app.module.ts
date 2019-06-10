@@ -17,8 +17,18 @@ import { GameCommandComponent } from './game-command/game-command.component';
 import { GameConfigurationViewComponent } from './game-configuration-view/game-configuration-view.component';
 import { GameViewComponent } from './game-view/game-view.component';
 import { GameStatsViewComponent } from './game-stats-view/game-stats-view.component';
-const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 import { HighchartsChartComponent } from 'highcharts-angular';
+import { GiveupDialogComponent } from './game-command/giveup-dialog/giveup-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DashBoardViewComponent } from './dash-board-view/dash-board-view.component';
+import { AppRoutingModule } from './app-routing.module';
+
+import { environment } from 'src/environments/environment';
+
+const env = environment;
+console.log(env);
+
+const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
 
 @NgModule({
     declarations: [
@@ -28,7 +38,10 @@ import { HighchartsChartComponent } from 'highcharts-angular';
         GameViewComponent,
         GameStatsViewComponent,
         HighchartsChartComponent,
+        GiveupDialogComponent,
+        DashBoardViewComponent,
     ],
+    entryComponents: [GiveupDialogComponent],
     imports: [
         BrowserModule,
         TextFieldModule,
@@ -39,7 +52,9 @@ import { HighchartsChartComponent } from 'highcharts-angular';
         ReactiveFormsModule,
         MatNativeDateModule,
         MatButtonModule,
+        MatDialogModule,
         SocketIoModule.forRoot(config),
+        AppRoutingModule,
     ],
     exports: [
         TextFieldModule,
@@ -50,6 +65,7 @@ import { HighchartsChartComponent } from 'highcharts-angular';
         ReactiveFormsModule,
         MatNativeDateModule,
         MatButtonModule,
+        MatDialogModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
