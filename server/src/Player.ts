@@ -87,7 +87,9 @@ export class Player {
      */
     addToScore(points: number) {
         this.score += points;
-        console.log('Nouveau score du joueur : ' + this.score);
+        console.log(
+            'Nouveau score du joueur ' + this.name + ' : ' + this.score
+        );
     }
 
     /**

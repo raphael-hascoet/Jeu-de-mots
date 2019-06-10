@@ -138,6 +138,19 @@ export class Game {
     }
 
     /**
+     * Méthode permettant de trouver un joueur grâce à son nom
+     * @param name - Nom du joueur à trouver
+     */
+    getPlayer(name: string): Player {
+        for (let player of this.players) {
+            if (player.getName() == name) {
+                return player;
+            }
+        }
+        throw new Error('The player ' + name + " isn't in the game");
+    }
+
+    /**
      * Méthode permettant d'ajouter un mot à la liste des mots proposés globalement ainsi que la liste personnelle des joueurs
      * @param word - Mot à ajouter
      * @param score - Score correspondant à ce mot (dépend du mot à trouver)
