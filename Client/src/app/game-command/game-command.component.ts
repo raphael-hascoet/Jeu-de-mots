@@ -15,6 +15,14 @@ import { GameService } from '../service/game.service';
  */
 export class GameCommandComponent implements OnInit {
     /**
+     * Objet représentant le lien 'subscribe' avec la méthode getWords
+     */
+    private subscriptionGetBestWords;
+    /**
+     * Objet représentant le lien 'subscribe' avec la méthode getAnswer
+     */
+    private subscriptionGiveUp;
+    /**
      * Constructeur des boutons du jeu
      * @param gameService - Service permettant de gérer les sockets avec le serveur
      * @param matDialog - Boite de dialogue d'abandon de la partie
@@ -25,33 +33,42 @@ export class GameCommandComponent implements OnInit {
         private routingService: RoutingService
     ) {}
 
-    ngOnInit() {
-        this.gameService.getWords().subscribe(msg => {
-            console.log(msg);
-            let msgToShow =
-                'Les 5 mots ayant rapporté le plus de points sont : \n';
-            let words: string[] = msg[0];
-            for (let i = 0; i < words.length; i++) {
-                msgToShow +=
-                    words[i]['word'] +
-                    ' = ' +
-                    words[i]['score']['correctPlace'] +
-                    ' , ' +
-                    words[i]['score']['correctLetter'] +
-                    '\n';
-            }
-            if (words.length == 0) {
-                msgToShow = "Votre équipe n'a encore rentré aucun mot.";
-            }
-            alert(msgToShow);
-        });
-        this.gameService.getAnswer().subscribe(msg => {
-            this.matDialog.open(AnswerDialogComponent, {
-                data: { answer: msg[0] },
+    ngOnInit(): void {
+        this.subscriptionGetBestWords = this.gameService
+            .getWords()
+            .subscribe(msg => {
+                console.log(msg);
+                let msgToShow =
+                    'Les 5 mots ayant rapporté le plus de points sont : \n';
+                let words: string[] = msg[0];
+                for (let i = 0; i < words.length; i++) {
+                    msgToShow +=
+                        words[i]['word'] +
+                        ' = ' +
+                        words[i]['score']['correctPlace'] +
+                        ' , ' +
+                        words[i]['score']['correctLetter'] +
+                        '\n';
+                }
+                if (words.length == 0) {
+                    msgToShow = "Votre équipe n'a encore rentré aucun mot.";
+                }
+                alert(msgToShow);
             });
-        });
+        this.subscriptionGiveUp = this.gameService
+            .getAnswer()
+            .subscribe(msg => {
+                this.routingService.changeViewToGameConfig();
+                this.matDialog.open(AnswerDialogComponent, {
+                    data: { answer: msg[0] },
+                });
+            });
     }
 
+    ngOnDestroy() {
+        this.subscriptionGetBestWords.unsubscribe();
+        this.subscriptionGiveUp.unsubscribe();
+    }
     /**
      * Méthode permettant d'afficher les meilleurs mots proposés par les joueurs
      */
@@ -66,7 +83,6 @@ export class GameCommandComponent implements OnInit {
         const dialogRef = this.matDialog.open(GiveupDialogComponent);
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.routingService.changeViewToGameConfig();
                 this.gameService.askForAnswer();
             }
         });
