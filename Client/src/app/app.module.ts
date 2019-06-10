@@ -19,8 +19,10 @@ import { GameViewComponent } from './game-view/game-view.component';
 import { GiveupDialogComponent } from './game-command/giveup-dialog/giveup-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DashBoardViewComponent } from './dash-board-view/dash-board-view.component';
+import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from 'src/environments/environment';
+
 
 const env = environment;
 console.log(env);
