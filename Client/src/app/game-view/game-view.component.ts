@@ -14,6 +14,11 @@ export class GameViewComponent implements OnInit {
     @ViewChild('box') input: ElementRef;
 
     @ViewChild('response') response: ElementRef;
+    /**
+     * Element HTML du Timer
+     */
+    @ViewChild('timer') timer: ElementRef;
+
     constructor(private gameService: GameService) {}
 
     ngOnInit() {
@@ -32,6 +37,30 @@ export class GameViewComponent implements OnInit {
             this.response.nativeElement.value =
                 'Gagné ! ' + '\n' + this.response.nativeElement.value;
         });
+        // Méthode de chronométrage
+        let seconds = 0;
+        let minutes = 0;
+        let text = 'Temps passé à jouer : ';
+        setInterval(() => {
+            seconds++;
+            if (seconds == 60) {
+                minutes++;
+                seconds = 0;
+            }
+            let timerMin = '';
+            let timerSec = seconds + ' secondes';
+            if (minutes > 0) {
+                if (minutes == 1) {
+                    timerMin = minutes + ' minute ';
+                } else {
+                    timerMin = minutes + ' minutes ';
+                }
+            }
+            if (seconds <= 1) {
+                timerSec = seconds + ' seconde';
+            }
+            this.timer.nativeElement.value = text + timerMin + timerSec;
+        }, 1000);
     }
 
     sendProposition(proposition) {
