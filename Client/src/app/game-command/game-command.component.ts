@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material';
 import { GiveupDialogComponent } from './giveup-dialog/giveup-dialog.component';
 import { AnswerDialogComponent } from './answer-dialog/answer-dialog.component';
 import { GameService } from '../service/game.service';
+import { BestWordsComponent } from './best-words/best-words.component';
 
 @Component({
     selector: 'app-game-command',
@@ -38,22 +39,21 @@ export class GameCommandComponent implements OnInit {
             .getWords()
             .subscribe(msg => {
                 console.log(msg);
-                let msgToShow =
-                    'Les 5 mots ayant rapporté le plus de points sont : \n';
                 let words: string[] = msg[0];
+                let bestWords: Array<string> = new Array<string>();
                 for (let i = 0; i < words.length; i++) {
-                    msgToShow +=
+                    bestWords.push(
                         words[i]['word'] +
-                        ' = ' +
-                        words[i]['score']['correctPlace'] +
-                        ' , ' +
-                        words[i]['score']['correctLetter'] +
-                        '\n';
+                            ' = ' +
+                            words[i]['score']['correctPlace'] +
+                            ' , ' +
+                            words[i]['score']['correctLetter'] +
+                            '\n'
+                    );
                 }
-                if (words.length == 0) {
-                    msgToShow = "Votre équipe n'a encore rentré aucun mot.";
-                }
-                alert(msgToShow);
+                this.matDialog.open(BestWordsComponent, {
+                    data: { words: bestWords },
+                });
             });
         this.subscriptionGiveUp = this.gameService
             .getAnswer()
