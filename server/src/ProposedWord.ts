@@ -1,3 +1,5 @@
+import { Score } from './Score';
+
 /**
  * Classe permettant de représenter un mot qui a été proposé par un joueur
  */
@@ -9,9 +11,9 @@ export class ProposedWord {
     /**
      * Score qui y est associé
      */
-    private score: number;
+    private score: Score;
 
-    constructor(word: string, score: number) {
+    constructor(word: string, score: Score) {
         this.word = word;
         this.score = score;
     }

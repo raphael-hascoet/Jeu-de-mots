@@ -17,9 +17,18 @@ import { GameCommandComponent } from './game-command/game-command.component';
 import { GameConfigurationViewComponent } from './game-configuration-view/game-configuration-view.component';
 import { GameViewComponent } from './game-view/game-view.component';
 import { GiveupDialogComponent } from './game-command/giveup-dialog/giveup-dialog.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { AnswerDialogComponent } from './game-command/answer-dialog/answer-dialog.component';
-const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+import { MatDialogModule } from '@angular/material/dialog';
+import { DashBoardViewComponent } from './dash-board-view/dash-board-view.component';
+import { AppRoutingModule } from './app-routing.module';
+
+import { environment } from 'src/environments/environment';
+
+
+const env = environment;
+console.log(env);
+
+const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
 
 @NgModule({
     declarations: [
@@ -28,9 +37,10 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
         GameConfigurationViewComponent,
         GameViewComponent,
         GiveupDialogComponent,
-        AnswerDialogComponent,
+        DashBoardViewComponent,
     ],
-    entryComponents: [GiveupDialogComponent, AnswerDialogComponent],
+    entryComponents: [GiveupDialogComponent],
+        AnswerDialogComponent,
     imports: [
         BrowserModule,
         TextFieldModule,
@@ -43,6 +53,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
         MatButtonModule,
         MatDialogModule,
         SocketIoModule.forRoot(config),
+        AppRoutingModule,
     ],
     exports: [
         TextFieldModule,

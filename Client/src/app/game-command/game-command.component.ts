@@ -1,9 +1,10 @@
+import { RoutingService } from './../service/routing.service';
 import { Component, OnInit, Input } from '@angular/core';
-import { SocketService } from '../service/socket.service';
 import { MatDialog } from '@angular/material';
 import { GiveupDialogComponent } from './giveup-dialog/giveup-dialog.component';
 import { AppComponent } from '../app.component';
 import { AnswerDialogComponent } from './answer-dialog/answer-dialog.component';
+import { GameService } from '../service/game.service';
 
 @Component({
     selector: 'app-game-command',
@@ -15,30 +16,30 @@ import { AnswerDialogComponent } from './answer-dialog/answer-dialog.component';
  */
 export class GameCommandComponent implements OnInit {
     /**
-     * Parent de la classe
-     */
-    @Input() parent: AppComponent;
-
-    /**
      * Constructeur des boutons du jeu
-     * @param socketService - Service permettant de gérer les sockets avec le serveur
-     * @param matDialog - Boite de dialogue d'abandon de la partie
+     * @param gameService - Service permettant de gérer les sockets avec le serveur
+     * @param giveUpDialog - Boite de dialogue d'abandon de la partie
      */
     constructor(
-        private socketService: SocketService,
-        public matDialog: MatDialog
+        private gameService: GameService,
+        public giveUpDialog: MatDialog,
+        private routingService: RoutingService
     ) {}
 
     ngOnInit() {
-        console.log('init', this);
-        this.socketService.getWords().subscribe(msg => {
+        this.gameService.getWords().subscribe(msg => {
             console.log(msg);
             let msgToShow =
                 'Les 5 mots ayant rapporté le plus de points sont : \n';
             let words: string[] = msg[0];
             for (let i = 0; i < words.length; i++) {
                 msgToShow +=
-                    words[i]['word'] + ' = ' + words[i]['score'] + '\n';
+                    words[i]['word'] +
+                    ' = ' +
+                    words[i]['score']['correctPlace'] +
+                    ' , ' +
+                    words[i]['score']['correctLetter'] +
+                    '\n';
             }
             if (words.length == 0) {
                 msgToShow = "Votre équipe n'a encore rentré aucun mot.";
@@ -56,7 +57,7 @@ export class GameCommandComponent implements OnInit {
      * Méthode permettant d'afficher les meilleurs mots proposés par les joueurs
      */
     onShowWords() {
-        this.socketService.askForWords();
+        this.gameService.askForWords();
     }
 
     /**
@@ -66,8 +67,8 @@ export class GameCommandComponent implements OnInit {
         const dialogRef = this.matDialog.open(GiveupDialogComponent);
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.parent.changeViewToGameConfig();
-                this.socketService.askForAnswer();
+                this.routingService.changeViewToGameConfig();
+                this.gameService.askForAnswer();
             }
         });
     }
