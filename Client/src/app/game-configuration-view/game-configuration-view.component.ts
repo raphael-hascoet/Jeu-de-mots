@@ -1,7 +1,7 @@
+import { RoutingService } from './../service/routing.service';
 import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { GameService } from '../service/game.service';
 import { GameConfig } from '../model/game-config/game-config';
-import { AppComponent } from '../app.component';
 import { FormControl, Validators } from '@angular/forms';
 import { Player } from '../model/player/player';
 
@@ -19,7 +19,6 @@ declare global {
     styleUrls: ['./game-configuration-view.component.css'],
 })
 export class GameConfigurationViewComponent implements OnInit {
-    @Input() parent: AppComponent;
     @Input() userName: string;
 
     userIsHost: boolean = false;
@@ -32,14 +31,19 @@ export class GameConfigurationViewComponent implements OnInit {
 
     players : Player[];
 
-    teamNameValue : string = "";
-    gameDifficultyValue : number = 1;
-
+    constructor(
+        private gameService: GameService,
+        private routingService: RoutingService,
+        private zone: NgZone
+    ) {}
     difficultyFormControl: FormControl = new FormControl(1, [Validators.required]);
 
-    constructor(private gameService: GameService, private zone: NgZone) {}
+    gameDifficultyValue : number = 1;
+    teamNameValue : string = "";
 
     ngOnInit() {
+        this.hostName = this.gameService.getUserName();
+
         this.gameService.userIsHost().subscribe(value => {
             this.userIsHost = value;
         });
@@ -89,7 +93,7 @@ export class GameConfigurationViewComponent implements OnInit {
     }
 
     changeViewToGame() {
-        this.parent.changeViewToGame();
+        this.routingService.changeViewToGame();
     }
 
     getMinDifficulty(): number {

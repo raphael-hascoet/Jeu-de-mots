@@ -16,6 +16,7 @@ export class GameService {
     valueUserIsHost: Observable<boolean> = this.socket.fromEvent<boolean>('userIsHost');
     teamName : Observable<string> = this.socket.fromEvent<string>('teamName');
     gameDifficulty: Observable<number> = this.socket.fromEvent<number>('gameDifficulty');
+    private userName: string;
 
     constructor(private socket: Socket) {}
 
@@ -134,5 +135,13 @@ export class GameService {
      */
     getAnswer() {
         return this.socket.fromEvent('answer');
+    }
+
+    setUserName(userName: string): void {
+        this.userName = userName;
+    }
+
+    getUserName(): string {
+        return this.userName;
     }
 }

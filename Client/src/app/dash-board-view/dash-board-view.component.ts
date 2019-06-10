@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { GameService } from './../service/game.service';
+import { RoutingService } from '../service/routing.service';
 import { AppComponent } from '../app.component';
-import { GameService } from '../service/game.service';
 import { FormControl, Validators, FormGroup, AsyncValidator, AsyncValidatorFn, AbstractControl } from '@angular/forms';
 import { Player } from '../model/player/player';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-dash-board-view',
@@ -10,7 +11,10 @@ import { Player } from '../model/player/player';
     styleUrls: ['./dash-board-view.component.css'],
 })
 export class DashBoardViewComponent implements OnInit {
-    @Input() parent: AppComponent;
+    constructor(
+        private gameService: GameService,
+        private routingService: RoutingService
+    ) {}
 
     hostIsConnected: boolean;
     nameAlreadyUsed: boolean = false;
@@ -35,6 +39,9 @@ export class DashBoardViewComponent implements OnInit {
             });
 
         this.gameService.getConnectedPlayers().subscribe(players => this.connectedPlayers=players);
+    goToGameConfig(userName: string): void {
+        this.gameService.setUserName(userName);
+        this.routingService.changeViewToGameConfig();
     }
 
     goToGameConfig(userName: string): void {

@@ -19,12 +19,15 @@ import { GameViewComponent } from './game-view/game-view.component';
 import { GiveupDialogComponent } from './game-command/giveup-dialog/giveup-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DashBoardViewComponent } from './dash-board-view/dash-board-view.component';
+import { AppRoutingModule } from './app-routing.module';
 
-console.log('window.location.host : ' + window.location.host);
-const config: SocketIoConfig = {
-    url: 'http://192.168.1.29:3000',
-    options: {},
-};
+import { environment } from 'src/environments/environment';
+
+
+const env = environment;
+console.log(env);
+
+const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
 
 @NgModule({
     declarations: [
@@ -48,6 +51,7 @@ const config: SocketIoConfig = {
         MatButtonModule,
         MatDialogModule,
         SocketIoModule.forRoot(config),
+        AppRoutingModule,
     ],
     exports: [
         TextFieldModule,
