@@ -1,7 +1,8 @@
 import { Game } from '../src/Game';
-import { calculateWordScore, getStatNbLetter } from '../src/gameUtils';
+import { calculateWordScore } from '../src/gameUtils';
 import { Player } from '../src/Player';
 import { GameConfiguration } from './GameConfiguration';
+import { getStatNbLetter, getChronology, getGameStats } from './statsUtils';
 
 const app = require('express')();
 var http = require('http').createServer(app);
@@ -60,6 +61,8 @@ io.on('connection', function(socket: any) {
         if (msg == Game.getInstance().getWordToFind()) {
             socket.emit('fin');
             socket.emit('nbLetters', [getStatNbLetter()]);
+            socket.emit('chronology', [getChronology()]);
+            socket.emit('gameStats', [getGameStats()]);
         }
     });
 
