@@ -17,6 +17,8 @@ export class GameService {
     teamName : Observable<string> = this.socket.fromEvent<string>('teamName');
     gameDifficulty: Observable<number> = this.socket.fromEvent<number>('gameDifficulty');
     gameIsLaunched: Observable<boolean> = this.socket.fromEvent<boolean>('gameIsLaunched');
+    gameDifficulty : Observable<number> = this.socket.fromEvent<number>('gameDifficulty');
+
     private userName: string;
 
     constructor(private socket: Socket) {}
@@ -153,5 +155,12 @@ export class GameService {
 
     getUserName(): string {
         return this.userName;
+    }
+
+    getGameDifficulty() : Observable<number> {
+        return this.gameDifficulty;
+    }
+    getTeamName() {
+        throw new Error("Method not implemented.");
     }
 }
