@@ -51,11 +51,7 @@ export function getChronology(): [Array<string>, Array<number>] {
  */
 export function getGameStats(): [Array<string>, Array<Array<string>>] {
     let global = new Array<string>();
-    global.push(
-        Game.getInstance()
-            .getHost()
-            .getTeam()
-    );
+    global.push(Game.getInstance().getTeamName());
     global.push(
         Game.getInstance()
             .getScore()
