@@ -75,7 +75,7 @@ export function getGameStats(): [Array<string>, Array<Array<string>>] {
         data.push(player.getScore().toString());
         data.push(player.getEfficacy().toString());
         data.push(player.getTryNumber().toString());
-        data.push(Badge[player.getBadge()]);
+        data.push(Badge[player.getBadge()].toLowerCase());
         players.push(data);
     }
     return [global, players];
