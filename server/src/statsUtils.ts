@@ -1,5 +1,7 @@
 import { Game } from './Game';
 import TsMap from 'ts-map';
+import { Player } from './Player';
+import { Badge } from './Badge';
 
 /**
  * Fonction permettant de construire le format des données à envoyer pour afficher
@@ -65,6 +67,7 @@ export function getGameStats(): [Array<string>, Array<Array<string>>] {
             .toString()
     );
     global.push('timer');
+    Game.getInstance().setPlayers(findBadge(Game.getInstance().getPlayers()));
     let players = new Array<Array<string>>();
     for (let player of Game.getInstance().getPlayers()) {
         let data = new Array<string>();
@@ -72,8 +75,125 @@ export function getGameStats(): [Array<string>, Array<Array<string>>] {
         data.push(player.getScore().toString());
         data.push(player.getEfficacy().toString());
         data.push(player.getTryNumber().toString());
-        data.push('null');
+        data.push(player.getBadge().toString());
         players.push(data);
     }
     return [global, players];
+}
+
+/**
+ * Méthode permettant d'attribuer un badge à chaque joueur en fin de partie
+ * @param players - Liste des joueurs
+ */
+function findBadge(players: Array<Player>): Array<Player> {
+    let badges = new TsMap<Badge, Array<Player>>();
+    let [hellFestPlayers, ramboPlayers] = findHellfestAndRambo(players);
+    badges.set(Badge.HELLFEST, hellFestPlayers);
+    badges.set(Badge.RAMBO, ramboPlayers);
+    badges.set(Badge.ECRIVAIN, findWriter(players));
+    badges.set(Badge.BOURRIN, findRough(players));
+    badges.forEach((playerList, badge) => {
+        if (
+            playerList != undefined &&
+            badge != undefined &&
+            playerList.length == 1
+        ) {
+            let playerToReplace = playerList[0];
+            players.forEach(player => {
+                if (
+                    player.getBadge() == Badge.NULL &&
+                    player.getName() == playerToReplace.getName()
+                ) {
+                    player.setBadge(badge);
+                }
+            });
+        }
+    });
+    return players;
+}
+
+/**
+ * Trouve les joueurs "Bourrin"
+ * @param players - Joueurs de la partie
+ */
+function findRough(players: Player[]): Array<Player> {
+    let maxRatio = 0;
+    let roughPlayers = new Array<Player>();
+    players.forEach(player => {
+        let ratio = player.getTryNumber() / player.getEfficacy();
+        if (ratio >= maxRatio) {
+            maxRatio = ratio;
+            if (
+                roughPlayers.length > 0 &&
+                roughPlayers[0].getTryNumber() /
+                    roughPlayers[0].getEfficacy() !=
+                    ratio
+            ) {
+                roughPlayers = new Array<Player>();
+            }
+            roughPlayers.push(player);
+        }
+    });
+    return roughPlayers;
+}
+
+/**
+ * Trouve les joueurs "Ecrivain"
+ * @param players - Joueurs de la partie
+ */
+function findWriter(players: Player[]): Array<Player> {
+    let maxAvgLength = 0;
+    let writerPlayers = new Array<Player>();
+    players.forEach(player => {
+        let avg = player.getWordAvgLength();
+        if (avg >= maxAvgLength) {
+            maxAvgLength = avg;
+            if (
+                writerPlayers.length > 0 &&
+                writerPlayers[0].getWordAvgLength() != avg
+            ) {
+                writerPlayers = new Array<Player>();
+            }
+            writerPlayers.push(player);
+        }
+    });
+    return writerPlayers;
+}
+
+/**
+ * Méthode permettant de trouver les joueurs "HellFest" et "Rambo"
+ * @param players - Joueurs de la partie
+ * @returns liste des joueurs hellfest et rambo
+ */
+function findHellfestAndRambo(
+    players: Array<Player>
+): [Array<Player>, Array<Player>] {
+    let minWords = 9999999;
+    let maxWords = 0;
+    let hellFestPlayers = new Array<Player>();
+    let ramboPlayers = new Array<Player>();
+    players.forEach(player => {
+        let nbWords = player.getTryNumber();
+        if (nbWords <= minWords) {
+            minWords = nbWords;
+            if (
+                hellFestPlayers.length > 0 &&
+                hellFestPlayers[0].getTryNumber() != nbWords
+            ) {
+                hellFestPlayers = new Array<Player>();
+            }
+            hellFestPlayers.push(player);
+        }
+        if (nbWords >= maxWords) {
+            maxWords = nbWords;
+            if (
+                ramboPlayers.length > 0 &&
+                ramboPlayers[0].getTryNumber() != nbWords
+            ) {
+                ramboPlayers = new Array<Player>();
+            }
+            ramboPlayers.push(player);
+        }
+    });
+    return [hellFestPlayers, ramboPlayers];
 }

@@ -4,6 +4,8 @@ import { Player } from './Player';
 import { ProposedWord } from './ProposedWord';
 import { Score } from './Score';
 import { WordToFind } from './WordToFind';
+import { Badge } from './Badge';
+import TsMap from 'ts-map';
 
 /**
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
@@ -150,6 +152,10 @@ export class Game {
         throw new Error('The player ' + name + " isn't in the game");
     }
 
+    setPlayers(players: Array<Player>) {
+        this.players = players;
+    }
+
     /**
      * Méthode permettant d'ajouter un mot à la liste des mots proposés globalement ainsi que la liste personnelle des joueurs
      * @param word - Mot à ajouter
@@ -222,6 +228,8 @@ export class Game {
      * @param word - Mot proposé
      */
     calculatePlayerScore(player: Player, word: string) {
-        player.addToScore(this.wordToFind.calculatePlayerScore(word));
+        player.addToScore(
+            this.wordToFind.calculatePlayerScore(word.toLocaleLowerCase())
+        );
     }
 }

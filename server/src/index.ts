@@ -3,6 +3,7 @@ import { calculateWordScore } from '../src/gameUtils';
 import { Player } from '../src/Player';
 import { GameConfiguration } from './GameConfiguration';
 import { getStatNbLetter, getChronology, getGameStats } from './statsUtils';
+import { Badge } from './Badge';
 
 const app = require('express')();
 var http = require('http').createServer(app);
@@ -73,6 +74,7 @@ io.on('connection', function(socket: any) {
         ]);
 
         if (msg == Game.getInstance().getWordToFind()) {
+            player.setBadge(Badge.CHAMPION);
             socket.emit('fin');
             socket.emit('nbLetters', [getStatNbLetter()]);
             socket.emit('chronology', [getChronology()]);
