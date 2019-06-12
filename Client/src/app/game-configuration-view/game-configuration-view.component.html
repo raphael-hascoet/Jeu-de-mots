@@ -3,10 +3,10 @@
 </h2>
 <p>Partie démarrée à l'adresse {{ localIp }}</p>
 <form>
-    <p>Pseudonyme : {{hostName}}</p>
+    <p>Pseudonyme : {{ hostName }}</p>
     <mat-form-field>
         <mat-label>Nom d'équipe</mat-label>
-        <input #hostTeam matInput />
+        <input #teamName matInput [readonly]="!userIsHost" value="{{teamNameValue}}" (input)="updateTeamName(teamName.value)"/>
     </mat-form-field>
     <mat-form-field>
         <mat-label>Niveau de difficulté</mat-label>
@@ -16,20 +16,32 @@
             type="number"
             min="{{ getMinDifficulty() }}"
             max="{{ getMaxDifficulty() }}"
-            [formControl]="difficulty"
+            [formControl]="difficultyFormControl"
+            [readonly]="!userIsHost"
+            value="{{gameDifficultyValue}}"
+            (input)="updateGameDifficulty(gameDifficulty.value)"
         />
-        <mat-error *ngIf="difficulty.invalid">
+        <mat-error *ngIf="difficultyFormControl.invalid">
             Entrez un niveau de difficulté entre {{ getMinDifficulty() }} et
             {{ getMaxDifficulty() }}
         </mat-error>
     </mat-form-field>
     <button
-        (click)="
-            createGame(hostTeam.value, gameDifficulty.value)
-        "
+        (click)="createGame(teamName.value, gameDifficulty.value)"
         mat-raised-button
-        [disabled]="difficulty.invalid"
+        [disabled]="difficultyFormControl.invalid || !userIsHost"
+        *ngIf="userIsHost"
     >
         Valider
     </button>
 </form>
+
+<h2>Lobby</h2>
+<p>Pseudonyme : {{ playerName }}</p>
+<p>En attente de la configuration de la partie ...</p>
+<h3>Joueurs connectés</h3>
+<ul>
+    <li *ngFor="let player of players">
+        {{ player.name }}
+    </li>
+</ul>
