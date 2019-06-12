@@ -7,7 +7,7 @@ export class Player {
         this.team = team;
     }
 
-    getName(): string{
+    getName(): string {
         return this.name;
     }
 

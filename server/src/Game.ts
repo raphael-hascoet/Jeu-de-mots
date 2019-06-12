@@ -3,6 +3,7 @@ import { latinise } from './stringUtil';
 import { Player } from './Player';
 import { ProposedWord } from './ProposedWord';
 import { Score } from './Score';
+import { Timer } from './Timer';
 
 /**
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
@@ -50,6 +51,10 @@ export class Game {
      * Mot que les joueurs doivent trouver
      */
     private wordToFind = '';
+    /**
+     * Temps passé par l'équipe à chercher le mot
+     */
+    private timer: Timer;
 
     /**
      * Constructeur d'une partie
@@ -60,6 +65,7 @@ export class Game {
         this.players.push(this.host);
         this.difficultyLevel = difficultyLevel;
         this.proposedWords = new Array<ProposedWord>();
+        this.timer = new Timer();
     }
 
     /**
@@ -67,8 +73,10 @@ export class Game {
      * Permet d'attendre que le mot dans le dictionnaire soit trouvé (méthode readDictionnary)
      * avant de continuer : à appeler dans une méthode 'async' en faisant
      * await Game.getInstance().startGame();
+     * @param socket - Socket de connexion avec le client
      */
-    public startGame() {
+    public startGame(socket: any) {
+        this.timer.startTimer(socket);
         return this.readDictionnary().then(
             data => {
                 this.wordToFind = data;
@@ -77,6 +85,13 @@ export class Game {
                 throw new Error(error);
             }
         );
+    }
+
+    /**
+     * Méthode permettant d'arrêter le jeu (ici elle arrête le timer)
+     */
+    public stopGame() {
+        this.timer.stopTimer();
     }
 
     /**

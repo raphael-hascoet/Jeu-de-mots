@@ -34,7 +34,7 @@ io.on('connection', function(socket: any) {
             new Player(gameConfig.hostName, gameConfig.hostTeam),
             gameConfig.gameDifficulty
         );
-        await Game.getInstance().startGame();
+        await Game.getInstance().startGame(socket);
         console.log(
             'hostName : ' +
                 Game.getInstance()
@@ -70,6 +70,7 @@ io.on('connection', function(socket: any) {
         ]);
 
         if (msg == Game.getInstance().getWordToFind()) {
+            Game.getInstance().stopGame();
             io.emit('fin');
         }
     });
