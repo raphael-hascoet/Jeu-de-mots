@@ -22,6 +22,7 @@ import { DashBoardViewComponent } from './dash-board-view/dash-board-view.compon
 import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from 'src/environments/environment';
+import { PlayersListComponent } from './players-list/players-list.component';
 
 
 const env = environment;
@@ -37,6 +38,7 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         GameViewComponent,
         GiveupDialogComponent,
         DashBoardViewComponent,
+        PlayersListComponent,
     ],
     entryComponents: [GiveupDialogComponent],
     imports: [

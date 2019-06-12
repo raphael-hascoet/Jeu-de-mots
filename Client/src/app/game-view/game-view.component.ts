@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { AppComponent } from '../app.component';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { GameService } from '../service/game.service';
 
 @Component({
