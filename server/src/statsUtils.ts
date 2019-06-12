@@ -44,14 +44,27 @@ export function getChronology(): [Array<string>, Array<number>] {
 
 /**
  * Méthode permettant de récupérer les statistiques de la partie
- * @returns Array<number> - Statistiques globales de la partie
+ * @returns Array<string> - Données globales de la partie
  *          Array<Array<string>> - Statistiques de chaque joueur
  */
-export function getGameStats(): [Array<number>, Array<Array<string>>] {
-    let global = new Array<number>();
-    global.push(Game.getInstance().getScore());
-    global.push(Game.getInstance().getTryNumber());
-    global.push(0);
+export function getGameStats(): [Array<string>, Array<Array<string>>] {
+    let global = new Array<string>();
+    global.push(
+        Game.getInstance()
+            .getHost()
+            .getTeam()
+    );
+    global.push(
+        Game.getInstance()
+            .getScore()
+            .toString()
+    );
+    global.push(
+        Game.getInstance()
+            .getTryNumber()
+            .toString()
+    );
+    global.push('timer');
     let players = new Array<Array<string>>();
     for (let player of Game.getInstance().getPlayers()) {
         let data = new Array<string>();
