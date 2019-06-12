@@ -1,0 +1,29 @@
+{
+    "badges": {
+        "bourrin": {
+            "name": "Bourrin",
+            "img": "assets/bourrin.png",
+            "description": "blablabla"
+        },
+        "hellfest": {
+            "name": "HellFest",
+            "img": "assets/hellfest.png",
+            "description": "blablabla"
+        },
+        "rambo": {
+            "name": "Rambo",
+            "img": "assets/rambo.png",
+            "description": "blablabla"
+        },
+        "champion": {
+            "name": "Champion",
+            "img": "assets/champion.png",
+            "description": "blablabla"
+        },
+        "ecrivain": {
+            "name": "Ecrivain",
+            "img": "assets/ecrivain.png",
+            "description": "blablabla"
+        }
+    }
+}

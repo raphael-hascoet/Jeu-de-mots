@@ -32,3 +32,9 @@
 #header {
     padding: 2vh;
 }
+
+.badge {
+    height: 10vh;
+    position: absolute;
+    left: 5vw;
+}

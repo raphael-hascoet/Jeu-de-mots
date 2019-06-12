@@ -3,7 +3,7 @@ import { AppComponent } from '../app.component';
 
 import * as Highcharts from 'highcharts';
 import { GameService } from '../service/game.service';
-
+import badges from './badges.json';
 @Component({
     selector: 'app-game-stats-view',
     templateUrl: './game-stats-view.component.html',
@@ -100,6 +100,8 @@ export class GameStatsViewComponent implements OnInit {
         efficiency: number;
         tries: number;
         badge: string;
+        img: string;
+        description: string;
     }[] = [];
 
     constructor(private gameService: GameService) {}
@@ -137,13 +139,50 @@ export class GameStatsViewComponent implements OnInit {
             this.gameTime = msg[0][0][3];
 
             msg[0][1].forEach(player => {
+                let descriptionBadge;
+                let sourceImg;
+                let nomBadge;
+                let test = 'bourrin';
+                switch (/*player[4]*/ test) {
+                    case 'bourrin':
+                        descriptionBadge = badges.badges.bourrin.description;
+                        sourceImg = badges.badges.bourrin.img;
+                        nomBadge = badges.badges.bourrin.name;
+                        break;
+                    case 'hellfest':
+                        descriptionBadge = badges.badges.hellfest.description;
+                        sourceImg = badges.badges.hellfest.img;
+                        nomBadge = badges.badges.hellfest.name;
+                        break;
+                    case 'rambo':
+                        descriptionBadge = badges.badges.rambo.description;
+                        sourceImg = badges.badges.rambo.img;
+                        nomBadge = badges.badges.rambo.name;
+                        break;
+                    case 'champion':
+                        descriptionBadge = badges.badges.champion.description;
+                        sourceImg = badges.badges.champion.img;
+                        nomBadge = badges.badges.champion.name;
+                        break;
+                    case 'ecrivain':
+                        descriptionBadge = badges.badges.ecrivain.description;
+                        sourceImg = badges.badges.ecrivain.img;
+                        nomBadge = badges.badges.ecrivain.name;
+                        break;
+
+                    default:
+                        break;
+                }
+
                 let effi: number = +player[2];
                 this.players.push({
                     name: player[0],
                     score: player[1],
                     efficiency: parseFloat(effi.toFixed(2)),
                     tries: player[3],
-                    badge: player[4],
+                    badge: nomBadge,
+                    img: sourceImg,
+                    description: descriptionBadge,
                 });
             });
         });

@@ -7,10 +7,16 @@
 <div id="main">
     <div id="players">
         <div *ngFor="let player of players" class="player">
+            <img
+                src="{{ player.img }}"
+                alt="{{ player.badge }}"
+                title="{{ player.description }}"
+                class="badge"
+            />
             <p class="name playerInfo">{{ player.name }}</p>
             <p class="score playerInfo">{{ player.score }} points</p>
             <p class="efficiency playerInfo">
-                {{ player.efficiency }}% d'éfficacité
+                {{ player.efficiency }}% d'efficacité
             </p>
             <p class="tries playerInfo">{{ player.tries }} essais</p>
         </div>
