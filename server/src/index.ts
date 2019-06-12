@@ -2,7 +2,10 @@ import { Game } from '../src/Game';
 import { calculateWordScore } from '../src/gameUtils';
 import { Player } from '../src/Player';
 import { GameConfiguration } from './GameConfiguration';
+import { Lobby } from './Lobby';
 
+const dotenv = require('dotenv');
+dotenv.config();
 const app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
@@ -16,6 +19,77 @@ io.on('connection', function(socket: any) {
      * @userId Pseudonyme du joueur, relié au socket
      */
     var userId: string = 'Inconnu';
+
+    var userIsHost = false;
+
+    var teamName = '';
+    var gameDifficulty = 1;
+
+    /**
+     * Le premier utilisateur à se connecter deviens l'host et peut configurer la partie
+     * les suivants peuvent voir la config en cours mais pas la modifier
+     */
+    socket.on('connectUser', function(userName: string) {
+        if (Game.gameIsLaunched()) {
+            console.log('ERREUR : la partie a déjà commencée');
+        } else if (Lobby.hostIsConnected()) {
+            /**
+             * Si l'host est déjà connecté, on rajoute uniquement cet utilisateur au lobby
+             */
+            userId = userName;
+            Lobby.getInstance().addPlayer(userId);
+            io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+            console.log('Joueur connecté sous le pseudonyme ' + userId);
+        } else {
+            /**
+             * Si c'est le premier utilisateur à se connecter, le lobby est créé et il en devient l'host
+             */
+            io.emit('hostIsConnected', true);
+            userId = userName;
+            Lobby.createLobby(userId);
+            io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+            console.log('Hôte connecté sous le pseudonyme ' + userId);
+            userIsHost = true;
+            socket.emit('hostConnectionAllowed');
+        }
+    });
+
+    socket.on('getHostIsConnected', function() {
+        socket.emit('hostIsConnected', Game.hostIsConnected());
+    });
+
+    socket.on('getGameIsLaunched', function() {
+        socket.emit('gameIsLaunched', Game.gameIsLaunched());
+    });
+
+    /**
+     * Cette méthode retourne tous les joueurs de la partie, y compris l'host
+     */
+    socket.on('getConnectedPlayers', function() {
+        socket.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+    });
+
+    socket.on('isUserHost', function() {
+        socket.emit('userIsHost', userIsHost);
+    });
+
+    socket.on('updateTeamName', function(newTeamName: string) {
+        teamName = newTeamName;
+        io.emit('teamName', teamName);
+    });
+
+    socket.on('getTeamName', function() {
+        socket.emit('teamName', teamName);
+    });
+
+    socket.on('updateGameDifficulty', function(newGameDifficulty: number) {
+        gameDifficulty = newGameDifficulty;
+        io.emit('gameDifficulty', gameDifficulty);
+    });
+
+    socket.on('getGameDifficulty', function() {
+        socket.emit('gameDifficulty', gameDifficulty);
+    });
 
     /**
      * Au lancement d'une partie
@@ -31,7 +105,8 @@ io.on('connection', function(socket: any) {
         }
 
         Game.getInstance(
-            new Player(gameConfig.hostName, gameConfig.hostTeam),
+            new Player(gameConfig.hostName),
+            gameConfig.hostTeam,
             gameConfig.gameDifficulty
         );
         await Game.getInstance().startGame(socket);
@@ -41,16 +116,13 @@ io.on('connection', function(socket: any) {
                     .getHost()
                     .getName()
         );
-        console.log(
-            'hostTeam : ' +
-                Game.getInstance()
-                    .getHost()
-                    .getTeam()
-        );
+        console.log('Team : ' + Game.getInstance().getTeamName());
         console.log(
             'difficultyLevel : ' + Game.getInstance().getDifficultyLevel()
         );
         console.log('Mot a trouver : ' + Game.getInstance().getWordToFind());
+
+        io.emit('gameIsLaunched', Game.gameIsLaunched());
     });
 
     /**
@@ -63,8 +135,8 @@ io.on('connection', function(socket: any) {
         console.log(msg);
         let score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
         Game.getInstance().addProposedWord(msg, score);
-        socket.emit('score', [
-            msg,
+        io.emit('score', [
+            userId + ' a proposé ' + msg,
             score.getcorrectPlace(),
             score.getcorrectLetter(),
         ]);
@@ -105,11 +177,27 @@ io.on('connection', function(socket: any) {
      * Déconnexion de l'utilisateur
      */
     socket.on('disconnect', function() {
-        console.log(userId + ' disconnected');
+        Lobby.getInstance().removePlayer(userId);
+        io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+
+        if (userIsHost) {
+            console.log('host ' + userId + ' disconnected');
+            io.emit('hostIsConnected', false);
+            Lobby.resetInstance();
+
+            if (!Game.gameIsLaunched()) {
+                console.log('configuration de la partie annulée');
+                io.emit('denyConfig');
+            } else {
+                console.log("L'host s'est déconnecté pendant la partie");
+            }
+        } else {
+            console.log(userId + ' disconnected');
+        }
     });
 });
 
-const server = http.listen(3000, async () => {
+const server = http.listen(process.env.PORT, async () => {
     console.log('server is running on port', server.address().port);
 
     //Initialisation des niveaux de difficulté
