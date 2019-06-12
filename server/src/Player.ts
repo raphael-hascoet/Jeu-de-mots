@@ -1,14 +1,11 @@
 import { ProposedWord } from './ProposedWord';
+import { Badge } from './Badge';
 
 export class Player {
     /**
      * Pseudo du joueur
      */
     private name: string;
-    /**
-     * Nom de l'équipe
-     */
-    private team: string;
     /**
      * Liste des mots que le joueur a proposés
      */
@@ -20,22 +17,21 @@ export class Player {
      *  3 points pour les 2 d'un coup
      */
     private score: number;
+    /**
+     * Badge du joueur
+     */
+    private badge: Badge;
 
-    constructor(name: string, team: string) {
+    constructor(name: string) {
         this.name = name;
-        this.team = team;
         this.proposedWords = new Array<ProposedWord>();
         this.score = 0;
+        this.badge = Badge.NULL;
     }
 
     getName(): string {
         return this.name;
     }
-
-    getTeam(): string {
-        return this.team;
-    }
-
     getProposedWords(): Array<ProposedWord> {
         return this.proposedWords;
     }
@@ -53,6 +49,14 @@ export class Player {
             score += word.getScore().getTotalScore();
         }
         return score;
+    }
+
+    getBadge(): Badge {
+        return this.badge;
+    }
+
+    setBadge(badge: Badge) {
+        this.badge = badge;
     }
 
     /**
@@ -108,4 +112,16 @@ export class Player {
         }
         return stats;
     }
+
+    /**
+     * Calcule la moyenne de taille des mots proposés
+     */
+    getWordAvgLength(): number {
+        let sum = 0;
+        this.proposedWords.forEach(word => {
+            sum += word.getLength();
+        });
+        return sum / this.getTryNumber();
+    }
+
 }

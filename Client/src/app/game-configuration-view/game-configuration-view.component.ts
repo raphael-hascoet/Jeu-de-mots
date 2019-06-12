@@ -3,6 +3,7 @@ import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { GameService } from '../service/game.service';
 import { GameConfig } from '../model/game-config/game-config';
 import { FormControl, Validators } from '@angular/forms';
+import { Player } from '../model/player/player';
 
 declare global {
     interface Window {
@@ -18,7 +19,9 @@ declare global {
     styleUrls: ['./game-configuration-view.component.css'],
 })
 export class GameConfigurationViewComponent implements OnInit {
-    private hostName: string;
+    userName: string;
+
+    userIsHost: boolean = false;
 
     localIp: string =
         sessionStorage.getItem('LOCAL_IP') + ':' + window.location.port;
@@ -26,21 +29,29 @@ export class GameConfigurationViewComponent implements OnInit {
     maxDifficulty: number;
     minDifficulty: number;
 
-    difficulty: FormControl = new FormControl(1, [Validators.required]);
+    players : Player[];
 
     constructor(
         private gameService: GameService,
         private routingService: RoutingService,
         private zone: NgZone
     ) {}
+    difficultyFormControl: FormControl = new FormControl(1, [Validators.required]);
+
+    gameDifficultyValue : number = 1;
+    teamNameValue : string = "";
 
     ngOnInit() {
-        this.hostName = this.gameService.getUserName();
+        this.userName = this.gameService.getUserName();
 
+        this.gameService.userIsHost().subscribe(value => {
+            this.userIsHost = value;
+        });
+        this.gameService.connectUser(this.userName);
         this.determineLocalIp();
         this.gameService.getMinDifficulty().subscribe(value => {
             this.minDifficulty = value;
-            this.difficulty.setValidators([
+            this.difficultyFormControl.setValidators([
                 Validators.required,
                 Validators.min(this.minDifficulty),
                 Validators.max(this.maxDifficulty),
@@ -48,20 +59,42 @@ export class GameConfigurationViewComponent implements OnInit {
         });
         this.gameService.getMaxDifficulty().subscribe(value => {
             this.maxDifficulty = value;
-            this.difficulty.setValidators([
+            this.difficultyFormControl.setValidators([
                 Validators.required,
                 Validators.min(this.minDifficulty),
                 Validators.max(this.maxDifficulty),
             ]);
         });
+        this.gameService.getTeamName().subscribe(value => this.teamNameValue = value);
+        this.gameService.getGameDifficulty().subscribe(value => {
+            this.gameDifficultyValue = value;
+        });
+
+        this.gameService.getConnectedPlayers().subscribe(players => this.players = players);
+
+        this.gameService.getGameIsLaunched().subscribe(gameIsLaunched =>{
+            if(gameIsLaunched){
+                this.changeViewToGame();
+            }
+        });
+        this.gameService.denyConfig().subscribe(value => this.routingService.changeViewToDashboard());
     }
 
-    createGame(hostTeam: string, gameDifficulty: number): void {
-        this.gameService.createGame(
-            new GameConfig(this.hostName, hostTeam, gameDifficulty)
-        );
+    updateTeamName(teamName: string){
+        this.gameService.updateTeamName(teamName);
+    }
 
-        this.changeViewToGame();
+    updateGameDifficulty(gameDifficulty : number){
+        this.gameService.updateGameDifficulty(gameDifficulty);
+    }
+
+    createGame(
+        hostTeam: string,
+        gameDifficulty: number
+    ): void {
+        this.gameService.createGame(
+            new GameConfig(this.userName, hostTeam, gameDifficulty)
+        );
     }
 
     changeViewToGame() {
