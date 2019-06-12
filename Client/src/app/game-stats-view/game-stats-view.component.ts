@@ -131,9 +131,10 @@ export class GameStatsViewComponent implements OnInit {
 
         this.gameService.getGameStats().subscribe(msg => {
             console.log('Stats', msg);
-            this.globalScore = msg[0][0][0];
-            this.globalNbTries = msg[0][0][1];
-            this.gameTime = msg[0][0][2];
+            this.teamName = msg[0][0][0];
+            this.globalScore = msg[0][0][1];
+            this.globalNbTries = msg[0][0][2];
+            this.gameTime = msg[0][0][3];
 
             msg[0][1].forEach(player => {
                 let effi: number = +player[2];
