@@ -11,6 +11,7 @@ import TsMap from 'ts-map';
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
  */
 export class Game {
+    
     private static instance: Game;
 
     /**
@@ -21,28 +22,55 @@ export class Game {
      *
      */
     static getInstance(
-        host = new Player('null', 'null'),
-        difficulty = 4
+        host = new Player('null'),
+        teamName = '',
+        difficulty = -1
     ): Game {
         if (!Game.instance || host.getName() != 'null') {
-            Game.instance = new Game(host, difficulty);
+            Game.instance = new Game(host, teamName, difficulty);
+        }
+
+        if(difficulty!=-1){
+            Game.instance.difficultyLevel = difficulty;
         }
 
         return Game.instance;
     }
 
+    static hostIsConnected(): boolean{
+        return this.getInstance().getHost().getName()!='null';
+    }
+
+    static gameIsLaunched(): boolean{
+        return this.getInstance().difficultyLevel!=-1;
+    }
+
+    static resetInstance(): void{
+        this.instance.host = new Player('null');
+        this.instance.difficultyLevel = -1;
+    }
+
     /**
      * Hebergeur de la partie
+     * 
+     * @name = 'null' si il y n'y a pas d'host connecté
      */
     private host: Player;
 
     /**
+     * Nom de l'équipe jouant cette partie
+     */
+    private teamName : string;
+
+    /**
      * Liste des joueurs de la partie
      */
-    private players: Array<Player>;
+    private players: Array<Player> = Array<Player>();
 
     /**
      * Niveau de difficulté de la partie
+     * 
+     * @valeur = -1 s'il n'y a pas de partie de lancée
      */
     private difficultyLevel: number;
     /**
@@ -57,13 +85,22 @@ export class Game {
     /**
      * Constructeur d'une partie
      */
-    private constructor(host: Player, difficultyLevel: number) {
+    private constructor(host: Player, teamName: string, difficultyLevel: number) {
         this.host = host;
         this.players = new Array<Player>();
         this.players.push(this.host);
+        this.teamName = teamName;
         this.difficultyLevel = difficultyLevel;
         this.proposedWords = new Array<ProposedWord>();
         this.wordToFind = new WordToFind('');
+    }
+
+    public addPlayer(playerName : string){
+        this.players.push(new Player(playerName));
+    }
+
+    public removePlayer(playerName : string){
+        this.players = this.players.filter(player => player.getName().localeCompare(playerName)!=0);
     }
 
     /**
@@ -125,6 +162,10 @@ export class Game {
 
     getHost(): Player {
         return this.host;
+    }
+
+    getTeamName(): string {
+        return this.teamName;
     }
 
     getPlayers(): Array<Player> {

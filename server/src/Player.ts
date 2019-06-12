@@ -7,10 +7,6 @@ export class Player {
      */
     private name: string;
     /**
-     * Nom de l'équipe
-     */
-    private team: string;
-    /**
      * Liste des mots que le joueur a proposés
      */
     private proposedWords: Array<ProposedWord>;
@@ -26,9 +22,8 @@ export class Player {
      */
     private badge: Badge;
 
-    constructor(name: string, team: string) {
+    constructor(name: string) {
         this.name = name;
-        this.team = team;
         this.proposedWords = new Array<ProposedWord>();
         this.score = 0;
         this.badge = Badge.NULL;
@@ -37,11 +32,6 @@ export class Player {
     getName(): string {
         return this.name;
     }
-
-    getTeam(): string {
-        return this.team;
-    }
-
     getProposedWords(): Array<ProposedWord> {
         return this.proposedWords;
     }
@@ -133,4 +123,5 @@ export class Player {
         });
         return sum / this.getTryNumber();
     }
+
 }

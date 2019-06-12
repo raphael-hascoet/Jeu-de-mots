@@ -2,24 +2,78 @@ import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { GameConfig } from '../model/game-config/game-config';
 import { Observable } from 'rxjs';
+import { Player } from '../model/player/player';
 
 @Injectable({
     providedIn: 'root',
 })
 export class GameService {
+    
+    maxDifficulty: Observable<number> = this.socket.fromEvent<number>('maxDifficulty');
+    minDifficulty: Observable<number> = this.socket.fromEvent<number>('minDifficulty');
+    hostIsConnected: Observable<boolean> = this.socket.fromEvent<boolean>('hostIsConnected');
+    connectedPlayers: Observable<Player[]> = this.socket.fromEvent<Player[]>('connectedPlayers');
+    valueUserIsHost: Observable<boolean> = this.socket.fromEvent<boolean>('userIsHost');
+    teamName : Observable<string> = this.socket.fromEvent<string>('teamName');
+    gameDifficulty: Observable<number> = this.socket.fromEvent<number>('gameDifficulty');
+    gameIsLaunched: Observable<boolean> = this.socket.fromEvent<boolean>('gameIsLaunched');
     private userName: string;
 
-    maxDifficulty = this.socket.fromEvent<number>('maxDifficulty');
-    minDifficulty = this.socket.fromEvent<number>('minDifficulty');
-
     constructor(private socket: Socket) {}
+
+    /**
+     * Le premier utilisateur à ce connecter deviens l'host, cette méthode permet d'envoyer le nom de l'host au serveur
+     * et d'initialiser la configuration de la partie
+     *
+     * @param hostname nom de l'host
+     */
+    connectUser(hostname: string): void {
+        this.socket.emit('connectUser', hostname);
+    }
+
+    /**
+     * Cette méthode revoie True si l'utilisateur connecté sur cette socket est l'host de la partie
+     * False sinon
+     */
+    userIsHost(): Observable<boolean> {
+        this.socket.emit('isUserHost');
+        return this.valueUserIsHost;
+    }
+
+    getHostIsConnected(): Observable<boolean> {
+        this.socket.emit('getHostIsConnected');
+        return this.hostIsConnected;
+    }
+
+    getConnectedPlayers(): Observable<Player[]> {
+        this.socket.emit('getConnectedPlayers');
+        return this.connectedPlayers;
+    }
+
+    updateTeamName(teamName: string): void {
+        this.socket.emit('updateTeamName', teamName);
+    }
+
+    getTeamName() : Observable<string>{
+        this.socket.emit('getTeamName');
+        return this.teamName;
+    }
+
+    updateGameDifficulty(gameDifficulty: number): void {
+        this.socket.emit('updateGameDifficulty', gameDifficulty);
+    }
+
+    getGameDifficulty() {
+        this.socket.emit('getGameDifficulty');
+        return this.gameDifficulty;
+    }
 
     /**
      * Création d'une partie
      *
      * @param config nom de l'host, nom de l'équipe et niveau de difficulté sélectionné
      */
-    createGame(config: GameConfig) {
+    createGame(config: GameConfig): void {
         this.socket.emit('startGame', config);
     }
 
@@ -31,6 +85,15 @@ export class GameService {
     getMinDifficulty(): Observable<number> {
         this.socket.emit('getMinimalDifficulty');
         return this.minDifficulty;
+    }
+
+    getGameIsLaunched(): Observable<boolean> {
+        this.socket.emit('getGameIsLaunched');
+        return this.gameIsLaunched;
+    }
+
+    denyConfig() {
+        return this.socket.fromEvent('denyConfig');
     }
 
     /**
