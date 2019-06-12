@@ -9,14 +9,24 @@
         <div *ngFor="let player of players" class="player">
             <p class="name playerInfo">{{ player.name }}</p>
             <p class="score playerInfo">{{ player.score }} points</p>
-            <p class="efficiency playerInfo">{{ player.efficiency }}%</p>
+            <p class="efficiency playerInfo">
+                {{ player.efficiency }}% d'éfficacité
+            </p>
             <p class="tries playerInfo">{{ player.tries }} essais</p>
         </div>
     </div>
     <div id="global">
-        <highcharts-chart [Highcharts]="highcharts" [options]="chronologie">
+        <highcharts-chart
+            [Highcharts]="highcharts"
+            [options]="chronologie"
+            [(update)]="updateChronologie"
+        >
         </highcharts-chart>
-        <highcharts-chart [Highcharts]="highcharts" [options]="barChart">
+        <highcharts-chart
+            [Highcharts]="highcharts"
+            [options]="barChart"
+            [(update)]="updateBar"
+        >
         </highcharts-chart>
     </div>
 </div>

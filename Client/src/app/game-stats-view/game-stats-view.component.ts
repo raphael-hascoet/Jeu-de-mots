@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { AppComponent } from '../app.component';
 
 import * as Highcharts from 'highcharts';
+import { GameService } from '../service/game.service';
 
 @Component({
     selector: 'app-game-stats-view',
@@ -10,209 +11,141 @@ import * as Highcharts from 'highcharts';
 })
 export class GameStatsViewComponent implements OnInit {
     @Input() parent: AppComponent;
+    @ViewChild('chronologie') chronoGraph: Highcharts.Chart;
     highcharts = Highcharts;
-    chronologie = {};
-    barChart = {};
+    //Graph Chronologie
+    updateChronologie = false; //boolean pour l'update du graph
+    chronologie: Highcharts.Options = {
+        chart: {
+            type: 'spline',
+        },
+        title: {
+            text: 'Chronologie de la partie',
+        },
+        subtitle: {
+            text: 'Tout est une question de temps',
+        },
+        xAxis: {
+            categories: [],
+        },
+        yAxis: {
+            title: {
+                text: 'Score du mot',
+            },
+        },
+        tooltip: {
+            valueSuffix: ' pts',
+        },
+        series: [
+            {
+                data: [],
+            } as Highcharts.SeriesSplineOptions,
+        ],
+    };
+
+    //Bar chart
+    updateBar = false;
+    barChart: Highcharts.Options = {
+        chart: {
+            type: 'column',
+        },
+        title: {
+            text: 'Nombre de propositions par nombre de lettres',
+        },
+        subtitle: {
+            text: '1111',
+        },
+        xAxis: {
+            categories: ['Jan'],
+            crosshair: true,
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'proposition(s)',
+            },
+        },
+        tooltip: {
+            headerFormat:
+                '<span style="font-size:10px">Nombre de lettres : {point.key}</span><table>',
+            pointFormat:
+                '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} propositions</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true,
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0,
+            },
+        },
+        series: [
+            {
+                name: '',
+                data: [],
+            } as Highcharts.SeriesColumnOptions,
+        ],
+    };
+
+    //global stats variables
     teamName = 'Equiiiipe';
-    globalScore = 100;
-    globalNbTries = 56;
-    gameTime = '11:05';
+    globalScore;
+    globalNbTries;
+    gameTime;
     players: {
         name: string;
         score: number;
         efficiency: number;
         tries: number;
-    }[] = [
-        {
-            name: 'Océane',
-            score: 15,
-            efficiency: 12,
-            tries: 40,
-        },
-        {
-            name: 'Léa',
-            score: 15,
-            efficiency: 12,
-            tries: 40,
-        },
-    ];
-    constructor() {}
+        badge: string;
+    }[] = [];
+
+    constructor(private gameService: GameService) {}
 
     ngOnInit() {
-        this.barChart = {
-            chart: {
-                type: 'column',
-            },
-            title: {
-                text: 'Monthly Average Rainfall',
-            },
-            subtitle: {
-                text: 'Source: WorldClimate.com',
-            },
-            xAxis: {
-                categories: [
-                    'Jan',
-                    'Feb',
-                    'Mar',
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec',
-                ],
-                crosshair: true,
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Rainfall (mm)',
-                },
-            },
-            tooltip: {
-                headerFormat:
-                    '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat:
-                    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true,
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0,
-                },
-            },
-            series: [
+        this.gameService.getChronologie().subscribe(msg => {
+            this.chronologie.xAxis = { categories: msg[0][0] };
+            this.chronologie.series = [
                 {
-                    name: 'Tokyo',
-                    data: [
-                        49.9,
-                        71.5,
-                        106.4,
-                        129.2,
-                        144.0,
-                        176.0,
-                        135.6,
-                        148.5,
-                        216.4,
-                        194.1,
-                        95.6,
-                        54.4,
-                    ],
-                },
-                {
-                    name: 'New York',
-                    data: [
-                        83.6,
-                        78.8,
-                        98.5,
-                        93.4,
-                        106.0,
-                        84.5,
-                        105.0,
-                        104.3,
-                        91.2,
-                        83.5,
-                        106.6,
-                        92.3,
-                    ],
-                },
-                {
-                    name: 'London',
-                    data: [
-                        48.9,
-                        38.8,
-                        39.3,
-                        41.4,
-                        47.0,
-                        48.3,
-                        59.0,
-                        59.6,
-                        52.4,
-                        65.2,
-                        59.3,
-                        51.2,
-                    ],
-                },
-                {
-                    name: 'Berlin',
-                    data: [
-                        42.4,
-                        33.2,
-                        34.5,
-                        39.7,
-                        52.6,
-                        75.5,
-                        57.4,
-                        60.4,
-                        47.6,
-                        39.1,
-                        46.8,
-                        51.1,
-                    ],
-                },
-            ],
-        };
+                    data: msg[0][1],
+                } as Highcharts.SeriesSplineOptions,
+            ];
+            this.updateChronologie = true;
+        });
 
-        this.chronologie = {
-            chart: {
-                type: 'spline',
-            },
-            title: {
-                text: 'Chronologie de la partie',
-            },
-            subtitle: {
-                text: 'Tout est une question de temps',
-            },
-            xAxis: {
-                categories: [
-                    'a',
-                    'aa',
-                    'aab',
-                    'c',
-                    'z',
-                    'azer',
-                    'azert',
-                    'zer',
-                    'zetyu',
-                    'fgd',
-                    'fxcvg',
-                    'fdcxv',
-                ],
-            },
-            yAxis: {
-                title: {
-                    text: 'Score du mot',
-                },
-            },
-            tooltip: {
-                valueSuffix: ' pts',
-            },
-            series: [
+        this.gameService.getNbLettres().subscribe(msg => {
+            this.barChart.xAxis = {
+                categories: msg[0][0],
+                crosshair: true,
+            };
+            this.barChart.series = [
                 {
-                    name: '',
-                    data: [
-                        7.0,
-                        6.9,
-                        9.5,
-                        14.5,
-                        18.2,
-                        21.5,
-                        25.2,
-                        26.5,
-                        23.3,
-                        18.3,
-                        13.9,
-                        9.6,
-                    ],
-                },
-            ],
-        };
+                    name: msg[0][1].keyStore[0],
+                    data: msg[0][1].valueStore[0],
+                } as Highcharts.SeriesColumnOptions,
+            ];
+            this.updateBar = true;
+        });
+
+        this.gameService.getGameStats().subscribe(msg => {
+            console.log('Stats', msg);
+            this.teamName = msg[0][0][0];
+            this.globalScore = msg[0][0][1];
+            this.globalNbTries = msg[0][0][2];
+            this.gameTime = msg[0][0][3];
+
+            msg[0][1].forEach(player => {
+                let effi: number = +player[2];
+                this.players.push({
+                    name: player[0],
+                    score: player[1],
+                    efficiency: parseFloat(effi.toFixed(2)),
+                    tries: player[3],
+                    badge: player[4],
+                });
+            });
+        });
     }
 }

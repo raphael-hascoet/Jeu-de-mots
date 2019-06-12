@@ -91,4 +91,16 @@ export class GameService {
     getUserName(): string {
         return this.userName;
     }
+
+    getNbLettres() {
+        return this.socket.fromEvent('nbLetters');
+    }
+
+    getChronologie() {
+        return this.socket.fromEvent('chronology');
+    }
+
+    getGameStats() {
+        return this.socket.fromEvent('gameStats');
+    }
 }
