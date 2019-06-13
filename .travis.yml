@@ -20,6 +20,8 @@ matrix:
             provider: firebase
             token:
               secure: "1/54ugx5kc6tDBNSxF4hAMw7vZoGSqx_8JGq_PuDczorg"
+            on:
+              branch: develop
 
         - language: node_js
           node_js:
