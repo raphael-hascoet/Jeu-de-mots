@@ -88,21 +88,39 @@ function findBadge(players: Array<Player>): Array<Player> {
     badges.set(Badge.RAMBO, ramboPlayers);
     badges.set(Badge.ECRIVAIN, findWriter(players));
     badges.set(Badge.BOURRIN, findRough(players));
-    badges.forEach((playerList, badge) => {
+    badges.forEach((playersToBadge, badgeToAdd) => {
+        let playerToBadge = undefined;
+        let found: boolean = false;
         if (
-            playerList != undefined &&
-            badge != undefined &&
-            playerList.length == 1
+            playersToBadge != undefined &&
+            badgeToAdd != undefined &&
+            playersToBadge.length > 1
         ) {
-            let playerToReplace = playerList[0];
-            players.forEach(player => {
-                if (
-                    player.getBadge() == Badge.NULL &&
-                    player.getName() == playerToReplace.getName()
-                ) {
-                    player.setBadge(badge);
-                }
+            playersToBadge.forEach(player => {
+                badges.forEach((players2, badge) => {
+                    if (
+                        badge != badgeToAdd &&
+                        players2 != undefined &&
+                        players[players.indexOf(player)].getBadge() ==
+                            Badge.NULL &&
+                        players2.find(p => p.getName() == player.getName())
+                    ) {
+                        playerToBadge = player;
+                        found = true;
+                    }
+                });
             });
+        }
+        if (playersToBadge != undefined && badgeToAdd != undefined) {
+            if (!found) {
+                playerToBadge = playersToBadge[0];
+            }
+            if (
+                playerToBadge != undefined &&
+                playerToBadge.getBadge() == Badge.NULL
+            ) {
+                players[players.indexOf(playerToBadge)].setBadge(badgeToAdd);
+            }
         }
     });
     return players;
