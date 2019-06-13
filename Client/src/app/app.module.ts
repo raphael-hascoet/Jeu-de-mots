@@ -17,12 +17,13 @@ import { GameCommandComponent } from './game-command/game-command.component';
 import { GameConfigurationViewComponent } from './game-configuration-view/game-configuration-view.component';
 import { GameViewComponent } from './game-view/game-view.component';
 import { GiveupDialogComponent } from './game-command/giveup-dialog/giveup-dialog.component';
+import { AnswerDialogComponent } from './game-command/answer-dialog/answer-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DashBoardViewComponent } from './dash-board-view/dash-board-view.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from 'src/environments/environment';
-
+import { BestWordsComponent } from './game-command/best-words/best-words.component';
 
 const env = environment;
 console.log(env);
@@ -37,8 +38,14 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         GameViewComponent,
         GiveupDialogComponent,
         DashBoardViewComponent,
+        AnswerDialogComponent,
+        BestWordsComponent,
     ],
-    entryComponents: [GiveupDialogComponent],
+    entryComponents: [
+        GiveupDialogComponent,
+        AnswerDialogComponent,
+        BestWordsComponent,
+    ],
     imports: [
         BrowserModule,
         TextFieldModule,
