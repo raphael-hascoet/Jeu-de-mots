@@ -148,6 +148,7 @@ io.on('connection', function(socket: any) {
     });
 
     socket.on('getAnswer', function() {
+        Game.getInstance().stopGame();
         socket.emit('answer', [Game.getInstance().getWordToFind()]);
     });
 
