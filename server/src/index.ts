@@ -142,7 +142,6 @@ io.on('connection', function(socket: any) {
         ]);
 
         if (msg == Game.getInstance().getWordToFind()) {
-            Game.getInstance().stopGame();
             io.emit('fin');
         }
     });
