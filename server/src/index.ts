@@ -6,6 +6,8 @@ import { Lobby } from './Lobby';
 import { getStatNbLetter, getChronology, getGameStats } from './statsUtils';
 import { Badge } from './Badge';
 
+const dotenv = require('dotenv');
+dotenv.config();
 const app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
@@ -203,7 +205,7 @@ io.on('connection', function(socket: any) {
     });
 });
 
-const server = http.listen(3000, async () => {
+const server = http.listen(process.env.PORT, async () => {
     console.log('server is running on port', server.address().port);
 
     //Initialisation des niveaux de difficulté
