@@ -65,7 +65,11 @@ export function getGameStats(
             .getTryNumber()
             .toString()
     );
-    global.push('timer');
+    global.push(
+        Game.getInstance()
+            .getTimer()
+            .toString()
+    );
     Game.getInstance().setPlayers(
         findBadge(Game.getInstance().getPlayers(), length)
     );
