@@ -9,7 +9,6 @@ import { Timer } from './Timer';
  * Classe comprenant toutes les méthodes nécessaires à la gestion d'une partie
  */
 export class Game {
-    
     private static instance: Game;
 
     /**
@@ -28,29 +27,33 @@ export class Game {
             Game.instance = new Game(host, teamName, difficulty);
         }
 
-        if(difficulty!=-1){
+        if (difficulty != -1) {
             Game.instance.difficultyLevel = difficulty;
         }
 
         return Game.instance;
     }
 
-    static hostIsConnected(): boolean{
-        return this.getInstance().getHost().getName()!='null';
+    static hostIsConnected(): boolean {
+        return (
+            this.getInstance()
+                .getHost()
+                .getName() != 'null'
+        );
     }
 
-    static gameIsLaunched(): boolean{
-        return this.getInstance().difficultyLevel!=-1;
+    static gameIsLaunched(): boolean {
+        return this.getInstance().difficultyLevel != -1;
     }
 
-    static resetInstance(): void{
+    static resetInstance(): void {
         this.instance.host = new Player('null');
         this.instance.difficultyLevel = -1;
     }
 
     /**
      * Hebergeur de la partie
-     * 
+     *
      * @name = 'null' si il y n'y a pas d'host connecté
      */
     private host: Player;
@@ -58,7 +61,7 @@ export class Game {
     /**
      * Nom de l'équipe jouant cette partie
      */
-    private teamName : string;
+    private teamName: string;
 
     /**
      * Liste des joueurs de la partie
@@ -67,7 +70,7 @@ export class Game {
 
     /**
      * Niveau de difficulté de la partie
-     * 
+     *
      * @valeur = -1 s'il n'y a pas de partie de lancée
      */
     private difficultyLevel: number;
@@ -87,22 +90,28 @@ export class Game {
     /**
      * Constructeur d'une partie
      */
-    private constructor(host: Player, teamName: string, difficultyLevel: number) {
+    private constructor(
+        host: Player,
+        teamName: string,
+        difficultyLevel: number
+    ) {
         this.host = host;
         this.players = new Array<Player>();
         this.players.push(this.host);
         this.teamName = teamName;
         this.difficultyLevel = difficultyLevel;
         this.proposedWords = new Array<ProposedWord>();
-        this.timer = new Timer();
+        this.timer = new Timer(0, 0);
     }
 
-    public addPlayer(playerName : string){
+    public addPlayer(playerName: string) {
         this.players.push(new Player(playerName));
     }
 
-    public removePlayer(playerName : string){
-        this.players = this.players.filter(player => player.getName().localeCompare(playerName)!=0);
+    public removePlayer(playerName: string) {
+        this.players = this.players.filter(
+            player => player.getName().localeCompare(playerName) != 0
+        );
     }
 
     /**
@@ -110,10 +119,9 @@ export class Game {
      * Permet d'attendre que le mot dans le dictionnaire soit trouvé (méthode readDictionnary)
      * avant de continuer : à appeler dans une méthode 'async' en faisant
      * await Game.getInstance().startGame();
-     * @param socket - Socket de connexion avec le client
      */
-    public startGame(socket: any) {
-        this.timer.startTimer(socket);
+    public startGame() {
+        this.timer.startTimer();
         return this.readDictionnary().then(
             data => {
                 this.wordToFind = data;
@@ -185,6 +193,10 @@ export class Game {
 
     getPlayers(): Player[] {
         return this.players;
+    }
+
+    getTimer() {
+        return this.timer.getTimer();
     }
 
     /**

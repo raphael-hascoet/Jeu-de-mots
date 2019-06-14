@@ -174,4 +174,11 @@ export class GameService {
     getTime() {
         return this.socket.fromEvent('timer');
     }
+
+    /**
+     * Méthode permettant de demander le temps passé à jouer
+     */
+    askTimer() {
+        this.socket.emit('getTime');
+    }
 }

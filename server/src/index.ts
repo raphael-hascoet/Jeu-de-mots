@@ -109,7 +109,7 @@ io.on('connection', function(socket: any) {
             gameConfig.hostTeam,
             gameConfig.gameDifficulty
         );
-        await Game.getInstance().startGame(socket);
+        await Game.getInstance().startGame();
         console.log(
             'hostName : ' +
                 Game.getInstance()
@@ -159,6 +159,12 @@ io.on('connection', function(socket: any) {
         socket.emit('words', [Game.getInstance().getBestProposedWords(5)]);
     });
 
+    /**
+     * Récupération du timer de jeu
+     */
+    socket.on('getTime', function() {
+        socket.emit('timer', [Game.getInstance().getTimer()]);
+    });
     /**
      * Récupération du niveau de difficulté minimal
      */
