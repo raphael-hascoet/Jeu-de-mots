@@ -30,6 +30,13 @@ Après l'installation, l'application solo peut être lancée avec la commande `n
 
 ## Développement
 
+Le serveur nécéssite des variables d'environnement. Pour les lui fournir, il faut créer un fichier `.env` dans le dossier `server/` et le remplir avec le code suivant :
+
+```
+NODE_ENV=development
+PORT=3000
+```
+
 Pour lancer le serveur en mode développement, aller dans le dossier `server/` et exécuter `npm run watch`
 
 Enfin **Lancer le serveur de l'application** : Dans le terminal, aller dans le dossier de l'application et executer `ng serve --host <ip local>`, pour accéder à l'application il faut, depuis un navigateur, requêter l'adresse donnée au port 4200 (ex: 192.168.0.2:4200)

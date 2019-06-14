@@ -17,6 +17,7 @@ import { GameCommandComponent } from './game-command/game-command.component';
 import { GameConfigurationViewComponent } from './game-configuration-view/game-configuration-view.component';
 import { GameViewComponent } from './game-view/game-view.component';
 import { GiveupDialogComponent } from './game-command/giveup-dialog/giveup-dialog.component';
+import { AnswerDialogComponent } from './game-command/answer-dialog/answer-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DashBoardViewComponent } from './dash-board-view/dash-board-view.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -24,7 +25,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { environment } from 'src/environments/environment';
 import { PlayersListComponent } from './players-list/players-list.component';
 import { HostDisconnectedDialogComponent } from './host-disconnected-dialog/host-disconnected-dialog.component';
-
 
 const env = environment;
 console.log(env);
@@ -41,8 +41,15 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         DashBoardViewComponent,
         PlayersListComponent,
         HostDisconnectedDialogComponent,
+        AnswerDialogComponent,
+        BestWordsComponent,
     ],
-    entryComponents: [GiveupDialogComponent, HostDisconnectedDialogComponent],
+    entryComponents: [
+        GiveupDialogComponent,
+        AnswerDialogComponent,
+        BestWordsComponent,
+        HostDisconnectedDialogComponent
+    ],
     imports: [
         BrowserModule,
         TextFieldModule,
