@@ -154,6 +154,7 @@ io.on('connection', function(socket: any) {
      */
     socket.on('proposition', function(msg: string) {
         console.log('Mot proposé par ' + userId + ' :');
+        msg = msg.toLocaleLowerCase();
         console.log(msg);
         let player = Game.getInstance().getPlayer(userId);
         let score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
@@ -170,7 +171,9 @@ io.on('connection', function(socket: any) {
             io.emit('fin');
             io.emit('nbLetters', [getStatNbLetter()]);
             io.emit('chronology', [getChronology()]);
-            io.emit('gameStats', [getGameStats()]);
+            io.emit('gameStats', [
+                getGameStats(Game.getInstance().getWordToFind().length),
+            ]);
         }
     });
 

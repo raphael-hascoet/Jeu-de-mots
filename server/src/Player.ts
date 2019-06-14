@@ -75,15 +75,18 @@ export class Player {
     }
 
     /**
-     * Indique l'efficacité d'un joueur (= somme des score des mots proposés / nb de mots proposés)
+     * Indique l'efficacité d'un joueur
+     * @param length - Taille du mot à trouver (i.e score max du mot à trouver)
      */
-    getEfficacy(): number {
+    getEfficacy(length: number): number {
+        if (this.getTryNumber() == 0) {
+            return 0;
+        }
         let efficacy = 0;
         this.proposedWords.forEach(word => {
-            efficacy += word.getScore().getTotalScore();
+            efficacy += word.getScore().getTotalScore() / length;
         });
-        console.log(this.name + ' : ' + efficacy + ' / ' + this.getTryNumber());
-        return efficacy / this.getTryNumber();
+        return (efficacy / this.getTryNumber()) * 100;
     }
 
     /**

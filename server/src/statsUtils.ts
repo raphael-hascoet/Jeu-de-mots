@@ -46,10 +46,13 @@ export function getChronology(): [Array<string>, Array<number>] {
 
 /**
  * Méthode permettant de récupérer les statistiques de la partie
+ * @param length - Taille du mot à trouver
  * @returns Array<string> - Données globales de la partie
  *          Array<Array<string>> - Statistiques de chaque joueur
  */
-export function getGameStats(): [Array<string>, Array<Array<string>>] {
+export function getGameStats(
+    length: number
+): [Array<string>, Array<Array<string>>] {
     let global = new Array<string>();
     global.push(Game.getInstance().getTeamName());
     global.push(
@@ -63,13 +66,15 @@ export function getGameStats(): [Array<string>, Array<Array<string>>] {
             .toString()
     );
     global.push('timer');
-    Game.getInstance().setPlayers(findBadge(Game.getInstance().getPlayers()));
+    Game.getInstance().setPlayers(
+        findBadge(Game.getInstance().getPlayers(), length)
+    );
     let players = new Array<Array<string>>();
     for (let player of Game.getInstance().getPlayers()) {
         let data = new Array<string>();
         data.push(player.getName());
         data.push(player.getScore().toString());
-        data.push(player.getEfficacy().toString());
+        data.push(player.getEfficacy(length).toString());
         data.push(player.getTryNumber().toString());
         data.push(Badge[player.getBadge()].toLowerCase());
         players.push(data);
@@ -80,14 +85,15 @@ export function getGameStats(): [Array<string>, Array<Array<string>>] {
 /**
  * Méthode permettant d'attribuer un badge à chaque joueur en fin de partie
  * @param players - Liste des joueurs
+ * @param length - Taille du mot à trouver
  */
-function findBadge(players: Array<Player>): Array<Player> {
+function findBadge(players: Array<Player>, length: number): Array<Player> {
     let badges = new TsMap<Badge, Array<Player>>();
     let [hellFestPlayers, ramboPlayers] = findHellfestAndRambo(players);
     badges.set(Badge.HELLFEST, hellFestPlayers);
     badges.set(Badge.RAMBO, ramboPlayers);
     badges.set(Badge.ECRIVAIN, findWriter(players));
-    badges.set(Badge.BOURRIN, findRough(players));
+    badges.set(Badge.BOURRIN, findRough(players, length));
     badges.forEach((playersToBadge, badgeToAdd) => {
         let playerToBadge = undefined;
         let found: boolean = false;
@@ -129,18 +135,19 @@ function findBadge(players: Array<Player>): Array<Player> {
 /**
  * Trouve les joueurs "Bourrin"
  * @param players - Joueurs de la partie
+ * @param length - Taille du mot à trouver
  */
-function findRough(players: Player[]): Array<Player> {
+function findRough(players: Player[], length: number): Array<Player> {
     let maxRatio = 0;
     let roughPlayers = new Array<Player>();
     players.forEach(player => {
-        let ratio = player.getTryNumber() / player.getEfficacy();
+        let ratio = player.getTryNumber() / player.getEfficacy(length);
         if (ratio >= maxRatio) {
             maxRatio = ratio;
             if (
                 roughPlayers.length > 0 &&
                 roughPlayers[0].getTryNumber() /
-                    roughPlayers[0].getEfficacy() !=
+                    roughPlayers[0].getEfficacy(length) !=
                     ratio
             ) {
                 roughPlayers = new Array<Player>();
