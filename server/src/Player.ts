@@ -82,6 +82,7 @@ export class Player {
         this.proposedWords.forEach(word => {
             efficacy += word.getScore().getTotalScore();
         });
+        console.log(this.name + ' : ' + efficacy + ' / ' + this.getTryNumber());
         return efficacy / this.getTryNumber();
     }
 
@@ -123,5 +124,4 @@ export class Player {
         });
         return sum / this.getTryNumber();
     }
-
 }

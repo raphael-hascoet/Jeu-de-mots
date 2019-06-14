@@ -100,9 +100,12 @@ export class Game {
         this.wordToFind = new WordToFind('');
     }
 
-    public addPlayer(newPlayer : Player){
-        for(let player of this.players){
-            if(!player.getName() || player.getName().localeCompare(newPlayer.getName())==0){
+    public addPlayer(newPlayer: Player) {
+        for (let player of this.players) {
+            if (
+                !player.getName() ||
+                player.getName().localeCompare(newPlayer.getName()) == 0
+            ) {
                 return;
             }
         }
