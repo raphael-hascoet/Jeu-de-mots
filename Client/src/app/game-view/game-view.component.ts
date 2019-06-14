@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { AppComponent } from '../app.component';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { GameService } from '../service/game.service';
 
 @Component({
@@ -11,6 +10,9 @@ export class GameViewComponent implements OnInit {
     title = 'app';
     incomingmsg = [];
     msg = 'First Protocol';
+
+    teamName : string;
+    gameDifficulty : number;
     @ViewChild('box') input: ElementRef;
 
     @ViewChild('response') response: ElementRef;
@@ -32,6 +34,9 @@ export class GameViewComponent implements OnInit {
             this.response.nativeElement.value =
                 'Gagné ! ' + '\n' + this.response.nativeElement.value;
         });
+
+        this.gameService.getTeamName().subscribe(value => this.teamName = value);
+        this.gameService.getGameDifficulty().subscribe(value => this.gameDifficulty = value);
     }
 
     sendProposition(proposition) {

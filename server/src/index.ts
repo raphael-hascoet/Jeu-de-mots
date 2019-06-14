@@ -50,12 +50,15 @@ io.on('connection', function(socket: any) {
             io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
             console.log('Hôte connecté sous le pseudonyme ' + userId);
             userIsHost = true;
-            socket.emit('hostConnectionAllowed');
         }
     });
 
     socket.on('getHostIsConnected', function() {
-        socket.emit('hostIsConnected', Game.hostIsConnected());
+        if(Game.gameIsLaunched()){
+            socket.emit('hostIsConnected', Game.hostIsConnected());
+        }else{
+            socket.emit('hostIsConnected', Lobby.hostIsConnected());
+        }
     });
 
     socket.on('getGameIsLaunched', function() {
@@ -66,7 +69,11 @@ io.on('connection', function(socket: any) {
      * Cette méthode retourne tous les joueurs de la partie, y compris l'host
      */
     socket.on('getConnectedPlayers', function() {
-        socket.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+        if(Game.gameIsLaunched()){
+            socket.emit('connectedPlayers', Game.getInstance().getPlayers());
+        }else{
+            socket.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+        }
     });
 
     socket.on('isUserHost', function() {
@@ -78,8 +85,12 @@ io.on('connection', function(socket: any) {
         io.emit('teamName', teamName);
     });
 
-    socket.on('getTeamName', function() {
-        socket.emit('teamName', teamName);
+    socket.on('getTeamName', function(){
+        if(Game.gameIsLaunched()){
+            io.emit('teamName', Game.getInstance().getTeamName());
+        }else{
+            io.emit('teamName', teamName);
+        }
     });
 
     socket.on('updateGameDifficulty', function(newGameDifficulty: number) {
@@ -87,8 +98,12 @@ io.on('connection', function(socket: any) {
         io.emit('gameDifficulty', gameDifficulty);
     });
 
-    socket.on('getGameDifficulty', function() {
-        socket.emit('gameDifficulty', gameDifficulty);
+    socket.on('getGameDifficulty', function(){
+        if(Game.gameIsLaunched()){
+            io.emit('gameDifficulty', Game.getInstance().getDifficultyLevel());
+        }else{
+            io.emit('gameDifficulty', gameDifficulty);
+        }
     });
 
     /**
@@ -109,6 +124,11 @@ io.on('connection', function(socket: any) {
             gameConfig.hostTeam,
             gameConfig.gameDifficulty
         );
+        for(let player of Lobby.getInstance().getPlayers()){
+            Game.getInstance().addPlayer(player);
+        }
+        io.emit('connectedPlayers', Game.getInstance().getPlayers());
+
         await Game.getInstance().startGame();
         console.log(
             'hostName : ' +
@@ -177,7 +197,14 @@ io.on('connection', function(socket: any) {
      */
     socket.on('disconnect', function() {
         Lobby.getInstance().removePlayer(userId);
-        io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+        
+
+        if(Game.gameIsLaunched()){
+            Game.getInstance().removePlayer(userId);
+            io.emit('connectedPlayers', Game.getInstance().getPlayers())
+        }else{
+            io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+        }
 
         if (userIsHost) {
             console.log('host ' + userId + ' disconnected');
@@ -187,7 +214,8 @@ io.on('connection', function(socket: any) {
             if (!Game.gameIsLaunched()) {
                 console.log('configuration de la partie annulée');
                 io.emit('denyConfig');
-            } else {
+            }else{
+                Game.resetInstance();
                 console.log("L'host s'est déconnecté pendant la partie");
             }
         } else {

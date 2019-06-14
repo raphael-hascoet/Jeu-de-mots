@@ -17,6 +17,7 @@ export class GameService {
     teamName : Observable<string> = this.socket.fromEvent<string>('teamName');
     gameDifficulty: Observable<number> = this.socket.fromEvent<number>('gameDifficulty');
     gameIsLaunched: Observable<boolean> = this.socket.fromEvent<boolean>('gameIsLaunched');
+
     private userName: string;
 
     constructor(private socket: Socket) {}
