@@ -178,6 +178,7 @@ io.on('connection', function(socket: any) {
     });
 
     socket.on('getAnswer', function() {
+        Game.getInstance().stopGame();
         socket.emit('answer', [Game.getInstance().getWordToFind()]);
     });
 
@@ -189,6 +190,12 @@ io.on('connection', function(socket: any) {
         socket.emit('words', [Game.getInstance().getBestProposedWords(5)]);
     });
 
+    /**
+     * Récupération du timer de jeu
+     */
+    socket.on('getTime', function() {
+        socket.emit('timer', [Game.getInstance().getTimer()]);
+    });
     /**
      * Récupération du niveau de difficulté minimal
      */

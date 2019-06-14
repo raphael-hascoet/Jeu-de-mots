@@ -21,6 +21,11 @@ export class GameViewComponent implements OnInit {
         private gameService: GameService,
         private routingService: RoutingService
     ) {}
+    /**
+     * Element HTML du Timer
+     */
+    @ViewChild('timer') timer: ElementRef;
+
 
     ngOnInit() {
         this.gameService.getScore().subscribe(msg => {
@@ -42,6 +47,42 @@ export class GameViewComponent implements OnInit {
 
         this.gameService.getTeamName().subscribe(value => this.teamName = value);
         this.gameService.getGameDifficulty().subscribe(value => this.gameDifficulty = value);
+        this.startTimer();
+    }
+
+    /**
+     * Méthode permettant de démarrer le chronomètre de jeu
+     */
+    private startTimer() {
+        let seconds = 0;
+        let minutes = 0;
+        this.gameService.askTimer();
+        this.gameService.getTime().subscribe(msg => {
+            console.log(msg);
+            seconds = msg[0]['seconds'];
+            minutes = msg[0]['minutes'];
+            setInterval(() => {
+                seconds++;
+                if (seconds == 60) {
+                    minutes++;
+                    seconds = 0;
+                }
+                let text = 'Temps passé à jouer : ';
+                let timerMin = '';
+                let timerSec = seconds + ' secondes';
+                if (minutes > 0) {
+                    if (minutes == 1) {
+                        timerMin = minutes + ' minute ';
+                    } else {
+                        timerMin = minutes + ' minutes ';
+                    }
+                }
+                if (seconds <= 1) {
+                    timerSec = seconds + ' seconde';
+                }
+                this.timer.nativeElement.value = text + timerMin + timerSec;
+            }, 1000);
+        });
     }
 
     sendProposition(proposition) {

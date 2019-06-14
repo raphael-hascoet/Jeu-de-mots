@@ -55,7 +55,7 @@ export class GameService {
         this.socket.emit('updateTeamName', teamName);
     }
 
-    getTeamName() : Observable<string>{
+    getTeamName(): Observable<string> {
         this.socket.emit('getTeamName');
         return this.teamName;
     }
@@ -166,5 +166,19 @@ export class GameService {
 
     getGameStats() {
         return this.socket.fromEvent('gameStats');
+    }
+
+    /**
+     * Méthode permettant de connaître le temps passé à jouer
+     */
+    getTime() {
+        return this.socket.fromEvent('timer');
+    }
+
+    /**
+     * Méthode permettant de demander le temps passé à jouer
+     */
+    askTimer() {
+        this.socket.emit('getTime');
     }
 }

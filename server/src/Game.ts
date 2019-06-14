@@ -3,6 +3,7 @@ import { latinise } from './stringUtil';
 import { Player } from './Player';
 import { ProposedWord } from './ProposedWord';
 import { Score } from './Score';
+import { Timer } from './Timer';
 import { WordToFind } from './WordToFind';
 
 /**
@@ -82,6 +83,10 @@ export class Game {
      * Mot à trouver
      */
     private wordToFind: WordToFind;
+    /**
+     * Temps passé par l'équipe à chercher le mot
+     */
+    private timer: Timer;
 
     /**
      * Constructeur d'une partie
@@ -97,6 +102,7 @@ export class Game {
         this.teamName = teamName;
         this.difficultyLevel = difficultyLevel;
         this.proposedWords = new Array<ProposedWord>();
+        this.timer = new Timer(0, 0);
         this.wordToFind = new WordToFind('');
     }
 
@@ -125,6 +131,7 @@ export class Game {
      * await Game.getInstance().startGame();
      */
     public startGame() {
+        this.timer.startTimer();
         return this.readDictionnary().then(
             data => {
                 this.wordToFind = new WordToFind(data);
@@ -133,6 +140,13 @@ export class Game {
                 throw new Error(error);
             }
         );
+    }
+
+    /**
+     * Méthode permettant d'arrêter le jeu (ici elle arrête le timer)
+     */
+    public stopGame() {
+        this.timer.stopTimer();
     }
 
     /**
@@ -191,6 +205,10 @@ export class Game {
 
     getProposedWords(): Array<ProposedWord> {
         return this.proposedWords;
+    }
+
+    getTimer() {
+        return this.timer.getTimer();
     }
 
     /**
