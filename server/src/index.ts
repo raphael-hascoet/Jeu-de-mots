@@ -50,12 +50,15 @@ io.on('connection', function(socket: any) {
             io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
             console.log('Hôte connecté sous le pseudonyme ' + userId);
             userIsHost = true;
-            socket.emit('hostConnectionAllowed');
         }
     });
 
     socket.on('getHostIsConnected', function() {
-        socket.emit('hostIsConnected', Game.hostIsConnected());
+        if(Game.gameIsLaunched()){
+            socket.emit('hostIsConnected', Game.hostIsConnected());
+        }else{
+            socket.emit('hostIsConnected', Lobby.hostIsConnected());
+        }
     });
 
     socket.on('getGameIsLaunched', function() {
