@@ -1,7 +1,11 @@
 <mat-dialog-content>
-    Le mot à trouver était : {{ data.answer }}
+  Le mot à trouver était : {{ data.answer }}
+
+  <div *ngFor="let def of definitions">
+    <p [innerHTML]="def"></p>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>OK</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>OK</button>
 </mat-dialog-actions>
