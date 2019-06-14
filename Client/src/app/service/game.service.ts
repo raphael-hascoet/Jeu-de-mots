@@ -175,4 +175,18 @@ export class GameService {
     getUserName(): string {
         return this.userName;
     }
+
+    /**
+     * Méthode permettant de connaître le temps passé à jouer
+     */
+    getTime() {
+        return this.socket.fromEvent('timer');
+    }
+
+    /**
+     * Méthode permettant de demander le temps passé à jouer
+     */
+    askTimer() {
+        this.socket.emit('getTime');
+    }
 }
