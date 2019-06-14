@@ -26,6 +26,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from 'src/environments/environment';
 import { BestWordsComponent } from './game-command/best-words/best-words.component';
+import { PlayersListComponent } from './players-list/players-list.component';
 
 const env = environment;
 console.log(env);
@@ -42,6 +43,7 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         HighchartsChartComponent,
         GiveupDialogComponent,
         DashBoardViewComponent,
+        PlayersListComponent,
         AnswerDialogComponent,
         BestWordsComponent,
     ],

@@ -3,7 +3,6 @@ import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { GameService } from '../service/game.service';
 import { GameConfig } from '../model/game-config/game-config';
 import { FormControl, Validators } from '@angular/forms';
-import { Player } from '../model/player/player';
 
 declare global {
     interface Window {
@@ -29,8 +28,6 @@ export class GameConfigurationViewComponent implements OnInit {
     maxDifficulty: number;
     minDifficulty: number;
 
-    players : Player[];
-
     constructor(
         private gameService: GameService,
         private routingService: RoutingService,
@@ -43,6 +40,8 @@ export class GameConfigurationViewComponent implements OnInit {
 
     ngOnInit() {
         this.userName = this.gameService.getUserName();
+
+        if(!this.userName) this.routingService.changeViewToDashboard();
 
         this.gameService.userIsHost().subscribe(value => {
             this.userIsHost = value;
@@ -70,14 +69,12 @@ export class GameConfigurationViewComponent implements OnInit {
             this.gameDifficultyValue = value;
         });
 
-        this.gameService.getConnectedPlayers().subscribe(players => this.players = players);
-
         this.gameService.getGameIsLaunched().subscribe(gameIsLaunched =>{
             if(gameIsLaunched){
                 this.changeViewToGame();
             }
         });
-        this.gameService.denyConfig().subscribe(value => this.routingService.changeViewToDashboard());
+        this.gameService.denyConfig().subscribe(() => this.routingService.changeViewToDashboard());
     }
 
     updateTeamName(teamName: string){
