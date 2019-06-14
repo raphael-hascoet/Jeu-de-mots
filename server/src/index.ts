@@ -4,6 +4,8 @@ import { Player } from '../src/Player';
 import { GameConfiguration } from './GameConfiguration';
 import { Lobby } from './Lobby';
 
+const dotenv = require('dotenv');
+dotenv.config();
 const app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
@@ -20,7 +22,7 @@ io.on('connection', function(socket: any) {
 
     var userIsHost = false;
 
-    var teamName = "";
+    var teamName = '';
     var gameDifficulty = 1;
 
     /**
@@ -30,7 +32,7 @@ io.on('connection', function(socket: any) {
     socket.on('connectUser', function(userName: string) {
         if (Game.gameIsLaunched()) {
             console.log('ERREUR : la partie a déjà commencée');
-        }else if (Lobby.hostIsConnected()) {
+        } else if (Lobby.hostIsConnected()) {
             /**
              * Si l'host est déjà connecté, on rajoute uniquement cet utilisateur au lobby
              */
@@ -71,11 +73,11 @@ io.on('connection', function(socket: any) {
         }
     });
 
-    socket.on('isUserHost', function(){
+    socket.on('isUserHost', function() {
         socket.emit('userIsHost', userIsHost);
     });
 
-    socket.on('updateTeamName', function(newTeamName : string){
+    socket.on('updateTeamName', function(newTeamName: string) {
         teamName = newTeamName;
         io.emit('teamName', teamName);
     });
@@ -88,7 +90,7 @@ io.on('connection', function(socket: any) {
         }
     });
 
-    socket.on('updateGameDifficulty', function(newGameDifficulty : number){
+    socket.on('updateGameDifficulty', function(newGameDifficulty: number) {
         gameDifficulty = newGameDifficulty;
         io.emit('gameDifficulty', gameDifficulty);
     });
@@ -138,7 +140,6 @@ io.on('connection', function(socket: any) {
         console.log('Mot a trouver : ' + Game.getInstance().getWordToFind());
 
         io.emit('gameIsLaunched', Game.gameIsLaunched());
-
     });
 
     /**
@@ -152,7 +153,7 @@ io.on('connection', function(socket: any) {
         let score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
         Game.getInstance().addProposedWord(msg, score);
         io.emit('score', [
-            userId+" a proposé "+msg,
+            userId + ' a proposé ' + msg,
             score.getcorrectPlace(),
             score.getcorrectLetter(),
         ]);
@@ -220,7 +221,7 @@ io.on('connection', function(socket: any) {
     });
 });
 
-const server = http.listen(3000, async () => {
+const server = http.listen(process.env.PORT, async () => {
     console.log('server is running on port', server.address().port);
 
     //Initialisation des niveaux de difficulté
