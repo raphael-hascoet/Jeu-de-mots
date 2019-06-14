@@ -100,8 +100,13 @@ export class Game {
         this.wordToFind = new WordToFind('');
     }
 
-    public addPlayer(playerName: string) {
-        this.players.push(new Player(playerName));
+    public addPlayer(newPlayer : Player){
+        for(let player of this.players){
+            if(!player.getName() || player.getName().localeCompare(newPlayer.getName())==0){
+                return;
+            }
+        }
+        this.players.push(newPlayer);
     }
 
     public removePlayer(playerName: string) {
