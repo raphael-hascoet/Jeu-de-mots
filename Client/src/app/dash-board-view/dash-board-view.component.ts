@@ -15,6 +15,7 @@ export class DashBoardViewComponent implements OnInit {
 
     hostIsConnected: boolean;
     nameAlreadyUsed: boolean = false;
+    gameIsLaunched: boolean = false;
 
     connectedPlayers: Player[];
 
@@ -38,6 +39,15 @@ export class DashBoardViewComponent implements OnInit {
                 }
             });
 
+        this.gameService.getGameIsLaunched().subscribe(gameIsLaunched => {
+            if(gameIsLaunched){
+                this.buttonText = "Partie en cours...";
+                this.gameIsLaunched = true;
+            }else{
+                this.gameIsLaunched = false;
+            }
+        });
+
         this.gameService.getConnectedPlayers().subscribe(players => this.connectedPlayers=players);
 
     }
@@ -48,13 +58,10 @@ export class DashBoardViewComponent implements OnInit {
             this.gameService.setUserName(userName);
             this.routingService.changeViewToGameConfig();
         }
-
-        console.log("nameAlreadyUsed : "+this.nameAlreadyUsed);
     }
 
     validateName(userName): boolean{
         if(this.connectedPlayers){
-            console.log("Connected players : "+this.connectedPlayers);
             for(let player of this.connectedPlayers){
                 if(player.name.localeCompare(userName)==0){
                     this.nameAlreadyUsed=true;

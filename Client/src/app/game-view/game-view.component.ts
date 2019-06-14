@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { GameService } from '../service/game.service';
+import { RoutingService } from '../service/routing.service';
+import { MatDialog } from '@angular/material';
+import { HostDisconnectedDialogComponent } from '../host-disconnected-dialog/host-disconnected-dialog.component';
 
 @Component({
     selector: 'app-game-view',
@@ -16,9 +19,14 @@ export class GameViewComponent implements OnInit {
     @ViewChild('box') input: ElementRef;
 
     @ViewChild('response') response: ElementRef;
-    constructor(private gameService: GameService) {}
+    constructor(private gameService: GameService, private routingService : RoutingService, private hostDisconnectedDialog : MatDialog) {}
 
     ngOnInit() {
+        if(!this.gameService.getUserName()){
+            this.routingService.changeViewToDashboard();
+            return;
+        }
+
         this.gameService.getScore().subscribe(msg => {
             this.response.nativeElement.value =
                 msg[0] +
@@ -37,6 +45,18 @@ export class GameViewComponent implements OnInit {
 
         this.gameService.getTeamName().subscribe(value => this.teamName = value);
         this.gameService.getGameDifficulty().subscribe(value => this.gameDifficulty = value);
+
+        this.gameService.getGameIsLaunched().subscribe(gameIsLaunched => {
+            if(!gameIsLaunched){
+                this.routingService.changeViewToDashboard();
+                const dialogRef = this.hostDisconnectedDialog.open(HostDisconnectedDialogComponent);
+                dialogRef.afterClosed().subscribe(result => {
+                    if (result) {
+                        this.routingService.changeViewToDashboard();
+                    }
+                });
+            }
+        });
     }
 
     sendProposition(proposition) {

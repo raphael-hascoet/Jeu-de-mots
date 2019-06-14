@@ -23,6 +23,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from 'src/environments/environment';
 import { PlayersListComponent } from './players-list/players-list.component';
+import { HostDisconnectedDialogComponent } from './host-disconnected-dialog/host-disconnected-dialog.component';
 
 
 const env = environment;
@@ -39,8 +40,9 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         GiveupDialogComponent,
         DashBoardViewComponent,
         PlayersListComponent,
+        HostDisconnectedDialogComponent,
     ],
-    entryComponents: [GiveupDialogComponent],
+    entryComponents: [GiveupDialogComponent, HostDisconnectedDialogComponent],
     imports: [
         BrowserModule,
         TextFieldModule,

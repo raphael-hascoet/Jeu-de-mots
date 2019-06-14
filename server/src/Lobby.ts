@@ -50,6 +50,7 @@ export class Lobby{
                 newPlayers.push(player);
             }
         }
+        this.players = newPlayers;
     }
 
     getHost(){

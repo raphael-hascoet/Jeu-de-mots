@@ -1,8 +1,10 @@
 import { RoutingService } from './../service/routing.service';
-import { Component, OnInit, Input, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { GameService } from '../service/game.service';
 import { GameConfig } from '../model/game-config/game-config';
 import { FormControl, Validators } from '@angular/forms';
+import { HostDisconnectedDialogComponent } from '../host-disconnected-dialog/host-disconnected-dialog.component';
+import { MatDialog } from '@angular/material';
 
 declare global {
     interface Window {
@@ -31,7 +33,8 @@ export class GameConfigurationViewComponent implements OnInit {
     constructor(
         private gameService: GameService,
         private routingService: RoutingService,
-        private zone: NgZone
+        private zone: NgZone,
+        private hostDisconnectedDialog : MatDialog
     ) {}
     difficultyFormControl: FormControl = new FormControl(1, [Validators.required]);
 
@@ -39,9 +42,12 @@ export class GameConfigurationViewComponent implements OnInit {
     teamNameValue : string = "";
 
     ngOnInit() {
-        this.userName = this.gameService.getUserName();
+        if(!this.gameService.getUserName()){
+            this.routingService.changeViewToDashboard();
+            return;
+        } 
 
-        if(!this.userName) this.routingService.changeViewToDashboard();
+        this.userName = this.gameService.getUserName();
 
         this.gameService.userIsHost().subscribe(value => {
             this.userIsHost = value;
@@ -74,7 +80,15 @@ export class GameConfigurationViewComponent implements OnInit {
                 this.changeViewToGame();
             }
         });
-        this.gameService.denyConfig().subscribe(() => this.routingService.changeViewToDashboard());
+        this.gameService.denyConfig().subscribe(() => {
+            this.routingService.changeViewToDashboard();
+            const dialogRef = this.hostDisconnectedDialog.open(HostDisconnectedDialogComponent);
+            dialogRef.afterClosed().subscribe(result => {
+                if (result) {
+                    this.routingService.changeViewToDashboard();
+                }
+            });
+        });
     }
 
     updateTeamName(teamName: string){
