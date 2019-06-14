@@ -142,8 +142,7 @@ export class GameStatsViewComponent implements OnInit {
                 let descriptionBadge;
                 let sourceImg;
                 let nomBadge;
-                let test = 'bourrin';
-                switch (/*player[4]*/ test) {
+                switch (player[4]) {
                     case 'bourrin':
                         descriptionBadge = badges.badges.bourrin.description;
                         sourceImg = badges.badges.bourrin.img;
