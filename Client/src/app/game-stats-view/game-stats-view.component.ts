@@ -122,12 +122,14 @@ export class GameStatsViewComponent implements OnInit {
                 categories: msg[0][0],
                 crosshair: true,
             };
-            this.barChart.series = [
-                {
-                    name: msg[0][1].keyStore[0],
-                    data: msg[0][1].valueStore[0],
-                } as Highcharts.SeriesColumnOptions,
-            ];
+            let series = [];
+            for (let index = 0; index < msg[0][1].keyStore.length; index++) {
+                series.push({
+                    name: msg[0][1].keyStore[index],
+                    data: msg[0][1].valueStore[index],
+                } as Highcharts.SeriesColumnOptions);
+            }
+            this.barChart.series = series;
             this.updateBar = true;
         });
 
