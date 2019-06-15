@@ -5,7 +5,7 @@ export class Player {
         this.name = name;
     }
 
-    getName(): string{
+    getName(): string {
         return this.name;
     }
 }
