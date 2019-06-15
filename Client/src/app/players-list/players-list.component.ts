@@ -17,14 +17,8 @@ export class PlayersListComponent implements OnInit {
 
     console.log('getPlayers');
     this.gameService.getConnectedPlayers().subscribe(players =>{
-      this.players = players
-      console.log('connected players : ');
-      for(let player of this.players){
-        console.log(player.name);
-      }
-    } );
-
-    
+      this.players = players;
+    });
   }
 
 }

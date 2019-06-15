@@ -22,7 +22,7 @@ export class GameViewComponent implements OnInit {
     constructor(private gameService: GameService, private routingService : RoutingService, private hostDisconnectedDialog : MatDialog) {}
 
     ngOnInit() {
-        if(!this.gameService.getUserName()){
+        if(!this.gameService.getUserName() || this.gameService.getUserName().localeCompare('')==0){
             this.routingService.changeViewToDashboard();
             return;
         }
@@ -46,14 +46,12 @@ export class GameViewComponent implements OnInit {
         this.gameService.getTeamName().subscribe(value => this.teamName = value);
         this.gameService.getGameDifficulty().subscribe(value => this.gameDifficulty = value);
 
-        this.gameService.getGameIsLaunched().subscribe(gameIsLaunched => {
-            if(!gameIsLaunched){
-                this.routingService.changeViewToDashboard();
+        this.gameService.getHostIsConnected().subscribe(hostIsConnected => {
+            if(!hostIsConnected){
                 const dialogRef = this.hostDisconnectedDialog.open(HostDisconnectedDialogComponent);
                 dialogRef.afterClosed().subscribe(result => {
-                    if (result) {
-                        this.routingService.changeViewToDashboard();
-                    }
+                    this.hostDisconnectedDialog.closeAll();
+                    this.routingService.changeViewToDashboard();
                 });
             }
         });

@@ -83,7 +83,15 @@ export class GameCommandComponent implements OnInit {
         const dialogRef = this.matDialog.open(GiveupDialogComponent);
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.gameService.askForAnswer();
+                this.gameService.surrenderGame();
+                this.gameService.userIsHost().subscribe(userIsHost => {
+                    if(userIsHost){
+                        this.gameService.askForAnswer();
+                    }else{
+                        this.gameService.setUserName('');
+                        this.routingService.changeViewToDashboard();
+                    }
+                })
             }
         });
     }

@@ -168,7 +168,7 @@ io.on('connection', function(socket: any) {
     });
 
     socket.on('getAnswer', function() {
-        socket.emit('answer', [Game.getInstance().getWordToFind()]);
+        io.emit('answer', [Game.getInstance().getWordToFind()]);
     });
 
     /**
@@ -193,6 +193,16 @@ io.on('connection', function(socket: any) {
         socket.emit('maxDifficulty', gameConfiguration.getMaximalDifficulty());
     });
 
+    socket.on('surrenderGame', function() {
+        if(userIsHost){
+            Game.resetInstance();
+        }else{
+            Game.getInstance().removePlayer(userId);
+            Lobby.getInstance().removePlayer(userId);
+            io.emit('connectedPlayers', Game.getInstance().getPlayers());
+        }
+    });
+
     /**
      * Déconnexion de l'utilisateur
      */
@@ -213,7 +223,6 @@ io.on('connection', function(socket: any) {
 
             if (!Game.gameIsLaunched()) {
                 console.log('configuration de la partie annulée');
-                io.emit('denyConfig');
             }else{
                 Game.resetInstance();
                 console.log("L'host s'est déconnecté pendant la partie");

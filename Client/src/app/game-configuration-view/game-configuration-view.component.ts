@@ -80,14 +80,15 @@ export class GameConfigurationViewComponent implements OnInit {
                 this.changeViewToGame();
             }
         });
-        this.gameService.denyConfig().subscribe(() => {
-            this.routingService.changeViewToDashboard();
-            const dialogRef = this.hostDisconnectedDialog.open(HostDisconnectedDialogComponent);
-            dialogRef.afterClosed().subscribe(result => {
-                if (result) {
+        this.gameService.getHostIsConnected().subscribe(hostIsConnected => {
+            if(!hostIsConnected){
+                this.routingService.changeViewToDashboard();
+                const dialogRef = this.hostDisconnectedDialog.open(HostDisconnectedDialogComponent);
+                dialogRef.afterClosed().subscribe(result => {
+                    this.hostDisconnectedDialog.closeAll();
                     this.routingService.changeViewToDashboard();
-                }
-            });
+                });
+            }
         });
     }
 

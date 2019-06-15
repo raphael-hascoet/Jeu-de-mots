@@ -1,7 +1,6 @@
 import { GameService } from './../service/game.service';
 import { RoutingService } from '../service/routing.service';
-import { AppComponent } from '../app.component';
-import { FormControl, Validators, FormGroup, AsyncValidator, AsyncValidatorFn, AbstractControl } from '@angular/forms';
+import { FormControl, Validators} from '@angular/forms';
 import { Player } from '../model/player/player';
 import { Component, OnInit } from '@angular/core';
 
