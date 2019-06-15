@@ -169,7 +169,7 @@ io.on('connection', function(socket: any) {
 
     socket.on('getAnswer', function() {
         Game.getInstance().stopGame();
-        socket.emit('answer', [Game.getInstance().getWordToFind()]);
+        io.emit('answer', [Game.getInstance().getWordToFind()]);
     });
 
     /**
@@ -203,6 +203,8 @@ io.on('connection', function(socket: any) {
     socket.on('surrenderGame', function() {
         if(userIsHost){
             Game.resetInstance();
+            io.emit('hostIsConnected', Lobby.hostIsConnected());
+            io.emit('gameIsLaunched', Game.gameIsLaunched());
         }else{
             Game.getInstance().removePlayer(userId);
             Lobby.getInstance().removePlayer(userId);
