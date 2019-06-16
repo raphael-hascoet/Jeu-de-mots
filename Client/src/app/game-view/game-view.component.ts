@@ -3,6 +3,7 @@ import { GameService } from '../service/game.service';
 import { RoutingService } from '../service/routing.service';
 import { MatDialog } from '@angular/material';
 import { HostDisconnectedDialogComponent } from '../host-disconnected-dialog/host-disconnected-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-game-view',
@@ -10,6 +11,17 @@ import { HostDisconnectedDialogComponent } from '../host-disconnected-dialog/hos
     styleUrls: ['./game-view.component.css'],
 })
 export class GameViewComponent implements OnInit {
+    /**
+     * Liste des subscriptions, a unsubscribe dans le ngOnDestroy
+     */
+    private scoreSubscription : Subscription;
+    private hasWonSubscription : Subscription;
+    private teamNameSubscription : Subscription;
+    private gameDifficultySubscription : Subscription;
+    private hostIsConnectedSubscription : Subscription;
+    private timeSubscription : Subscription;
+
+
     title = 'app';
     incomingmsg = [];
     msg = 'First Protocol';
@@ -31,7 +43,7 @@ export class GameViewComponent implements OnInit {
             return;
         }
 
-        this.gameService.getScore().subscribe(msg => {
+        this.scoreSubscription = this.gameService.getScore().subscribe(msg => {
             this.response.nativeElement.value =
                 msg[0] +
                 ' : ' +
@@ -42,15 +54,15 @@ export class GameViewComponent implements OnInit {
                 this.response.nativeElement.value;
         });
 
-        this.gameService.hasWon().subscribe(msg => {
+        this.hasWonSubscription = this.gameService.hasWon().subscribe(msg => {
             this.response.nativeElement.value =
                 'Gagné ! ' + '\n' + this.response.nativeElement.value;
         });
 
-        this.gameService.getTeamName().subscribe(value => this.teamName = value);
-        this.gameService.getGameDifficulty().subscribe(value => this.gameDifficulty = value);
+        this.teamNameSubscription = this.gameService.getTeamName().subscribe(value => this.teamName = value);
+        this.gameDifficultySubscription = this.gameService.getGameDifficulty().subscribe(value => this.gameDifficulty = value);
 
-        this.gameService.getHostIsConnected().subscribe(hostIsConnected => {
+        this.hostIsConnectedSubscription = this.gameService.getHostIsConnected().subscribe(hostIsConnected => {
             if(!hostIsConnected){
                 const dialogRef = this.hostDisconnectedDialog.open(HostDisconnectedDialogComponent);
                 dialogRef.afterClosed().subscribe(result => {
@@ -61,6 +73,15 @@ export class GameViewComponent implements OnInit {
         });
         this.startTimer();
     }
+    
+    ngOnDestroy() {
+        this.scoreSubscription.unsubscribe();
+        this.hasWonSubscription.unsubscribe();
+        this.teamNameSubscription.unsubscribe();
+        this.gameDifficultySubscription.unsubscribe();
+        this.hostIsConnectedSubscription.unsubscribe();
+        this.timeSubscription.unsubscribe();
+    }
 
     /**
      * Méthode permettant de démarrer le chronomètre de jeu
@@ -69,7 +90,7 @@ export class GameViewComponent implements OnInit {
         let seconds = 0;
         let minutes = 0;
         this.gameService.askTimer();
-        this.gameService.getTime().subscribe(msg => {
+        this.timeSubscription = this.gameService.getTime().subscribe(msg => {
             console.log(msg);
             seconds = msg[0]['seconds'];
             minutes = msg[0]['minutes'];

@@ -5,6 +5,7 @@ import { GameConfig } from '../model/game-config/game-config';
 import { FormControl, Validators } from '@angular/forms';
 import { HostDisconnectedDialogComponent } from '../host-disconnected-dialog/host-disconnected-dialog.component';
 import { MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 declare global {
     interface Window {
@@ -20,6 +21,12 @@ declare global {
     styleUrls: ['./game-configuration-view.component.css'],
 })
 export class GameConfigurationViewComponent implements OnInit {
+    /**
+     * liste des Subscriptions a unsubscribe dans le ngOnDestroy
+     */
+    private hostIsConnectedSubscription : Subscription;
+    private gameIsLaunchedSubscription : Subscription;
+
     userName: string;
 
     userIsHost: boolean = false;
@@ -75,12 +82,12 @@ export class GameConfigurationViewComponent implements OnInit {
             this.gameDifficultyValue = value;
         });
 
-        this.gameService.getGameIsLaunched().subscribe(gameIsLaunched =>{
+        this.gameIsLaunchedSubscription = this.gameService.getGameIsLaunched().subscribe(gameIsLaunched =>{
             if(gameIsLaunched && this.gameService.getUserName() && this.gameService.getUserName().localeCompare('')!=0){
                 this.changeViewToGame();
             }
         });
-        this.gameService.getHostIsConnected().subscribe(hostIsConnected => {
+        this.hostIsConnectedSubscription = this.gameService.getHostIsConnected().subscribe(hostIsConnected => {
             if(!hostIsConnected){
                 this.routingService.changeViewToDashboard();
                 const dialogRef = this.hostDisconnectedDialog.open(HostDisconnectedDialogComponent);
@@ -90,6 +97,11 @@ export class GameConfigurationViewComponent implements OnInit {
                 });
             }
         });
+    }
+
+    ngOnDestroy(){
+        this.hostIsConnectedSubscription.unsubscribe();
+        this.gameIsLaunchedSubscription.unsubscribe();
     }
 
     updateTeamName(teamName: string){
