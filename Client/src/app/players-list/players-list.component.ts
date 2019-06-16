@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Player } from '../model/player/player';
 import { GameService } from '../service/game.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-players-list',
@@ -8,17 +9,20 @@ import { GameService } from '../service/game.service';
   styleUrls: ['./players-list.component.css']
 })
 export class PlayersListComponent implements OnInit {
+  private connectedPlayersSubscription: Subscription;
 
   players : Player[];
 
   constructor(private gameService : GameService) { }
 
   ngOnInit() {
-
-    console.log('getPlayers');
-    this.gameService.getConnectedPlayers().subscribe(players =>{
+    this.connectedPlayersSubscription = this.gameService.getConnectedPlayers().subscribe(players =>{
       this.players = players;
     });
+  }
+
+  ngOnDestroy(){
+    this.connectedPlayersSubscription.unsubscribe();
   }
 
 }
