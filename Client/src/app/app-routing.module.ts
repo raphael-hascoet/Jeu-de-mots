@@ -3,6 +3,7 @@ import { DashBoardViewComponent } from './dash-board-view/dash-board-view.compon
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { GameViewComponent } from './game-view/game-view.component';
+import { GameStatsViewComponent } from './game-stats-view/game-stats-view.component';
 
 const routes: Routes = [
     {
@@ -16,6 +17,10 @@ const routes: Routes = [
     {
         path: '',
         component: DashBoardViewComponent,
+    },
+    {
+        path: 'stats',
+        component: GameStatsViewComponent,
     },
 ];
 

@@ -176,6 +176,18 @@ export class GameService {
         return this.userName;
     }
 
+    getNbLettres() {
+        return this.socket.fromEvent('nbLetters');
+    }
+
+    getChronologie() {
+        return this.socket.fromEvent('chronology');
+    }
+
+    getGameStats() {
+        return this.socket.fromEvent('gameStats');
+    }
+
     /**
      * Méthode permettant de connaître le temps passé à jouer
      */

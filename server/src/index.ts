@@ -3,6 +3,8 @@ import { calculateWordScore } from '../src/gameUtils';
 import { Player } from '../src/Player';
 import { GameConfiguration } from './GameConfiguration';
 import { Lobby } from './Lobby';
+import { getStatNbLetter, getChronology, getGameStats } from './statsUtils';
+import { Badge } from './Badge';
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -152,9 +154,12 @@ io.on('connection', function(socket: any) {
      */
     socket.on('proposition', function(msg: string) {
         console.log('Mot proposé par ' + userId + ' :');
+        msg = msg.toLocaleLowerCase();
         console.log(msg);
+        let player = Game.getInstance().getPlayer(userId);
         let score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
-        Game.getInstance().addProposedWord(msg, score);
+        Game.getInstance().addProposedWord(msg, score, player);
+        Game.getInstance().calculatePlayerScore(player, msg);
         io.emit('score', [
             userId + ' a proposé ' + msg,
             score.getcorrectPlace(),
@@ -162,7 +167,13 @@ io.on('connection', function(socket: any) {
         ]);
 
         if (msg == Game.getInstance().getWordToFind()) {
+            player.setBadge(Badge.CHAMPION);
             io.emit('fin');
+            io.emit('nbLetters', [getStatNbLetter()]);
+            io.emit('chronology', [getChronology()]);
+            io.emit('gameStats', [
+                getGameStats(Game.getInstance().getWordToFind().length),
+            ]);
         }
     });
 

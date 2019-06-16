@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { GameService } from '../service/game.service';
+import { RoutingService } from './../service/routing.service';
 
 @Component({
     selector: 'app-game-view',
@@ -16,12 +17,15 @@ export class GameViewComponent implements OnInit {
     @ViewChild('box') input: ElementRef;
 
     @ViewChild('response') response: ElementRef;
+    constructor(
+        private gameService: GameService,
+        private routingService: RoutingService
+    ) {}
     /**
      * Element HTML du Timer
      */
     @ViewChild('timer') timer: ElementRef;
 
-    constructor(private gameService: GameService) {}
 
     ngOnInit() {
         this.gameService.getScore().subscribe(msg => {
@@ -38,6 +42,7 @@ export class GameViewComponent implements OnInit {
         this.gameService.hasWon().subscribe(msg => {
             this.response.nativeElement.value =
                 'Gagné ! ' + '\n' + this.response.nativeElement.value;
+            this.changeViewToGameStats();
         });
 
         this.gameService.getTeamName().subscribe(value => this.teamName = value);
@@ -92,5 +97,9 @@ export class GameViewComponent implements OnInit {
         if (value.replace(/\s/g, '').length != 0) {
             this.sendProposition(value);
         }
+    }
+
+    changeViewToGameStats() {
+        this.routingService.changeViewToGameStats();
     }
 }

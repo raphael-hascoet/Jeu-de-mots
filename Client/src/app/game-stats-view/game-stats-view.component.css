@@ -1,0 +1,40 @@
+#main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+#players {
+    padding: 1vw;
+    text-align: center;
+}
+.player {
+    border-radius: 10px 100px / 120px;
+    border-style: solid;
+    border-width: medium;
+    margin-bottom: 1vh;
+    max-width: 400px;
+    min-width: 200px;
+}
+
+.name {
+    font-weight: bold;
+}
+
+#header > p {
+    font-size: 2vh;
+    font-weight: bolder;
+    margin: 0.5vh;
+}
+
+#header > h1 {
+    font-size: 3vh;
+}
+
+#header {
+    padding: 2vh;
+}
+
+.badge {
+    height: 10vh;
+    position: absolute;
+    left: 5vw;
+}
