@@ -228,6 +228,7 @@ io.on('connection', function(socket: any) {
         } else {
             console.log(userId + ' disconnected');
         }
+        io.emit('notification', userId + ' a quitté la partie');
     });
 });
 
