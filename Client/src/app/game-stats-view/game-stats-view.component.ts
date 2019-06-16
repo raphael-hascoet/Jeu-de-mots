@@ -11,7 +11,7 @@ import badges from './badges.json';
 })
 export class GameStatsViewComponent implements OnInit {
     @Input() parent: AppComponent;
-    @ViewChild('chronologie') chronoGraph: Highcharts.Chart;
+    @ViewChild('globalStats') globalStats: ElementRef;
     highcharts = Highcharts;
     //Graph Chronologie
     updateChronologie = false; //boolean pour l'update du graph
@@ -86,6 +86,30 @@ export class GameStatsViewComponent implements OnInit {
                 name: '',
                 data: [],
             } as Highcharts.SeriesColumnOptions,
+            {
+                name: '',
+                data: [],
+            } as Highcharts.SeriesColumnOptions,
+            {
+                name: '',
+                data: [],
+            } as Highcharts.SeriesColumnOptions,
+            {
+                name: '',
+                data: [],
+            } as Highcharts.SeriesColumnOptions,
+            {
+                name: '',
+                data: [],
+            } as Highcharts.SeriesColumnOptions,
+            {
+                name: '',
+                data: [],
+            } as Highcharts.SeriesColumnOptions,
+            {
+                name: '',
+                data: [],
+            } as Highcharts.SeriesColumnOptions,
         ],
     };
 
@@ -122,19 +146,18 @@ export class GameStatsViewComponent implements OnInit {
                 categories: msg[0][0],
                 crosshair: true,
             };
-            let series = [];
+            this.barChart.series = [];
             for (let index = 0; index < msg[0][1].keyStore.length; index++) {
-                series.push({
+                this.barChart.series.push({
                     name: msg[0][1].keyStore[index],
                     data: msg[0][1].valueStore[index],
                 } as Highcharts.SeriesColumnOptions);
             }
-            this.barChart.series = series;
+
             this.updateBar = true;
         });
 
         this.gameService.getGameStats().subscribe(msg => {
-            console.log('Stats', msg);
             this.teamName = msg[0][0][0];
             this.globalScore = msg[0][0][1];
             this.globalNbTries = msg[0][0][2];
