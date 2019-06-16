@@ -91,7 +91,6 @@ export class GameViewComponent implements OnInit {
         let minutes = 0;
         this.gameService.askTimer();
         this.timeSubscription = this.gameService.getTime().subscribe(msg => {
-            console.log(msg);
             seconds = msg[0]['seconds'];
             minutes = msg[0]['minutes'];
             setInterval(() => {

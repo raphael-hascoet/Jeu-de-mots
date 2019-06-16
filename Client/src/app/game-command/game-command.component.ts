@@ -5,6 +5,7 @@ import { GiveupDialogComponent } from './giveup-dialog/giveup-dialog.component';
 import { AnswerDialogComponent } from './answer-dialog/answer-dialog.component';
 import { GameService } from '../service/game.service';
 import { BestWordsComponent } from './best-words/best-words.component';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-game-command',
@@ -23,6 +24,10 @@ export class GameCommandComponent implements OnInit {
      * Objet représentant le lien 'subscribe' avec la méthode getAnswer
      */
     private subscriptionGiveUp;
+
+    private subscriptionAfterCLoseGiveUpDialog : Subscription;
+    private subscriptionUserIsHost: Subscription;
+
     /**
      * Constructeur des boutons du jeu
      * @param gameService - Service permettant de gérer les sockets avec le serveur
@@ -38,7 +43,6 @@ export class GameCommandComponent implements OnInit {
         this.subscriptionGetBestWords = this.gameService
             .getWords()
             .subscribe(msg => {
-                console.log(msg);
                 let words: string[] = msg[0];
                 let bestWords: Array<string> = new Array<string>();
                 for (let i = 0; i < words.length; i++) {
@@ -68,6 +72,8 @@ export class GameCommandComponent implements OnInit {
     ngOnDestroy() {
         this.subscriptionGetBestWords.unsubscribe();
         this.subscriptionGiveUp.unsubscribe();
+        this.subscriptionAfterCLoseGiveUpDialog.unsubscribe();
+        this.subscriptionUserIsHost.unsubscribe();
     }
     /**
      * Méthode permettant d'afficher les meilleurs mots proposés par les joueurs
@@ -81,10 +87,10 @@ export class GameCommandComponent implements OnInit {
      */
     onGiveUp() {
         const dialogRef = this.matDialog.open(GiveupDialogComponent);
-        dialogRef.afterClosed().subscribe(result => {
+        this.subscriptionAfterCLoseGiveUpDialog = dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.gameService.surrenderGame();
-                this.gameService.userIsHost().subscribe(userIsHost => {
+                this.subscriptionUserIsHost = this.gameService.userIsHost().subscribe(userIsHost => {
                     if(userIsHost){
                         this.gameService.askForAnswer();
                     }else{
