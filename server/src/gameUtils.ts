@@ -23,19 +23,20 @@ export function createGame(
  * @return le score du mot proposé
  */
 export function calculateWordScore(
-    proposedWord: string,
-    wordToFind: string
+    wordToFind: string,
+    proposedWord: string
 ): Score {
     let correctPlace = 0;
     let correctLetter = 0;
 
     for (let i = 0; i < proposedWord.length; i++) {
-        if (wordToFind.charAt(i)) {
-            if (wordToFind.charAt(i) == proposedWord.charAt(i)) {
-                correctPlace++;
-            } else if (wordToFind.includes(proposedWord.charAt(i) + '')) {
-                correctLetter++;
-            }
+        if (
+            wordToFind.charAt(i) &&
+            wordToFind.charAt(i) == proposedWord.charAt(i)
+        ) {
+            correctPlace++;
+        } else if (wordToFind.includes(proposedWord.charAt(i) + '')) {
+            correctLetter++;
         }
     }
 
