@@ -28,6 +28,7 @@ export function calculateWordScore(
 ): Score {
     let correctPlace = 0;
     let correctLetter = 0;
+    let lettresNotFound = wordToFind;
 
     for (let i = 0; i < proposedWord.length; i++) {
         if (
@@ -35,8 +36,23 @@ export function calculateWordScore(
             wordToFind.charAt(i) == proposedWord.charAt(i)
         ) {
             correctPlace++;
-        } else if (wordToFind.includes(proposedWord.charAt(i) + '')) {
+            if (!lettresNotFound.includes(proposedWord.charAt(i) + '')) {
+                correctLetter--;
+            } else {
+                lettresNotFound = lettresNotFound.replace(
+                    proposedWord.charAt(i),
+                    ''
+                );
+            }
+        } else if (
+            wordToFind.includes(proposedWord.charAt(i) + '') &&
+            lettresNotFound.includes(proposedWord.charAt(i) + '')
+        ) {
             correctLetter++;
+            lettresNotFound = lettresNotFound.replace(
+                proposedWord.charAt(i),
+                ''
+            );
         }
     }
 
