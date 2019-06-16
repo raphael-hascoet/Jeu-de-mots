@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { AppComponent } from '../app.component';
 
 import * as Highcharts from 'highcharts';
@@ -11,7 +11,8 @@ import badges from './badges.json';
 })
 export class GameStatsViewComponent implements OnInit {
     @Input() parent: AppComponent;
-    @ViewChild('globalStats') globalStats: ElementRef;
+    @ViewChild('barChart') barChart: ElementRef;
+
     highcharts = Highcharts;
     //Graph Chronologie
     updateChronologie = false; //boolean pour l'update du graph
@@ -43,78 +44,8 @@ export class GameStatsViewComponent implements OnInit {
         ],
     };
 
-    //Bar chart
-    updateBar = false;
-    barChart: Highcharts.Options = {
-        chart: {
-            type: 'column',
-        },
-        title: {
-            text: 'Nombre de propositions par nombre de lettres',
-        },
-        subtitle: {
-            text: '1111',
-        },
-        xAxis: {
-            categories: ['Jan'],
-            crosshair: true,
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: 'proposition(s)',
-            },
-        },
-        tooltip: {
-            headerFormat:
-                '<span style="font-size:10px">Nombre de lettres : {point.key}</span><table>',
-            pointFormat:
-                '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.1f} propositions</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true,
-        },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0,
-            },
-        },
-        series: [
-            {
-                name: '',
-                data: [],
-            } as Highcharts.SeriesColumnOptions,
-            {
-                name: '',
-                data: [],
-            } as Highcharts.SeriesColumnOptions,
-            {
-                name: '',
-                data: [],
-            } as Highcharts.SeriesColumnOptions,
-            {
-                name: '',
-                data: [],
-            } as Highcharts.SeriesColumnOptions,
-            {
-                name: '',
-                data: [],
-            } as Highcharts.SeriesColumnOptions,
-            {
-                name: '',
-                data: [],
-            } as Highcharts.SeriesColumnOptions,
-            {
-                name: '',
-                data: [],
-            } as Highcharts.SeriesColumnOptions,
-        ],
-    };
-
     //global stats variables
-    teamName = 'Equiiiipe';
+    teamName;
     globalScore;
     globalNbTries;
     gameTime;
@@ -142,19 +73,53 @@ export class GameStatsViewComponent implements OnInit {
         });
 
         this.gameService.getNbLettres().subscribe(msg => {
-            this.barChart.xAxis = {
-                categories: msg[0][0],
-                crosshair: true,
-            };
-            this.barChart.series = [];
+            let series = [];
             for (let index = 0; index < msg[0][1].keyStore.length; index++) {
-                this.barChart.series.push({
+                series.push({
                     name: msg[0][1].keyStore[index],
                     data: msg[0][1].valueStore[index],
                 } as Highcharts.SeriesColumnOptions);
             }
 
-            this.updateBar = true;
+            let chart = new Highcharts.Chart({
+                chart: {
+                    type: 'column',
+                    renderTo: this.barChart.nativeElement,
+                },
+                title: {
+                    text: 'Nombre de propositions par nombre de lettres',
+                },
+                subtitle: {
+                    text: '1111',
+                },
+                xAxis: {
+                    categories: msg[0][0],
+                    crosshair: true,
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'proposition(s)',
+                    },
+                },
+                tooltip: {
+                    headerFormat:
+                        '<span style="font-size:10px">Nombre de lettres : {point.key}</span><table>',
+                    pointFormat:
+                        '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} propositions</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true,
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                    },
+                },
+                series: series,
+            });
         });
 
         this.gameService.getGameStats().subscribe(msg => {
