@@ -159,7 +159,10 @@ io.on('connection', function(socket: any) {
         let player = Game.getInstance().getPlayer(userId);
         let score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
         Game.getInstance().addProposedWord(msg, score, player);
-        Game.getInstance().calculatePlayerScore(player, msg);
+        let result = Game.getInstance().calculatePlayerScore(player, msg);
+        if (result != '') {
+            io.emit('notification', userId + result);
+        }
         io.emit('score', [
             userId + ' a proposé ' + msg,
             score.getcorrectPlace(),
