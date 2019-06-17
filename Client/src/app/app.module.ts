@@ -28,6 +28,7 @@ import { environment } from 'src/environments/environment';
 import { PlayersListComponent } from './players-list/players-list.component';
 import { HostDisconnectedDialogComponent } from './host-disconnected-dialog/host-disconnected-dialog.component';
 import { BestWordsComponent } from './game-command/best-words/best-words.component';
+import { StatsCommandComponent } from './stats-command/stats-command.component';
 import { NotificationBoxComponent } from './notification-box/notification-box.component';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
@@ -50,6 +51,7 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         HostDisconnectedDialogComponent,
         AnswerDialogComponent,
         BestWordsComponent,
+        StatsCommandComponent,
         NotificationBoxComponent,
     ],
     entryComponents: [

@@ -57,4 +57,9 @@ export class Timer {
         }
         return timerMin + timerSec;
     }
+
+    public resetTimer() {
+        this.minutes = 0;
+        this.seconds = 0;
+    }
 }
