@@ -11,13 +11,23 @@ export class NotificationBoxComponent implements OnInit {
      * Notifications reçues par les joueurs
      */
     private notifications: Array<string>;
+    /**
+     * Lien subscribe avec la méthode getNotification
+     */
+    private subscribeNotif;
     constructor(private gameService: GameService) {
         this.notifications = new Array<string>();
     }
 
     ngOnInit() {
-        this.gameService.getNotification().subscribe((msg: string) => {
-            this.notifications.push(msg);
-        });
+        this.subscribeNotif = this.gameService
+            .getNotification()
+            .subscribe((msg: string) => {
+                this.notifications.push(msg);
+            });
+    }
+
+    ngOnDestroy() {
+        this.subscribeNotif.unsubscribe();
     }
 }
