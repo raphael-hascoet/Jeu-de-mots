@@ -1,6 +1,7 @@
 import { DefinitionsService } from './../../service/definitions.service';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 @Component({
     selector: 'app-answer-dialog',
@@ -8,6 +9,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
     styleUrls: ['./answer-dialog.component.css'],
 })
 export class AnswerDialogComponent implements OnInit {
+    private definedWord: string = '';
     private definitions: Array<string>;
 
     constructor(
@@ -19,9 +21,10 @@ export class AnswerDialogComponent implements OnInit {
     ngOnInit() {
         this.definitionsService
             .getDefinitions(this.data.answer)
-            .subscribe((data: Array<string>) => {
+            .subscribe((data: any) => {
                 console.log(data);
-                this.definitions = data;
+                this.definedWord = data.word;
+                this.definitions = data.defs;
             });
     }
 }

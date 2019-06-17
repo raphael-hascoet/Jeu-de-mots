@@ -29,6 +29,7 @@ import { PlayersListComponent } from './players-list/players-list.component';
 import { HostDisconnectedDialogComponent } from './host-disconnected-dialog/host-disconnected-dialog.component';
 import { BestWordsComponent } from './game-command/best-words/best-words.component';
 import { NotificationBoxComponent } from './notification-box/notification-box.component';
+import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 const env = environment;
 console.log(env);
@@ -55,7 +56,7 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         GiveupDialogComponent,
         AnswerDialogComponent,
         BestWordsComponent,
-        HostDisconnectedDialogComponent
+        HostDisconnectedDialogComponent,
     ],
     imports: [
         BrowserModule,
@@ -70,6 +71,7 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         MatDialogModule,
         SocketIoModule.forRoot(config),
         AppRoutingModule,
+        ScrollDispatchModule,
     ],
     exports: [
         TextFieldModule,
