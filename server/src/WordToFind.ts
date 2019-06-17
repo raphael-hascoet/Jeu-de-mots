@@ -59,17 +59,39 @@ export class WordToFind {
     /**
      * Méthode permettant de calculer le score du joueur ayant proposé le mot
      * @param proposedWord - Mot proposé par le joueur
+     * @returns number : score à ajouter au score du joueur
+     *          Array<string> : texte à afficher aux autres joueurs
      */
-    calculatePlayerScore(proposedWord: string): number {
+    calculatePlayerScore(proposedWord: string): [number, string] {
+        let text = '';
         let nbLettersProposedWord = this.calculateNbLettersInWord(proposedWord);
-        let nbPoints = this.findNewLetters(nbLettersProposedWord);
-        nbPoints = this.findPlacedLetters(
+        let nbFound = this.findNewLetters(nbLettersProposedWord);
+        let resultPlaced = this.findPlacedLetters(
             proposedWord,
-            nbPoints,
+            nbFound,
             nbLettersProposedWord
         );
+        if (resultPlaced[2] != 0) {
+            text += ' a trouvé ' + resultPlaced[2];
+            if (nbFound == 1) {
+                text += ' nouvelle lettre';
+            } else {
+                text += ' nouvelles lettres';
+            }
+        }
+        if (resultPlaced[1] != 0) {
+            if (text != '') {
+                text += ' et ';
+            }
+            text += ' a bien placé ' + resultPlaced[1];
+            if (resultPlaced[1] == 1) {
+                text += ' nouvelle lettre';
+            } else {
+                text += ' nouvelles lettres';
+            }
+        }
         this.updateNbLettersFounded(nbLettersProposedWord);
-        return nbPoints;
+        return [nbFound + resultPlaced[0], text];
     }
 
     /**
@@ -113,14 +135,19 @@ export class WordToFind {
     /**
      * Méthode permettant de trouver les lettres bien placées
      * @param proposedWord - Mot proposé
-     * @param nbPoints - Nombre de points actuel du joueur
+     * @param nbFound - Nombre de lettres déjà trouvées
      * @param nbLettersProposedWord - Nombre d'occurrences de chaque lettres dans le mot proposé
+     * @returns number : nombre de points à ajouter au joueur
+     *          number : nombre de lettres qu'il a bien placées
+     *          number : nombre de lettres trouvées par le joueur (sans compter celles bien placées)
      */
     private findPlacedLetters(
         proposedWord: string,
-        nbPoints: number,
+        nbFound: number,
         nbLettersProposedWord: TsMap<string, number>
-    ) {
+    ): [number, number, number] {
+        let nbPoints = 0;
+        let nbPlaced = 0;
         for (
             let index = 0;
             index < proposedWord.length && index < this.word.length;
@@ -131,6 +158,7 @@ export class WordToFind {
                 letter == this.word.charAt(index) &&
                 this.wordState.charAt(index) == '.'
             ) {
+                nbPlaced++;
                 nbPoints++;
                 this.updateWordState(index, letter);
                 let nbLetters =
@@ -147,10 +175,11 @@ export class WordToFind {
                     nbLetters > nbFounded
                 ) {
                     nbPoints++;
+                    nbFound--;
                 }
             }
         }
-        return nbPoints;
+        return [nbPoints, nbPlaced, nbFound];
     }
 
     /**

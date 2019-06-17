@@ -304,10 +304,13 @@ export class Game {
      * Méthode permettant de calculer le score du joueur en fonction du mot qu'il a proposé
      * @param player - Joueur ayant proposé un mot
      * @param word - Mot proposé
+     * @returns texte récapitulant de qui a été trouvé par le joueur
      */
-    calculatePlayerScore(player: Player, word: string) {
-        player.addToScore(
-            this.wordToFind.calculatePlayerScore(word.toLocaleLowerCase())
+    calculatePlayerScore(player: Player, word: string): string {
+        let result = this.wordToFind.calculatePlayerScore(
+            word.toLocaleLowerCase()
         );
+        player.addToScore(result[0]);
+        return result[1];
     }
 }

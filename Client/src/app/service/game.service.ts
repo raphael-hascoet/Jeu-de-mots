@@ -137,6 +137,13 @@ export class GameService {
     }
 
     /**
+     * Récupère les notifications envoyées par le serveur
+     */
+    getNotification() {
+        return this.socket.fromEvent('notification');
+    }
+
+    /**
      * Récupération de l'event de fin de partie
      */
     hasWon() {
