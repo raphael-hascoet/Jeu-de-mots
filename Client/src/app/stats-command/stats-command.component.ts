@@ -11,6 +11,9 @@ import { Subscription } from 'rxjs';
 export class StatsCommandComponent implements OnInit {
     private replayGameSubscription: Subscription;
     private gameDifficultySubscription: Subscription;
+    private subscriptionUserIsHost: Subscription;
+    private getAnswerubscription: Subscription;
+
     constructor(
         private gameService: GameService,
         private routingService: RoutingService
@@ -20,9 +23,13 @@ export class StatsCommandComponent implements OnInit {
         this.replayGameSubscription = this.gameService
             .replayGame()
             .subscribe(msg => {
-                console.log('Rejouer!!');
-
                 this.changeViewToGame();
+            });
+
+        this.getAnswerubscription = this.gameService
+            .getAnswer()
+            .subscribe(msg => {
+                this.changeViewToConfig();
             });
     }
 
@@ -33,20 +40,41 @@ export class StatsCommandComponent implements OnInit {
                 let difficulty: number;
                 difficulty = +value;
                 difficulty = difficulty + 1;
-                console.log('Nouvelle difficultée', difficulty);
                 this.gameService.replay(difficulty);
             });
     }
 
-    endGame() {}
+    endGame() {
+        this.gameService.surrenderGame();
+        this.subscriptionUserIsHost = this.gameService
+            .userIsHost()
+            .subscribe(userIsHost => {
+                if (userIsHost) {
+                    this.gameService.askForAnswer();
+                } else {
+                    this.gameService.setUserName('');
+                    this.routingService.changeViewToDashboard();
+                }
+            });
+    }
 
     changeViewToGame() {
         this.routingService.changeViewToGame();
     }
 
+    changeViewToConfig() {
+        this.routingService.changeViewToGameConfig();
+    }
+
     ngOnDestroy() {
         if (this.gameDifficultySubscription) {
             this.gameDifficultySubscription.unsubscribe();
+        }
+        if (this.subscriptionUserIsHost) {
+            this.subscriptionUserIsHost.unsubscribe();
+        }
+        if (this.getAnswerubscription) {
+            this.getAnswerubscription.unsubscribe();
         }
         this.replayGameSubscription.unsubscribe();
     }
