@@ -16,6 +16,8 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { GameCommandComponent } from './game-command/game-command.component';
 import { GameConfigurationViewComponent } from './game-configuration-view/game-configuration-view.component';
 import { GameViewComponent } from './game-view/game-view.component';
+import { GameStatsViewComponent } from './game-stats-view/game-stats-view.component';
+import { HighchartsChartComponent } from 'highcharts-angular';
 import { GiveupDialogComponent } from './game-command/giveup-dialog/giveup-dialog.component';
 import { AnswerDialogComponent } from './game-command/answer-dialog/answer-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -23,7 +25,10 @@ import { DashBoardViewComponent } from './dash-board-view/dash-board-view.compon
 import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from 'src/environments/environment';
+import { PlayersListComponent } from './players-list/players-list.component';
+import { HostDisconnectedDialogComponent } from './host-disconnected-dialog/host-disconnected-dialog.component';
 import { BestWordsComponent } from './game-command/best-words/best-words.component';
+import { NotificationBoxComponent } from './notification-box/notification-box.component';
 
 const env = environment;
 console.log(env);
@@ -36,15 +41,21 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         GameCommandComponent,
         GameConfigurationViewComponent,
         GameViewComponent,
+        GameStatsViewComponent,
+        HighchartsChartComponent,
         GiveupDialogComponent,
         DashBoardViewComponent,
+        PlayersListComponent,
+        HostDisconnectedDialogComponent,
         AnswerDialogComponent,
         BestWordsComponent,
+        NotificationBoxComponent,
     ],
     entryComponents: [
         GiveupDialogComponent,
         AnswerDialogComponent,
         BestWordsComponent,
+        HostDisconnectedDialogComponent
     ],
     imports: [
         BrowserModule,

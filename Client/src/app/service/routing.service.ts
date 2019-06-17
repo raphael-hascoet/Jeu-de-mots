@@ -18,4 +18,8 @@ export class RoutingService {
     changeViewToGame(): void {
         this.router.navigateByUrl('/game');
     }
+
+    changeViewToGameStats(): void {
+        this.router.navigateByUrl('/stats');
+    }
 }

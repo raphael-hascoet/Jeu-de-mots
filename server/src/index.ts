@@ -4,6 +4,8 @@ import { Player } from '../src/Player';
 import { GameConfiguration } from './GameConfiguration';
 import { Lobby } from './Lobby';
 import { getDefinitions } from './definitionsUtils';
+import { getStatNbLetter, getChronology, getGameStats } from './statsUtils';
+import { Badge } from './Badge';
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -31,7 +33,7 @@ io.on('connection', function(socket: any) {
     /**
      * @userId Pseudonyme du joueur, relié au socket
      */
-    var userId: string = 'Inconnu';
+    var userId: string = '';
 
     var userIsHost = false;
 
@@ -63,12 +65,15 @@ io.on('connection', function(socket: any) {
             io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
             console.log('Hôte connecté sous le pseudonyme ' + userId);
             userIsHost = true;
-            socket.emit('hostConnectionAllowed');
         }
     });
 
     socket.on('getHostIsConnected', function() {
-        socket.emit('hostIsConnected', Game.hostIsConnected());
+        if (Game.gameIsLaunched()) {
+            socket.emit('hostIsConnected', Game.hostIsConnected());
+        } else {
+            socket.emit('hostIsConnected', Lobby.hostIsConnected());
+        }
     });
 
     socket.on('getGameIsLaunched', function() {
@@ -79,7 +84,11 @@ io.on('connection', function(socket: any) {
      * Cette méthode retourne tous les joueurs de la partie, y compris l'host
      */
     socket.on('getConnectedPlayers', function() {
-        socket.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+        if (Game.gameIsLaunched()) {
+            socket.emit('connectedPlayers', Game.getInstance().getPlayers());
+        } else {
+            socket.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+        }
     });
 
     socket.on('isUserHost', function() {
@@ -92,7 +101,11 @@ io.on('connection', function(socket: any) {
     });
 
     socket.on('getTeamName', function() {
-        socket.emit('teamName', teamName);
+        if (Game.gameIsLaunched()) {
+            io.emit('teamName', Game.getInstance().getTeamName());
+        } else {
+            io.emit('teamName', teamName);
+        }
     });
 
     socket.on('updateGameDifficulty', function(newGameDifficulty: number) {
@@ -101,7 +114,11 @@ io.on('connection', function(socket: any) {
     });
 
     socket.on('getGameDifficulty', function() {
-        socket.emit('gameDifficulty', gameDifficulty);
+        if (Game.gameIsLaunched()) {
+            io.emit('gameDifficulty', Game.getInstance().getDifficultyLevel());
+        } else {
+            io.emit('gameDifficulty', gameDifficulty);
+        }
     });
 
     /**
@@ -122,6 +139,11 @@ io.on('connection', function(socket: any) {
             gameConfig.hostTeam,
             gameConfig.gameDifficulty
         );
+        for (let player of Lobby.getInstance().getPlayers()) {
+            Game.getInstance().addPlayer(player);
+        }
+        io.emit('connectedPlayers', Game.getInstance().getPlayers());
+
         await Game.getInstance().startGame();
         console.log(
             'hostName : ' +
@@ -145,9 +167,15 @@ io.on('connection', function(socket: any) {
      */
     socket.on('proposition', function(msg: string) {
         console.log('Mot proposé par ' + userId + ' :');
+        msg = msg.toLocaleLowerCase();
         console.log(msg);
+        let player = Game.getInstance().getPlayer(userId);
         let score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
-        Game.getInstance().addProposedWord(msg, score);
+        Game.getInstance().addProposedWord(msg, score, player);
+        let result = Game.getInstance().calculatePlayerScore(player, msg);
+        if (result != '') {
+            io.emit('notification', userId + result);
+        }
         io.emit('score', [
             userId + ' a proposé ' + msg,
             score.getcorrectPlace(),
@@ -155,11 +183,19 @@ io.on('connection', function(socket: any) {
         ]);
 
         if (msg == Game.getInstance().getWordToFind()) {
+            player.setBadge(Badge.CHAMPION);
             io.emit('fin');
+            io.emit('nbLetters', [getStatNbLetter()]);
+            io.emit('chronology', [getChronology()]);
+            io.emit('gameStats', [
+                getGameStats(Game.getInstance().getWordToFind().length),
+            ]);
         }
     });
 
     socket.on('getAnswer', function() {
+        Game.getInstance().stopGame();
+        io.emit('notification', userId + ' a quitté la partie');
         socket.emit('answer', [Game.getInstance().getWordToFind()]);
     });
 
@@ -171,6 +207,12 @@ io.on('connection', function(socket: any) {
         socket.emit('words', [Game.getInstance().getBestProposedWords(5)]);
     });
 
+    /**
+     * Récupération du timer de jeu
+     */
+    socket.on('getTime', function() {
+        socket.emit('timer', [Game.getInstance().getTimer()]);
+    });
     /**
      * Récupération du niveau de difficulté minimal
      */
@@ -185,13 +227,30 @@ io.on('connection', function(socket: any) {
         socket.emit('maxDifficulty', gameConfiguration.getMaximalDifficulty());
     });
 
-    socket.on('getDefinitions', function(word: string) {});
+    socket.on('surrenderGame', function() {
+        if (userIsHost) {
+            Game.resetInstance();
+            io.emit('hostIsConnected', Lobby.hostIsConnected());
+            io.emit('gameIsLaunched', Game.gameIsLaunched());
+        } else {
+            Game.getInstance().removePlayer(userId);
+            Lobby.getInstance().removePlayer(userId);
+            io.emit('connectedPlayers', Game.getInstance().getPlayers());
+        }
+    });
+
     /**
      * Déconnexion de l'utilisateur
      */
     socket.on('disconnect', function() {
         Lobby.getInstance().removePlayer(userId);
-        io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+
+        if (Game.gameIsLaunched()) {
+            Game.getInstance().removePlayer(userId);
+            io.emit('connectedPlayers', Game.getInstance().getPlayers());
+        } else {
+            io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
+        }
 
         if (userIsHost) {
             console.log('host ' + userId + ' disconnected');
@@ -202,11 +261,14 @@ io.on('connection', function(socket: any) {
                 console.log('configuration de la partie annulée');
                 io.emit('denyConfig');
             } else {
+                Game.resetInstance();
                 console.log("L'host s'est déconnecté pendant la partie");
+                io.emit('gameIsLaunched', Game.gameIsLaunched());
             }
         } else {
             console.log(userId + ' disconnected');
         }
+        io.emit('notification', userId + ' a quitté la partie');
     });
 });
 

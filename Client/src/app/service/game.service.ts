@@ -8,15 +8,29 @@ import { Player } from '../model/player/player';
     providedIn: 'root',
 })
 export class GameService {
-    
-    maxDifficulty: Observable<number> = this.socket.fromEvent<number>('maxDifficulty');
-    minDifficulty: Observable<number> = this.socket.fromEvent<number>('minDifficulty');
-    hostIsConnected: Observable<boolean> = this.socket.fromEvent<boolean>('hostIsConnected');
-    connectedPlayers: Observable<Player[]> = this.socket.fromEvent<Player[]>('connectedPlayers');
-    valueUserIsHost: Observable<boolean> = this.socket.fromEvent<boolean>('userIsHost');
-    teamName : Observable<string> = this.socket.fromEvent<string>('teamName');
-    gameDifficulty: Observable<number> = this.socket.fromEvent<number>('gameDifficulty');
-    gameIsLaunched: Observable<boolean> = this.socket.fromEvent<boolean>('gameIsLaunched');
+    maxDifficulty: Observable<number> = this.socket.fromEvent<number>(
+        'maxDifficulty'
+    );
+    minDifficulty: Observable<number> = this.socket.fromEvent<number>(
+        'minDifficulty'
+    );
+    hostIsConnected: Observable<boolean> = this.socket.fromEvent<boolean>(
+        'hostIsConnected'
+    );
+    connectedPlayers: Observable<Player[]> = this.socket.fromEvent<Player[]>(
+        'connectedPlayers'
+    );
+    valueUserIsHost: Observable<boolean> = this.socket.fromEvent<boolean>(
+        'userIsHost'
+    );
+    teamName: Observable<string> = this.socket.fromEvent<string>('teamName');
+    gameDifficulty: Observable<number> = this.socket.fromEvent<number>(
+        'gameDifficulty'
+    );
+    gameIsLaunched: Observable<boolean> = this.socket.fromEvent<boolean>(
+        'gameIsLaunched'
+    );
+
     private userName: string;
 
     constructor(private socket: Socket) {}
@@ -54,7 +68,7 @@ export class GameService {
         this.socket.emit('updateTeamName', teamName);
     }
 
-    getTeamName() : Observable<string>{
+    getTeamName(): Observable<string> {
         this.socket.emit('getTeamName');
         return this.teamName;
     }
@@ -92,10 +106,6 @@ export class GameService {
         return this.gameIsLaunched;
     }
 
-    denyConfig() {
-        return this.socket.fromEvent('denyConfig');
-    }
-
     /**
      * Réception du score du dernoer mot proposé
      */
@@ -127,6 +137,13 @@ export class GameService {
     }
 
     /**
+     * Récupère les notifications envoyées par le serveur
+     */
+    getNotification() {
+        return this.socket.fromEvent('notification');
+    }
+
+    /**
      * Récupération de l'event de fin de partie
      */
     hasWon() {
@@ -153,5 +170,39 @@ export class GameService {
 
     getUserName(): string {
         return this.userName;
+    }
+
+    getNbLettres() {
+        return this.socket.fromEvent('nbLetters');
+    }
+
+    getChronologie() {
+        return this.socket.fromEvent('chronology');
+    }
+
+    getGameStats() {
+        return this.socket.fromEvent('gameStats');
+    }
+
+    surrenderGame(): void {
+        this.socket.emit('surrenderGame');
+    }
+
+    surrender() {
+        return this.socket.fromEvent('gameSurrendered');
+    }
+
+    /**
+     * Méthode permettant de connaître le temps passé à jouer
+     */
+    getTime() {
+        return this.socket.fromEvent('timer');
+    }
+
+    /**
+     * Méthode permettant de demander le temps passé à jouer
+     */
+    askTimer() {
+        this.socket.emit('getTime');
     }
 }

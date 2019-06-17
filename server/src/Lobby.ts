@@ -20,6 +20,9 @@ export class Lobby{
     }
 
     static hostIsConnected(): boolean {
+        if(!Lobby.getInstance().getHost().getName()){
+            return false;
+        }
         return Lobby.instance && Lobby.getInstance().getHost().getName().localeCompare('')!=0;
     }
 
@@ -33,22 +36,20 @@ export class Lobby{
 
     addPlayer(userId: string): void {
         for(let player of this.players){
-            if(player.getName().localeCompare(userId)==0){
+            if(!userId || !player.getName() || player.getName().localeCompare(userId)==0){
                 return;
             }
         }
         this.players.push(new Player(userId));
     }
 
-    removePlayer(userId: string) {
+    removePlayer(userId: string) : void{
         var newPlayers : Player[] = Array<Player>();
         for(let player of this.players){
-            if(player.getName().localeCompare(userId)!=0){
+            if(player.getName() && player.getName().localeCompare(userId)!=0){
                 newPlayers.push(player);
-                console.log("player added to newPlayers : "+player.getName())
             }
         }
-
         this.players = newPlayers;
     }
 
