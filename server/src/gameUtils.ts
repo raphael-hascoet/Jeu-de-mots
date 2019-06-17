@@ -23,19 +23,36 @@ export function createGame(
  * @return le score du mot proposé
  */
 export function calculateWordScore(
-    proposedWord: string,
-    wordToFind: string
+    wordToFind: string,
+    proposedWord: string
 ): Score {
     let correctPlace = 0;
     let correctLetter = 0;
+    let lettresNotFound = wordToFind;
 
     for (let i = 0; i < proposedWord.length; i++) {
-        if (wordToFind.charAt(i)) {
-            if (wordToFind.charAt(i) == proposedWord.charAt(i)) {
-                correctPlace++;
-            } else if (wordToFind.includes(proposedWord.charAt(i) + '')) {
-                correctLetter++;
+        if (
+            wordToFind.charAt(i) &&
+            wordToFind.charAt(i) == proposedWord.charAt(i)
+        ) {
+            correctPlace++;
+            if (!lettresNotFound.includes(proposedWord.charAt(i) + '')) {
+                correctLetter--;
+            } else {
+                lettresNotFound = lettresNotFound.replace(
+                    proposedWord.charAt(i),
+                    ''
+                );
             }
+        } else if (
+            wordToFind.includes(proposedWord.charAt(i) + '') &&
+            lettresNotFound.includes(proposedWord.charAt(i) + '')
+        ) {
+            correctLetter++;
+            lettresNotFound = lettresNotFound.replace(
+                proposedWord.charAt(i),
+                ''
+            );
         }
     }
 
