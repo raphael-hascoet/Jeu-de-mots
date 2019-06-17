@@ -174,9 +174,7 @@ io.on('connection', function(socket: any) {
             io.emit('fin');
             io.emit('nbLetters', [getStatNbLetter()]);
             io.emit('chronology', [getChronology()]);
-            io.emit('gameStats', [
-                getGameStats(Game.getInstance().getWordToFind().length),
-            ]);
+            io.emit('gameStats', [getGameStats()]);
         }
     });
 
