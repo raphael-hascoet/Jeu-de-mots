@@ -61,7 +61,6 @@ io.on('connection', function(socket: any) {
         } else {
             socket.emit('hostIsConnected', Lobby.hostIsConnected());
         }
-        
     });
 
     socket.on('getGameIsLaunched', function() {
@@ -212,11 +211,11 @@ io.on('connection', function(socket: any) {
     });
 
     socket.on('surrenderGame', function() {
-        if(userIsHost){
+        if (userIsHost) {
             Game.resetInstance();
             io.emit('hostIsConnected', Lobby.hostIsConnected());
             io.emit('gameIsLaunched', Game.gameIsLaunched());
-        }else{
+        } else {
             Game.getInstance().removePlayer(userId);
             Lobby.getInstance().removePlayer(userId);
             io.emit('connectedPlayers', Game.getInstance().getPlayers());
@@ -243,12 +242,8 @@ io.on('connection', function(socket: any) {
 
             if (!Game.gameIsLaunched()) {
                 console.log('configuration de la partie annulée');
-<<<<<<< HEAD
                 io.emit('denyConfig');
             } else {
-=======
-            }else{
->>>>>>> develop
                 Game.resetInstance();
                 console.log("L'host s'est déconnecté pendant la partie");
                 io.emit('gameIsLaunched', Game.gameIsLaunched());
