@@ -93,10 +93,6 @@ export class GameService {
         return this.gameIsLaunched;
     }
 
-    denyConfig() {
-        return this.socket.fromEvent('denyConfig');
-    }
-
     /**
      * Réception du score du dernoer mot proposé
      */
@@ -154,6 +150,14 @@ export class GameService {
 
     getUserName(): string {
         return this.userName;
+    }
+
+    surrenderGame(): void{
+        this.socket.emit('surrenderGame');
+    }
+
+    surrender() {
+        return this.socket.fromEvent('gameSurrendered');
     }
 
     /**
