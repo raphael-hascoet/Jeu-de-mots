@@ -1,8 +1,11 @@
 import { RoutingService } from './../service/routing.service';
-import { Component, OnInit, Input, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { GameService } from '../service/game.service';
 import { GameConfig } from '../model/game-config/game-config';
 import { FormControl, Validators } from '@angular/forms';
+import { HostDisconnectedDialogComponent } from '../host-disconnected-dialog/host-disconnected-dialog.component';
+import { MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 declare global {
     interface Window {
@@ -18,6 +21,12 @@ declare global {
     styleUrls: ['./game-configuration-view.component.css'],
 })
 export class GameConfigurationViewComponent implements OnInit {
+    /**
+     * liste des Subscriptions a unsubscribe dans le ngOnDestroy
+     */
+    private hostIsConnectedSubscription : Subscription;
+    private gameIsLaunchedSubscription : Subscription;
+
     userName: string;
 
     userIsHost: boolean = false;
@@ -31,7 +40,8 @@ export class GameConfigurationViewComponent implements OnInit {
     constructor(
         private gameService: GameService,
         private routingService: RoutingService,
-        private zone: NgZone
+        private zone: NgZone,
+        private hostDisconnectedDialog : MatDialog
     ) {}
     difficultyFormControl: FormControl = new FormControl(1, [Validators.required]);
 
@@ -39,9 +49,12 @@ export class GameConfigurationViewComponent implements OnInit {
     teamNameValue : string = "";
 
     ngOnInit() {
-        this.userName = this.gameService.getUserName();
+        if(!this.gameService.getUserName() || this.gameService.getUserName().localeCompare('')==0){
+            this.routingService.changeViewToDashboard();
+            return;
+        } 
 
-        if(!this.userName) this.routingService.changeViewToDashboard();
+        this.userName = this.gameService.getUserName();
 
         this.gameService.userIsHost().subscribe(value => {
             this.userIsHost = value;
@@ -69,12 +82,25 @@ export class GameConfigurationViewComponent implements OnInit {
             this.gameDifficultyValue = value;
         });
 
-        this.gameService.getGameIsLaunched().subscribe(gameIsLaunched =>{
-            if(gameIsLaunched){
+        this.gameIsLaunchedSubscription = this.gameService.getGameIsLaunched().subscribe(gameIsLaunched =>{
+            if(gameIsLaunched && this.gameService.getUserName() && this.gameService.getUserName().localeCompare('')!=0){
                 this.changeViewToGame();
             }
         });
-        this.gameService.denyConfig().subscribe(() => this.routingService.changeViewToDashboard());
+        this.hostIsConnectedSubscription = this.gameService.getHostIsConnected().subscribe(hostIsConnected => {
+            if(!hostIsConnected){
+                const dialogRef = this.hostDisconnectedDialog.open(HostDisconnectedDialogComponent);
+                dialogRef.afterClosed().subscribe(result => {
+                    this.hostDisconnectedDialog.closeAll();
+                    this.routingService.changeViewToDashboard();
+                });
+            }
+        });
+    }
+
+    ngOnDestroy(){
+        this.hostIsConnectedSubscription.unsubscribe();
+        this.gameIsLaunchedSubscription.unsubscribe();
     }
 
     updateTeamName(teamName: string){

@@ -20,7 +20,7 @@ io.on('connection', function(socket: any) {
     /**
      * @userId Pseudonyme du joueur, relié au socket
      */
-    var userId: string = 'Inconnu';
+    var userId: string = '';
 
     var userIsHost = false;
 
@@ -214,6 +214,18 @@ io.on('connection', function(socket: any) {
         socket.emit('maxDifficulty', gameConfiguration.getMaximalDifficulty());
     });
 
+    socket.on('surrenderGame', function() {
+        if (userIsHost) {
+            Game.resetInstance();
+            io.emit('hostIsConnected', Lobby.hostIsConnected());
+            io.emit('gameIsLaunched', Game.gameIsLaunched());
+        } else {
+            Game.getInstance().removePlayer(userId);
+            Lobby.getInstance().removePlayer(userId);
+            io.emit('connectedPlayers', Game.getInstance().getPlayers());
+        }
+    });
+
     /**
      * Déconnexion de l'utilisateur
      */
@@ -238,6 +250,7 @@ io.on('connection', function(socket: any) {
             } else {
                 Game.resetInstance();
                 console.log("L'host s'est déconnecté pendant la partie");
+                io.emit('gameIsLaunched', Game.gameIsLaunched());
             }
         } else {
             console.log(userId + ' disconnected');
