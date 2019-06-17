@@ -159,7 +159,10 @@ io.on('connection', function(socket: any) {
         let player = Game.getInstance().getPlayer(userId);
         let score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
         Game.getInstance().addProposedWord(msg, score, player);
-        Game.getInstance().calculatePlayerScore(player, msg);
+        let result = Game.getInstance().calculatePlayerScore(player, msg);
+        if (result != '') {
+            io.emit('notification', userId + result);
+        }
         io.emit('score', [
             userId + ' a proposé ' + msg,
             score.getcorrectPlace(),
@@ -179,7 +182,8 @@ io.on('connection', function(socket: any) {
 
     socket.on('getAnswer', function() {
         Game.getInstance().stopGame();
-        io.emit('answer', [Game.getInstance().getWordToFind()]);
+        io.emit('notification', userId + ' a quitté la partie');
+        socket.emit('answer', [Game.getInstance().getWordToFind()]);
     });
 
     /**
@@ -264,6 +268,7 @@ io.on('connection', function(socket: any) {
         } else {
             console.log(userId + ' disconnected');
         }
+        io.emit('notification', userId + ' a quitté la partie');
     });
 });
 

@@ -29,6 +29,7 @@ import { PlayersListComponent } from './players-list/players-list.component';
 import { HostDisconnectedDialogComponent } from './host-disconnected-dialog/host-disconnected-dialog.component';
 import { BestWordsComponent } from './game-command/best-words/best-words.component';
 import { StatsCommandComponent } from './stats-command/stats-command.component';
+import { NotificationBoxComponent } from './notification-box/notification-box.component';
 
 const env = environment;
 console.log(env);
@@ -50,12 +51,13 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         AnswerDialogComponent,
         BestWordsComponent,
         StatsCommandComponent,
+        NotificationBoxComponent,
     ],
     entryComponents: [
         GiveupDialogComponent,
         AnswerDialogComponent,
         BestWordsComponent,
-        HostDisconnectedDialogComponent
+        HostDisconnectedDialogComponent,
     ],
     imports: [
         BrowserModule,
