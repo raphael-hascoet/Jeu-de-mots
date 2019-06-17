@@ -25,7 +25,7 @@ export class GameCommandComponent implements OnInit {
      */
     private subscriptionGiveUp;
 
-    private subscriptionAfterCLoseGiveUpDialog : Subscription;
+    private subscriptionAfterCLoseGiveUpDialog: Subscription;
     private subscriptionUserIsHost: Subscription;
 
     /**
@@ -72,8 +72,8 @@ export class GameCommandComponent implements OnInit {
     ngOnDestroy() {
         this.subscriptionGetBestWords.unsubscribe();
         this.subscriptionGiveUp.unsubscribe();
-        this.subscriptionAfterCLoseGiveUpDialog.unsubscribe();
-        this.subscriptionUserIsHost.unsubscribe();
+        //this.subscriptionAfterCLoseGiveUpDialog.unsubscribe();
+        //this.subscriptionUserIsHost.unsubscribe();
     }
     /**
      * Méthode permettant d'afficher les meilleurs mots proposés par les joueurs
@@ -87,18 +87,22 @@ export class GameCommandComponent implements OnInit {
      */
     onGiveUp() {
         const dialogRef = this.matDialog.open(GiveupDialogComponent);
-        this.subscriptionAfterCLoseGiveUpDialog = dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.gameService.surrenderGame();
-                this.subscriptionUserIsHost = this.gameService.userIsHost().subscribe(userIsHost => {
-                    if(userIsHost){
-                        this.gameService.askForAnswer();
-                    }else{
-                        this.gameService.setUserName('');
-                        this.routingService.changeViewToDashboard();
-                    }
-                })
-            }
-        });
+        this.subscriptionAfterCLoseGiveUpDialog = dialogRef
+            .afterClosed()
+            .subscribe(result => {
+                if (result) {
+                    this.gameService.surrenderGame();
+                    this.subscriptionUserIsHost = this.gameService
+                        .userIsHost()
+                        .subscribe(userIsHost => {
+                            if (userIsHost) {
+                                this.gameService.askForAnswer();
+                            } else {
+                                this.gameService.setUserName('');
+                                this.routingService.changeViewToDashboard();
+                            }
+                        });
+                }
+            });
     }
 }

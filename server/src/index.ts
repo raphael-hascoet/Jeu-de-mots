@@ -3,6 +3,8 @@ import { calculateWordScore } from '../src/gameUtils';
 import { Player } from '../src/Player';
 import { GameConfiguration } from './GameConfiguration';
 import { Lobby } from './Lobby';
+import { getStatNbLetter, getChronology, getGameStats } from './statsUtils';
+import { Badge } from './Badge';
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -54,12 +56,11 @@ io.on('connection', function(socket: any) {
     });
 
     socket.on('getHostIsConnected', function() {
-        if(Game.gameIsLaunched()){
+        if (Game.gameIsLaunched()) {
             socket.emit('hostIsConnected', Game.hostIsConnected());
-        }else{
+        } else {
             socket.emit('hostIsConnected', Lobby.hostIsConnected());
         }
-        
     });
 
     socket.on('getGameIsLaunched', function() {
@@ -70,9 +71,9 @@ io.on('connection', function(socket: any) {
      * Cette méthode retourne tous les joueurs de la partie, y compris l'host
      */
     socket.on('getConnectedPlayers', function() {
-        if(Game.gameIsLaunched()){
+        if (Game.gameIsLaunched()) {
             socket.emit('connectedPlayers', Game.getInstance().getPlayers());
-        }else{
+        } else {
             socket.emit('connectedPlayers', Lobby.getInstance().getPlayers());
         }
     });
@@ -86,10 +87,10 @@ io.on('connection', function(socket: any) {
         io.emit('teamName', teamName);
     });
 
-    socket.on('getTeamName', function(){
-        if(Game.gameIsLaunched()){
+    socket.on('getTeamName', function() {
+        if (Game.gameIsLaunched()) {
             io.emit('teamName', Game.getInstance().getTeamName());
-        }else{
+        } else {
             io.emit('teamName', teamName);
         }
     });
@@ -99,10 +100,10 @@ io.on('connection', function(socket: any) {
         io.emit('gameDifficulty', gameDifficulty);
     });
 
-    socket.on('getGameDifficulty', function(){
-        if(Game.gameIsLaunched()){
+    socket.on('getGameDifficulty', function() {
+        if (Game.gameIsLaunched()) {
             io.emit('gameDifficulty', Game.getInstance().getDifficultyLevel());
-        }else{
+        } else {
             io.emit('gameDifficulty', gameDifficulty);
         }
     });
@@ -125,7 +126,7 @@ io.on('connection', function(socket: any) {
             gameConfig.hostTeam,
             gameConfig.gameDifficulty
         );
-        for(let player of Lobby.getInstance().getPlayers()){
+        for (let player of Lobby.getInstance().getPlayers()) {
             Game.getInstance().addPlayer(player);
         }
         io.emit('connectedPlayers', Game.getInstance().getPlayers());
@@ -153,9 +154,12 @@ io.on('connection', function(socket: any) {
      */
     socket.on('proposition', function(msg: string) {
         console.log('Mot proposé par ' + userId + ' :');
+        msg = msg.toLocaleLowerCase();
         console.log(msg);
+        let player = Game.getInstance().getPlayer(userId);
         let score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
-        Game.getInstance().addProposedWord(msg, score);
+        Game.getInstance().addProposedWord(msg, score, player);
+        Game.getInstance().calculatePlayerScore(player, msg);
         io.emit('score', [
             userId + ' a proposé ' + msg,
             score.getcorrectPlace(),
@@ -163,7 +167,13 @@ io.on('connection', function(socket: any) {
         ]);
 
         if (msg == Game.getInstance().getWordToFind()) {
+            player.setBadge(Badge.CHAMPION);
             io.emit('fin');
+            io.emit('nbLetters', [getStatNbLetter()]);
+            io.emit('chronology', [getChronology()]);
+            io.emit('gameStats', [
+                getGameStats(Game.getInstance().getWordToFind().length),
+            ]);
         }
     });
 
@@ -201,11 +211,11 @@ io.on('connection', function(socket: any) {
     });
 
     socket.on('surrenderGame', function() {
-        if(userIsHost){
+        if (userIsHost) {
             Game.resetInstance();
             io.emit('hostIsConnected', Lobby.hostIsConnected());
             io.emit('gameIsLaunched', Game.gameIsLaunched());
-        }else{
+        } else {
             Game.getInstance().removePlayer(userId);
             Lobby.getInstance().removePlayer(userId);
             io.emit('connectedPlayers', Game.getInstance().getPlayers());
@@ -218,10 +228,10 @@ io.on('connection', function(socket: any) {
     socket.on('disconnect', function() {
         Lobby.getInstance().removePlayer(userId);
 
-        if(Game.gameIsLaunched()){
+        if (Game.gameIsLaunched()) {
             Game.getInstance().removePlayer(userId);
-            io.emit('connectedPlayers', Game.getInstance().getPlayers())
-        }else{
+            io.emit('connectedPlayers', Game.getInstance().getPlayers());
+        } else {
             io.emit('connectedPlayers', Lobby.getInstance().getPlayers());
         }
 
@@ -232,7 +242,8 @@ io.on('connection', function(socket: any) {
 
             if (!Game.gameIsLaunched()) {
                 console.log('configuration de la partie annulée');
-            }else{
+                io.emit('denyConfig');
+            } else {
                 Game.resetInstance();
                 console.log("L'host s'est déconnecté pendant la partie");
                 io.emit('gameIsLaunched', Game.gameIsLaunched());

@@ -21,4 +21,15 @@ export class ProposedWord {
     getScore() {
         return this.score;
     }
+
+    getWord() {
+        return this.word;
+    }
+
+    /**
+     * Méthode permettant de connaître la taille du mot
+     */
+    getLength() {
+        return this.word.length;
+    }
 }
