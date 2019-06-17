@@ -1,6 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { GameService } from '../service/game.service';
+<<<<<<< HEAD
 import { RoutingService } from './../service/routing.service';
+=======
+import { RoutingService } from '../service/routing.service';
+import { MatDialog } from '@angular/material';
+import { HostDisconnectedDialogComponent } from '../host-disconnected-dialog/host-disconnected-dialog.component';
+import { Subscription } from 'rxjs';
+>>>>>>> develop
 
 @Component({
     selector: 'app-game-view',
@@ -8,6 +15,17 @@ import { RoutingService } from './../service/routing.service';
     styleUrls: ['./game-view.component.css'],
 })
 export class GameViewComponent implements OnInit {
+    /**
+     * Liste des subscriptions, a unsubscribe dans le ngOnDestroy
+     */
+    private scoreSubscription : Subscription;
+    private hasWonSubscription : Subscription;
+    private teamNameSubscription : Subscription;
+    private gameDifficultySubscription : Subscription;
+    private hostIsConnectedSubscription : Subscription;
+    private timeSubscription : Subscription;
+
+
     title = 'app';
     incomingmsg = [];
     msg = 'First Protocol';
@@ -17,18 +35,20 @@ export class GameViewComponent implements OnInit {
     @ViewChild('box') input: ElementRef;
 
     @ViewChild('response') response: ElementRef;
-    constructor(
-        private gameService: GameService,
-        private routingService: RoutingService
-    ) {}
+
     /**
      * Element HTML du Timer
      */
     @ViewChild('timer') timer: ElementRef;
-
+    constructor(private gameService: GameService, private routingService : RoutingService, private hostDisconnectedDialog : MatDialog) {}
 
     ngOnInit() {
-        this.gameService.getScore().subscribe(msg => {
+        if(!this.gameService.getUserName() || this.gameService.getUserName().localeCompare('')==0){
+            this.routingService.changeViewToDashboard();
+            return;
+        }
+
+        this.scoreSubscription = this.gameService.getScore().subscribe(msg => {
             this.response.nativeElement.value =
                 msg[0] +
                 ' : ' +
@@ -39,15 +59,34 @@ export class GameViewComponent implements OnInit {
                 this.response.nativeElement.value;
         });
 
-        this.gameService.hasWon().subscribe(msg => {
+        this.hasWonSubscription = this.gameService.hasWon().subscribe(msg => {
             this.response.nativeElement.value =
                 'Gagné ! ' + '\n' + this.response.nativeElement.value;
             this.changeViewToGameStats();
         });
 
-        this.gameService.getTeamName().subscribe(value => this.teamName = value);
-        this.gameService.getGameDifficulty().subscribe(value => this.gameDifficulty = value);
+        this.teamNameSubscription = this.gameService.getTeamName().subscribe(value => this.teamName = value);
+        this.gameDifficultySubscription = this.gameService.getGameDifficulty().subscribe(value => this.gameDifficulty = value);
+
+        this.hostIsConnectedSubscription = this.gameService.getHostIsConnected().subscribe(hostIsConnected => {
+            if(!hostIsConnected){
+                const dialogRef = this.hostDisconnectedDialog.open(HostDisconnectedDialogComponent);
+                dialogRef.afterClosed().subscribe(result => {
+                    this.hostDisconnectedDialog.closeAll();
+                    this.routingService.changeViewToDashboard();
+                });
+            }
+        });
         this.startTimer();
+    }
+    
+    ngOnDestroy() {
+        this.scoreSubscription.unsubscribe();
+        this.hasWonSubscription.unsubscribe();
+        this.teamNameSubscription.unsubscribe();
+        this.gameDifficultySubscription.unsubscribe();
+        this.hostIsConnectedSubscription.unsubscribe();
+        this.timeSubscription.unsubscribe();
     }
 
     /**
@@ -57,8 +96,7 @@ export class GameViewComponent implements OnInit {
         let seconds = 0;
         let minutes = 0;
         this.gameService.askTimer();
-        this.gameService.getTime().subscribe(msg => {
-            console.log(msg);
+        this.timeSubscription = this.gameService.getTime().subscribe(msg => {
             seconds = msg[0]['seconds'];
             minutes = msg[0]['minutes'];
             setInterval(() => {

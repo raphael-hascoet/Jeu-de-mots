@@ -25,8 +25,9 @@ import { DashBoardViewComponent } from './dash-board-view/dash-board-view.compon
 import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from 'src/environments/environment';
-import { BestWordsComponent } from './game-command/best-words/best-words.component';
 import { PlayersListComponent } from './players-list/players-list.component';
+import { HostDisconnectedDialogComponent } from './host-disconnected-dialog/host-disconnected-dialog.component';
+import { BestWordsComponent } from './game-command/best-words/best-words.component';
 
 const env = environment;
 console.log(env);
@@ -44,6 +45,7 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         GiveupDialogComponent,
         DashBoardViewComponent,
         PlayersListComponent,
+        HostDisconnectedDialogComponent,
         AnswerDialogComponent,
         BestWordsComponent,
     ],
@@ -51,6 +53,7 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         GiveupDialogComponent,
         AnswerDialogComponent,
         BestWordsComponent,
+        HostDisconnectedDialogComponent
     ],
     imports: [
         BrowserModule,

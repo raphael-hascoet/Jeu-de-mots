@@ -10,7 +10,7 @@
     <button
         (click)="goToGameConfig(name.value)"
         mat-raised-button
-        [disabled]="nameFormControl.invalid"
+        [disabled]="nameFormControl.invalid || gameIsLaunched"
     >
         {{buttonText}}
     </button>

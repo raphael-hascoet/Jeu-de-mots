@@ -8,15 +8,28 @@ import { Player } from '../model/player/player';
     providedIn: 'root',
 })
 export class GameService {
-    
-    maxDifficulty: Observable<number> = this.socket.fromEvent<number>('maxDifficulty');
-    minDifficulty: Observable<number> = this.socket.fromEvent<number>('minDifficulty');
-    hostIsConnected: Observable<boolean> = this.socket.fromEvent<boolean>('hostIsConnected');
-    connectedPlayers: Observable<Player[]> = this.socket.fromEvent<Player[]>('connectedPlayers');
-    valueUserIsHost: Observable<boolean> = this.socket.fromEvent<boolean>('userIsHost');
-    teamName : Observable<string> = this.socket.fromEvent<string>('teamName');
-    gameDifficulty: Observable<number> = this.socket.fromEvent<number>('gameDifficulty');
-    gameIsLaunched: Observable<boolean> = this.socket.fromEvent<boolean>('gameIsLaunched');
+    maxDifficulty: Observable<number> = this.socket.fromEvent<number>(
+        'maxDifficulty'
+    );
+    minDifficulty: Observable<number> = this.socket.fromEvent<number>(
+        'minDifficulty'
+    );
+    hostIsConnected: Observable<boolean> = this.socket.fromEvent<boolean>(
+        'hostIsConnected'
+    );
+    connectedPlayers: Observable<Player[]> = this.socket.fromEvent<Player[]>(
+        'connectedPlayers'
+    );
+    valueUserIsHost: Observable<boolean> = this.socket.fromEvent<boolean>(
+        'userIsHost'
+    );
+    teamName: Observable<string> = this.socket.fromEvent<string>('teamName');
+    gameDifficulty: Observable<number> = this.socket.fromEvent<number>(
+        'gameDifficulty'
+    );
+    gameIsLaunched: Observable<boolean> = this.socket.fromEvent<boolean>(
+        'gameIsLaunched'
+    );
 
     private userName: string;
 
@@ -93,10 +106,6 @@ export class GameService {
         return this.gameIsLaunched;
     }
 
-    denyConfig() {
-        return this.socket.fromEvent('denyConfig');
-    }
-
     /**
      * Réception du score du dernoer mot proposé
      */
@@ -166,6 +175,14 @@ export class GameService {
 
     getGameStats() {
         return this.socket.fromEvent('gameStats');
+    }
+
+    surrenderGame(): void {
+        this.socket.emit('surrenderGame');
+    }
+
+    surrender() {
+        return this.socket.fromEvent('gameSurrendered');
     }
 
     /**
