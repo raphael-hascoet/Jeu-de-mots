@@ -137,6 +137,13 @@ export class GameService {
     }
 
     /**
+     * Signal d'une nouvelle partie
+     */
+    replayGame() {
+        return this.socket.fromEvent('startReplay');
+    }
+
+    /**
      * Récupération de l'event de fin de partie
      */
     hasWon() {
@@ -197,5 +204,13 @@ export class GameService {
      */
     askTimer() {
         this.socket.emit('getTime');
+    }
+
+    /**
+     * Méthode permettant de relancer la même partie avec un niveau different
+     */
+
+    replay(level: number): void {
+        this.socket.emit('replay', level);
     }
 }

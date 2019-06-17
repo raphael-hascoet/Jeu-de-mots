@@ -131,6 +131,8 @@ export class Game {
      * await Game.getInstance().startGame();
      */
     public startGame() {
+        this.proposedWords = new Array<ProposedWord>();
+        this.timer.resetTimer();
         this.timer.startTimer();
         return this.readDictionnary().then(
             data => {
@@ -309,5 +311,18 @@ export class Game {
         player.addToScore(
             this.wordToFind.calculatePlayerScore(word.toLocaleLowerCase())
         );
+    }
+    /**
+     * Méthode permettant de changer le niveau de difficulté
+     * @param newLevel
+     */
+    setDifficultyLevel(newLevel: number): void {
+        this.difficultyLevel = newLevel;
+    }
+
+    resetPlayerScore(): void {
+        this.players.forEach(player => {
+            player.resetScore();
+        });
     }
 }
