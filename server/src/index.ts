@@ -227,6 +227,19 @@ io.on('connection', function(socket: any) {
     });
 
     /**
+     * Redémarrage de la partie
+     */
+
+    socket.on('replay', async function(msg: number) {
+        Game.getInstance().setDifficultyLevel(msg);
+        Game.getInstance().resetPlayerScore();
+        await Game.getInstance().startGame();
+        console.log('Mot a trouver : ' + Game.getInstance().getWordToFind());
+
+        io.emit('startReplay');
+    });
+
+    /**
      * Déconnexion de l'utilisateur
      */
     socket.on('disconnect', function() {

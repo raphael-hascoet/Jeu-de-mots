@@ -127,4 +127,10 @@ export class Player {
         });
         return sum / this.getTryNumber();
     }
+
+    resetScore() {
+        this.proposedWords = new Array<ProposedWord>();
+        this.score = 0;
+        this.badge = Badge.NULL;
+    }
 }

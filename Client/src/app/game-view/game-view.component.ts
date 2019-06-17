@@ -64,7 +64,6 @@ export class GameViewComponent implements OnInit {
         this.hasWonSubscription = this.gameService.hasWon().subscribe(msg => {
             this.response.nativeElement.value =
                 'Gagné ! ' + '\n' + this.response.nativeElement.value;
-            console.log('passer vu stats');
 
             this.changeViewToGameStats();
         });
