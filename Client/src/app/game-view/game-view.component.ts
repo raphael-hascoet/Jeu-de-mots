@@ -14,31 +14,38 @@ export class GameViewComponent implements OnInit {
     /**
      * Liste des subscriptions, a unsubscribe dans le ngOnDestroy
      */
-    private scoreSubscription : Subscription;
-    private hasWonSubscription : Subscription;
-    private teamNameSubscription : Subscription;
-    private gameDifficultySubscription : Subscription;
-    private hostIsConnectedSubscription : Subscription;
-    private timeSubscription : Subscription;
-
+    private scoreSubscription: Subscription;
+    private hasWonSubscription: Subscription;
+    private teamNameSubscription: Subscription;
+    private gameDifficultySubscription: Subscription;
+    private hostIsConnectedSubscription: Subscription;
+    private timeSubscription: Subscription;
 
     title = 'app';
     incomingmsg = [];
     msg = 'First Protocol';
 
-    teamName : string;
-    gameDifficulty : number;
+    teamName: string;
+    gameDifficulty: number;
     @ViewChild('box') input: ElementRef;
 
     @ViewChild('response') response: ElementRef;
+
     /**
      * Element HTML du Timer
      */
     @ViewChild('timer') timer: ElementRef;
-    constructor(private gameService: GameService, private routingService : RoutingService, private hostDisconnectedDialog : MatDialog) {}
+    constructor(
+        private gameService: GameService,
+        private routingService: RoutingService,
+        private hostDisconnectedDialog: MatDialog
+    ) {}
 
     ngOnInit() {
-        if(!this.gameService.getUserName() || this.gameService.getUserName().localeCompare('')==0){
+        if (
+            !this.gameService.getUserName() ||
+            this.gameService.getUserName().localeCompare('') == 0
+        ) {
             this.routingService.changeViewToDashboard();
             return;
         }
@@ -57,23 +64,34 @@ export class GameViewComponent implements OnInit {
         this.hasWonSubscription = this.gameService.hasWon().subscribe(msg => {
             this.response.nativeElement.value =
                 'Gagné ! ' + '\n' + this.response.nativeElement.value;
+            console.log('passer vu stats');
+
+            this.changeViewToGameStats();
         });
 
-        this.teamNameSubscription = this.gameService.getTeamName().subscribe(value => this.teamName = value);
-        this.gameDifficultySubscription = this.gameService.getGameDifficulty().subscribe(value => this.gameDifficulty = value);
+        this.teamNameSubscription = this.gameService
+            .getTeamName()
+            .subscribe(value => (this.teamName = value));
+        this.gameDifficultySubscription = this.gameService
+            .getGameDifficulty()
+            .subscribe(value => (this.gameDifficulty = value));
 
-        this.hostIsConnectedSubscription = this.gameService.getHostIsConnected().subscribe(hostIsConnected => {
-            if(!hostIsConnected){
-                const dialogRef = this.hostDisconnectedDialog.open(HostDisconnectedDialogComponent);
-                dialogRef.afterClosed().subscribe(result => {
-                    this.hostDisconnectedDialog.closeAll();
-                    this.routingService.changeViewToDashboard();
-                });
-            }
-        });
+        this.hostIsConnectedSubscription = this.gameService
+            .getHostIsConnected()
+            .subscribe(hostIsConnected => {
+                if (!hostIsConnected) {
+                    const dialogRef = this.hostDisconnectedDialog.open(
+                        HostDisconnectedDialogComponent
+                    );
+                    dialogRef.afterClosed().subscribe(result => {
+                        this.hostDisconnectedDialog.closeAll();
+                        this.routingService.changeViewToDashboard();
+                    });
+                }
+            });
         this.startTimer();
     }
-    
+
     ngOnDestroy() {
         this.scoreSubscription.unsubscribe();
         this.hasWonSubscription.unsubscribe();
@@ -129,5 +147,9 @@ export class GameViewComponent implements OnInit {
         if (value.replace(/\s/g, '').length != 0) {
             this.sendProposition(value);
         }
+    }
+
+    changeViewToGameStats() {
+        this.routingService.changeViewToGameStats();
     }
 }

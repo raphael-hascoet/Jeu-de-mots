@@ -41,4 +41,20 @@ export class Timer {
     public getTimer(): Timer {
         return new Timer(this.minutes, this.seconds);
     }
+
+    public toString(): string {
+        let timerMin = '';
+        let timerSec = this.seconds + ' secondes';
+        if (this.minutes > 0) {
+            if (this.minutes == 1) {
+                timerMin = this.minutes + ' minute ';
+            } else {
+                timerMin = this.minutes + ' minutes ';
+            }
+        }
+        if (this.seconds <= 1) {
+            timerSec = this.seconds + ' seconde';
+        }
+        return timerMin + timerSec;
+    }
 }

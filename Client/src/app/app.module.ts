@@ -16,6 +16,8 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { GameCommandComponent } from './game-command/game-command.component';
 import { GameConfigurationViewComponent } from './game-configuration-view/game-configuration-view.component';
 import { GameViewComponent } from './game-view/game-view.component';
+import { GameStatsViewComponent } from './game-stats-view/game-stats-view.component';
+import { HighchartsChartComponent } from 'highcharts-angular';
 import { GiveupDialogComponent } from './game-command/giveup-dialog/giveup-dialog.component';
 import { AnswerDialogComponent } from './game-command/answer-dialog/answer-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -38,6 +40,8 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         GameCommandComponent,
         GameConfigurationViewComponent,
         GameViewComponent,
+        GameStatsViewComponent,
+        HighchartsChartComponent,
         GiveupDialogComponent,
         DashBoardViewComponent,
         PlayersListComponent,
