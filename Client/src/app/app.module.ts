@@ -30,6 +30,7 @@ import { HostDisconnectedDialogComponent } from './host-disconnected-dialog/host
 import { BestWordsComponent } from './game-command/best-words/best-words.component';
 import { StatsCommandComponent } from './stats-command/stats-command.component';
 import { NotificationBoxComponent } from './notification-box/notification-box.component';
+import { WinDialogComponent } from './game-view/win-dialog/win-dialog.component';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 import { DefinitionsBoxComponent } from './definitions-box/definitions-box.component';
 
@@ -55,12 +56,14 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         StatsCommandComponent,
         NotificationBoxComponent,
         DefinitionsBoxComponent,
+        WinDialogComponent,
     ],
     entryComponents: [
         GiveupDialogComponent,
         AnswerDialogComponent,
         BestWordsComponent,
         HostDisconnectedDialogComponent,
+        WinDialogComponent,
     ],
     imports: [
         BrowserModule,

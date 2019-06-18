@@ -46,14 +46,12 @@ export function getChronology(): [Array<string>, Array<number>] {
 
 /**
  * Méthode permettant de récupérer les statistiques de la partie
- * @param length - Taille du mot à trouver
  * @returns Array<string> - Données globales de la partie
  *          Array<Array<string>> - Statistiques de chaque joueur
  */
-export function getGameStats(
-    length: number
-): [Array<string>, Array<Array<string>>] {
+export function getGameStats(): [Array<string>, Array<Array<string>>] {
     let global = new Array<string>();
+    let length = Game.getInstance().getWordToFind().length;
     global.push(Game.getInstance().getTeamName());
     global.push(
         Game.getInstance()
@@ -70,6 +68,7 @@ export function getGameStats(
             .getTimer()
             .toString()
     );
+    global.push(Game.getInstance().getWordToFind());
     Game.getInstance().setPlayers(
         findBadge(Game.getInstance().getPlayers(), length)
     );
@@ -95,9 +94,9 @@ function findBadge(players: Array<Player>, length: number): Array<Player> {
     let badges = new TsMap<Badge, Array<Player>>();
     let [hellFestPlayers, ramboPlayers] = findHellfestAndRambo(players);
     badges.set(Badge.HELLFEST, hellFestPlayers);
+    badges.set(Badge.BOURRIN, findRough(players, length));
     badges.set(Badge.RAMBO, ramboPlayers);
     badges.set(Badge.ECRIVAIN, findWriter(players));
-    badges.set(Badge.BOURRIN, findRough(players, length));
     badges.forEach((playersToBadge, badgeToAdd) => {
         let playerToBadge = undefined;
         let found: boolean = false;
