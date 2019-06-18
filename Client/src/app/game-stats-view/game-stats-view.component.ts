@@ -4,6 +4,7 @@ import { AppComponent } from '../app.component';
 import * as Highcharts from 'highcharts';
 import { GameService } from '../service/game.service';
 import badges from './badges.json';
+import { RoutingService } from '../service/routing.service';
 @Component({
     selector: 'app-game-stats-view',
     templateUrl: './game-stats-view.component.html',
@@ -59,9 +60,17 @@ export class GameStatsViewComponent implements OnInit {
         description: string;
     }[] = [];
 
-    constructor(private gameService: GameService) {}
+    constructor(private gameService: GameService, private routingService : RoutingService) {}
 
     ngOnInit() {
+        if (
+            !this.gameService.getUserName() ||
+            this.gameService.getUserName().localeCompare('') == 0
+        ) {
+            this.routingService.changeViewToDashboard();
+            return;
+        }
+
         this.gameService.getChronologie().subscribe(msg => {
             this.chronologie.xAxis = { categories: msg[0][0] };
             this.chronologie.series = [

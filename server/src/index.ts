@@ -195,8 +195,12 @@ io.on('connection', function(socket: any) {
 
     socket.on('getAnswer', function() {
         Game.getInstance().stopGame();
-        io.emit('notification', userId + ' a quitté la partie');
-        socket.emit('answer', [Game.getInstance().getWordToFind()]);
+        if(userIsHost){
+            io.emit('answer', [Game.getInstance().getWordToFind()]);
+        }else{
+            io.emit('notification', userId + ' a quitté la partie');
+            socket.emit('answer', [Game.getInstance().getWordToFind()]);
+        }
     });
 
     /**
@@ -281,7 +285,9 @@ io.on('connection', function(socket: any) {
         } else {
             console.log(userId + ' disconnected');
         }
-        io.emit('notification', userId + ' a quitté la partie');
+        if(userId && userId.localeCompare('')!=0){
+            io.emit('notification', userId + ' a quitté la partie');
+        }
     });
 });
 
