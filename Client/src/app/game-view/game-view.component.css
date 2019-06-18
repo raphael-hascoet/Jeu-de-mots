@@ -6,7 +6,7 @@ button {
     text-align: left;
 }
 
-app-players-list {
+#infos {
     position: fixed;
     top: 10px;
     right: 10%;

@@ -3,6 +3,7 @@ import { calculateWordScore } from '../src/gameUtils';
 import { Player } from '../src/Player';
 import { GameConfiguration } from './GameConfiguration';
 import { Lobby } from './Lobby';
+import { getDefinitions } from './definitionsUtils';
 import { getStatNbLetter, getChronology, getGameStats } from './statsUtils';
 import { Badge } from './Badge';
 
@@ -13,6 +14,18 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 var gameConfiguration = new GameConfiguration();
 gameConfiguration.calculLevelInterval();
+
+app.use(function(req: any, res: any, next: any) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    next();
+});
+
+app.get('/definitions', function(req: any, res: any) {
+    console.log('Definitions ' + req.query.word);
+    getDefinitions(req.query.word).then((defs: Array<string>) => {
+        res.send(JSON.stringify(defs));
+    });
+});
 
 io.on('connection', function(socket: any) {
     console.log('a user connected');
@@ -159,7 +172,10 @@ io.on('connection', function(socket: any) {
         let player = Game.getInstance().getPlayer(userId);
         let score = calculateWordScore(Game.getInstance().getWordToFind(), msg);
         Game.getInstance().addProposedWord(msg, score, player);
-        Game.getInstance().calculatePlayerScore(player, msg);
+        let result = Game.getInstance().calculatePlayerScore(player, msg);
+        if (result != '') {
+            io.emit('notification', userId + result);
+        }
         io.emit('score', [
             userId + ' a proposé ' + msg,
             score.getcorrectPlace(),
@@ -179,7 +195,8 @@ io.on('connection', function(socket: any) {
 
     socket.on('getAnswer', function() {
         Game.getInstance().stopGame();
-        io.emit('answer', [Game.getInstance().getWordToFind()]);
+        io.emit('notification', userId + ' a quitté la partie');
+        socket.emit('answer', [Game.getInstance().getWordToFind()]);
     });
 
     /**
@@ -223,6 +240,19 @@ io.on('connection', function(socket: any) {
     });
 
     /**
+     * Redémarrage de la partie
+     */
+
+    socket.on('replay', async function(msg: number) {
+        Game.getInstance().setDifficultyLevel(msg);
+        Game.getInstance().resetPlayerScore();
+        await Game.getInstance().startGame();
+        console.log('Mot a trouver : ' + Game.getInstance().getWordToFind());
+
+        io.emit('startReplay');
+    });
+
+    /**
      * Déconnexion de l'utilisateur
      */
     socket.on('disconnect', function() {
@@ -251,6 +281,7 @@ io.on('connection', function(socket: any) {
         } else {
             console.log(userId + ' disconnected');
         }
+        io.emit('notification', userId + ' a quitté la partie');
     });
 });
 

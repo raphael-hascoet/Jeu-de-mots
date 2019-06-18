@@ -131,6 +131,8 @@ export class Game {
      * await Game.getInstance().startGame();
      */
     public startGame() {
+        this.proposedWords = new Array<ProposedWord>();
+        this.timer.resetTimer();
         this.timer.startTimer();
         return this.readDictionnary().then(
             data => {
@@ -304,10 +306,26 @@ export class Game {
      * Méthode permettant de calculer le score du joueur en fonction du mot qu'il a proposé
      * @param player - Joueur ayant proposé un mot
      * @param word - Mot proposé
+     * @returns texte récapitulant de qui a été trouvé par le joueur
      */
-    calculatePlayerScore(player: Player, word: string) {
-        player.addToScore(
-            this.wordToFind.calculatePlayerScore(word.toLocaleLowerCase())
+    calculatePlayerScore(player: Player, word: string): string {
+        let result = this.wordToFind.calculatePlayerScore(
+            word.toLocaleLowerCase()
         );
+        player.addToScore(result[0]);
+        return result[1];
+    }
+    /**
+     * Méthode permettant de changer le niveau de difficulté
+     * @param newLevel
+     */
+    setDifficultyLevel(newLevel: number): void {
+        this.difficultyLevel = newLevel;
+    }
+
+    resetPlayerScore(): void {
+        this.players.forEach(player => {
+            player.resetScore();
+        });
     }
 }

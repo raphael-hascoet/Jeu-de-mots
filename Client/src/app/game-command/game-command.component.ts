@@ -72,8 +72,12 @@ export class GameCommandComponent implements OnInit {
     ngOnDestroy() {
         this.subscriptionGetBestWords.unsubscribe();
         this.subscriptionGiveUp.unsubscribe();
-        //this.subscriptionAfterCLoseGiveUpDialog.unsubscribe();
-        //this.subscriptionUserIsHost.unsubscribe();
+        if (this.subscriptionAfterCLoseGiveUpDialog) {
+            this.subscriptionAfterCLoseGiveUpDialog.unsubscribe();
+        }
+        if (this.subscriptionUserIsHost) {
+            this.subscriptionUserIsHost.unsubscribe();
+        }
     }
     /**
      * Méthode permettant d'afficher les meilleurs mots proposés par les joueurs
