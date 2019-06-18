@@ -5,7 +5,7 @@
 export const environment = {
     production: false,
     serverUrl:
-        'https://jeu-de-mots-server-jeu-de-mots-server.apps.us-east-2.online-starter.openshift.com/',
+        'https://jeu-de-mots-server-jeu-de-mots-server.apps.us-east-2.online-starter.openshift.com',
 };
 
 /*
