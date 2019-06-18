@@ -3,6 +3,7 @@ import { calculateWordScore } from '../src/gameUtils';
 import { Player } from '../src/Player';
 import { GameConfiguration } from './GameConfiguration';
 import { Lobby } from './Lobby';
+import { getDefinitions } from './definitionsUtils';
 import { getStatNbLetter, getChronology, getGameStats } from './statsUtils';
 import { Badge } from './Badge';
 
@@ -13,6 +14,18 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 var gameConfiguration = new GameConfiguration();
 gameConfiguration.calculLevelInterval();
+
+app.use(function(req: any, res: any, next: any) {
+    res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
+    next();
+});
+
+app.get('/definitions', function(req: any, res: any) {
+    console.log('Definitions ' + req.query.word);
+    getDefinitions(req.query.word).then((defs: Array<string>) => {
+        res.send(JSON.stringify(defs));
+    });
+});
 
 io.on('connection', function(socket: any) {
     console.log('a user connected');
