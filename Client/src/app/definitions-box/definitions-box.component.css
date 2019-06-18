@@ -1,12 +1,13 @@
 .definitions {
   margin-top: 5px;
   font-size: 0.8em;
+  color: #333333;
 }
 
 .definitionsViewport {
   height: 200px;
   border: 1px solid gray;
-  margin-top: 5px;
+  margin-top: 8px;
 }
 
 .definitionsViewport div {

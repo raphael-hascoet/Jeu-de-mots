@@ -1,40 +1,60 @@
 #main {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
+
 #players {
-    padding: 1vw;
-    text-align: center;
+  padding: 1vw;
+  text-align: center;
 }
+
 .player {
-    border-radius: 10px 100px / 120px;
-    border-style: solid;
-    border-width: medium;
-    margin-bottom: 1vh;
-    max-width: 400px;
-    min-width: 200px;
+  border-radius: 10px 100px / 120px;
+  border-style: solid;
+  border-width: medium;
+  margin-bottom: 1vh;
+  max-width: 400px;
+  min-width: 200px;
 }
 
 .name {
-    font-weight: bold;
+  font-weight: bold;
 }
 
-#header > p {
-    font-size: 2vh;
-    font-weight: bolder;
-    margin: 0.5vh;
+#header>p {
+  font-size: 2vh;
+  font-weight: bolder;
+  margin: 0.5vh;
 }
 
-#header > h1 {
-    font-size: 3vh;
+#equipe>h1 {
+  font-size: 3vh;
+}
+
+#equipe>h2 {
+  font-size: 2.5vh;
+  margin: 0;
+}
+
+#equipe>h4 {
+  font-size: 2.5vh;
+  margin: 10px 0;
 }
 
 #header {
-    padding: 2vh;
+  padding: 2vh;
+  margin: auto;
+  margin-bottom: 5px;
+  width: 50vw;
 }
 
 .badge {
-    height: 10vh;
-    position: absolute;
-    left: 5vw;
+  height: 10vh;
+  position: absolute;
+  left: 5vw;
+}
+
+app-definitions-box {
+  padding-top: 10px;
+  width: 80vw;
 }

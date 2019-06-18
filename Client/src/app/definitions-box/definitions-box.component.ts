@@ -10,6 +10,8 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 export class DefinitionsBoxComponent implements OnInit {
     @Input() word: string;
 
+    private isLoaded: boolean = false;
+    private isDefined: boolean = false;
     private definedWord: string = '';
     private definitions: Array<string>;
 
@@ -20,8 +22,14 @@ export class DefinitionsBoxComponent implements OnInit {
             .getDefinitions(this.word)
             .subscribe((data: any) => {
                 console.log(data);
+                this.isLoaded = true;
                 this.definedWord = data.word;
                 this.definitions = data.defs;
+                this.isDefined =
+                    !!this.definedWord &&
+                    !!this.definitions &&
+                    this.definedWord !== '' &&
+                    this.definitions !== [];
             });
     }
 }

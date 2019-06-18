@@ -1,4 +1,6 @@
-<div *ngIf="definedWord !== undefined && definedWord !== ''" class='definitions'>
+<p *ngIf="!isLoaded">Chargement des définitions...</p>
+
+<div *ngIf="isDefined && isLoaded" class='definitions'>
   <span class="labelDef">Définitions de {{definedWord}} :</span>
   <cdk-virtual-scroll-viewport itemSize="50" class='definitionsViewport'>
     <div *cdkVirtualFor="let def of definitions" class='definitionsItem'>
@@ -8,4 +10,4 @@
   </cdk-virtual-scroll-viewport>
 </div>
 
-<p *ngIf="definedWord === undefined">Aucune définition trouvée</p>
+<p *ngIf="!isDefined && isLoaded">Aucune définition trouvée</p>
