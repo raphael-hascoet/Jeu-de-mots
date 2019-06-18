@@ -1,7 +1,20 @@
 <mat-dialog-content>
-    Le mot à trouver était : {{ data.answer }}
+  Le mot à trouver était : {{ data.answer }}
+
+  <div *ngIf="definedWord !== undefined && definedWord !== ''" class='definitions'>
+    <span class="labelDef">Définitions de {{definedWord}} :</span>
+    <cdk-virtual-scroll-viewport itemSize="50" class='definitionsViewport'>
+      <div *cdkVirtualFor="let def of definitions" class='definitionsItem'>
+        <p [innerHTML]="def"></p>
+
+      </div>
+    </cdk-virtual-scroll-viewport>
+  </div>
+
+  <p *ngIf="definedWord === undefined">Aucune définition trouvée</p>
+
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>OK</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>OK</button>
 </mat-dialog-actions>

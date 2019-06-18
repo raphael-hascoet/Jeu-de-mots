@@ -30,6 +30,7 @@ import { HostDisconnectedDialogComponent } from './host-disconnected-dialog/host
 import { BestWordsComponent } from './game-command/best-words/best-words.component';
 import { StatsCommandComponent } from './stats-command/stats-command.component';
 import { NotificationBoxComponent } from './notification-box/notification-box.component';
+import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 const env = environment;
 console.log(env);
@@ -72,6 +73,7 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         MatDialogModule,
         SocketIoModule.forRoot(config),
         AppRoutingModule,
+        ScrollDispatchModule,
     ],
     exports: [
         TextFieldModule,
