@@ -16,7 +16,7 @@ var gameConfiguration = new GameConfiguration();
 gameConfiguration.calculLevelInterval();
 
 app.use(function(req: any, res: any, next: any) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
     next();
 });
 
