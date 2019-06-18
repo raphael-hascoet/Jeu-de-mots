@@ -1,19 +1,1 @@
-.definitions {
-  margin-top: 5px;
-  font-size: 0.8em;
-}
 
-.definitionsViewport {
-  height: 200px;
-  border: 1px solid gray;
-  margin-top: 5px;
-}
-
-.definitionsViewport div {
-  padding: 8px 6px;
-  border-bottom: 1px solid lightgray
-}
-
-.definitionsViewport p {
-  margin: 0;
-}
