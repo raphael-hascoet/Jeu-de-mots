@@ -31,6 +31,7 @@ import { BestWordsComponent } from './game-command/best-words/best-words.compone
 import { StatsCommandComponent } from './stats-command/stats-command.component';
 import { NotificationBoxComponent } from './notification-box/notification-box.component';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { DefinitionsBoxComponent } from './definitions-box/definitions-box.component';
 
 const env = environment;
 console.log(env);
@@ -53,6 +54,7 @@ const config: SocketIoConfig = { url: env['serverUrl'], options: {} };
         BestWordsComponent,
         StatsCommandComponent,
         NotificationBoxComponent,
+        DefinitionsBoxComponent,
     ],
     entryComponents: [
         GiveupDialogComponent,
