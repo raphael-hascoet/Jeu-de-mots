@@ -1,11 +1,13 @@
-# Jeu-de-mots
+# :pencil: Jeu-de-mots
 :books: Projet Semestre 2 FILA1
 Le projet Jeu de Mots est un jeu multijoueurs crée dans le cadre de la formation FIL à l'IMT Atlantique.
 Le but du jeu est de trouver le mot du serveur.
 
 ## Instructions Joueur
 
-Pour acceder au jeu : https://jeu-de-mots.firebaseapp.com/
+:link: Pour acceder au jeu : https://jeu-de-mots.firebaseapp.com/
+
+:warning: L'utilisation de Chrome est conseillée
 
 ## Instructions Développeur
 
@@ -31,9 +33,9 @@ Pour acceder au jeu : https://jeu-de-mots.firebaseapp.com/
 ### Lancement du projet Angular (Client de l'application)
 
 Afin d'installer les dépendences npm du projet,
-se placer dans le dossier de l'application et exécuter `npm install`
+se placer dans le dossier principal de l'application et exécuter `npm install`
 
-Après l'installation, l'application solo peut être lancée avec la commande `npm run solo`
+Après l'installation, l'application peut être lancée en local avec la commande `npm run solo`
 
 ### Développement
 
