@@ -17,7 +17,7 @@ export class GameService {
     hostIsConnected: Observable<boolean> = this.socket.fromEvent<boolean>(
         'hostIsConnected'
     );
-    connectedPlayers: Observable<Player[]> = this.socket.fromEvent<Player[]>(
+    connectedPlayers: Observable<object> = this.socket.fromEvent<object>(
         'connectedPlayers'
     );
     valueUserIsHost: Observable<boolean> = this.socket.fromEvent<boolean>(
@@ -59,7 +59,7 @@ export class GameService {
         return this.hostIsConnected;
     }
 
-    getConnectedPlayers(): Observable<Player[]> {
+    getConnectedPlayers(): Observable<object> {
         this.socket.emit('getConnectedPlayers');
         return this.connectedPlayers;
     }
