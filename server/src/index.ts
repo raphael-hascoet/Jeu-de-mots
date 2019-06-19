@@ -16,7 +16,7 @@ var gameConfiguration = new GameConfiguration();
 gameConfiguration.calculLevelInterval();
 
 app.use(function(req: any, res: any, next: any) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
     next();
 });
 
@@ -187,9 +187,7 @@ io.on('connection', function(socket: any) {
             io.emit('fin');
             io.emit('nbLetters', [getStatNbLetter()]);
             io.emit('chronology', [getChronology()]);
-            io.emit('gameStats', [
-                getGameStats(Game.getInstance().getWordToFind().length),
-            ]);
+            io.emit('gameStats', [getGameStats()]);
         }
     });
 

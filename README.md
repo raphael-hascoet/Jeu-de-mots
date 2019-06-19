@@ -35,6 +35,7 @@ Le serveur nécéssite des variables d'environnement. Pour les lui fournir, il f
 ```
 NODE_ENV=development
 PORT=3000
+CLIENT_URL=http://localhost:4200
 ```
 
 Pour lancer le serveur en mode développement, aller dans le dossier `server/` et exécuter `npm run watch`

@@ -4,6 +4,7 @@ import { RoutingService } from '../service/routing.service';
 import { MatDialog } from '@angular/material';
 import { HostDisconnectedDialogComponent } from '../host-disconnected-dialog/host-disconnected-dialog.component';
 import { Subscription } from 'rxjs';
+import { WinDialogComponent } from './win-dialog/win-dialog.component';
 
 @Component({
     selector: 'app-game-view',
@@ -38,7 +39,7 @@ export class GameViewComponent implements OnInit {
     constructor(
         private gameService: GameService,
         private routingService: RoutingService,
-        private hostDisconnectedDialog: MatDialog
+        private matDialog: MatDialog
     ) {}
 
     ngOnInit() {
@@ -79,11 +80,11 @@ export class GameViewComponent implements OnInit {
             .getHostIsConnected()
             .subscribe(hostIsConnected => {
                 if (!hostIsConnected) {
-                    const dialogRef = this.hostDisconnectedDialog.open(
+                    const dialogRef = this.matDialog.open(
                         HostDisconnectedDialogComponent
                     );
                     dialogRef.afterClosed().subscribe(result => {
-                        this.hostDisconnectedDialog.closeAll();
+                        this.matDialog.closeAll();
                         this.routingService.changeViewToDashboard();
                     });
                 }
@@ -157,6 +158,7 @@ export class GameViewComponent implements OnInit {
     }
 
     changeViewToGameStats() {
+        this.matDialog.open(WinDialogComponent);
         this.routingService.changeViewToGameStats();
     }
 }

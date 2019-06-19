@@ -47,6 +47,7 @@ export class GameStatsViewComponent implements OnInit {
 
     //global stats variables
     teamName;
+    word;
     globalScore;
     globalNbTries;
     gameTime;
@@ -136,6 +137,7 @@ export class GameStatsViewComponent implements OnInit {
             this.globalScore = msg[0][0][1];
             this.globalNbTries = msg[0][0][2];
             this.gameTime = msg[0][0][3];
+            this.word = msg[0][0][4];
 
             msg[0][1].forEach(player => {
                 let descriptionBadge;

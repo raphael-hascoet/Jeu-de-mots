@@ -136,7 +136,7 @@ export class Game {
         this.timer.startTimer();
         return this.readDictionnary().then(
             data => {
-                this.wordToFind = new WordToFind(data);
+                this.wordToFind = new WordToFind(latinise(data.toLowerCase()));
             },
             error => {
                 throw new Error(error);
@@ -177,7 +177,6 @@ export class Game {
                             );
                             word = words[random].trim();
                         }
-                        word = latinise(word.toLocaleLowerCase());
                         resolve(word);
                     }
                 );
