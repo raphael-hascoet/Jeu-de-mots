@@ -56,9 +56,9 @@ export class GameViewComponent implements OnInit {
                 msg[0] +
                 ' : ' +
                 msg[1] +
-                ' , ' +
+                ' bien placées, ' +
                 msg[2] +
-                '\n' +
+                ' mal placées\n' +
                 this.response.nativeElement.value;
         });
 
@@ -93,20 +93,16 @@ export class GameViewComponent implements OnInit {
     }
 
     ngOnDestroy() {
-        if(this.scoreSubscription)
-        this.scoreSubscription.unsubscribe();
-        if(this.hasWonSubscription)
-        this.hasWonSubscription.unsubscribe();
-        if(this.teamNameSubscription)
-        this.teamNameSubscription.unsubscribe();
-        if(this.gameDifficultySubscription)
-        this.gameDifficultySubscription.unsubscribe();
-        if(this.hostIsConnectedSubscription)
-        this.hostIsConnectedSubscription.unsubscribe();
-        if(this.timeSubscription)
-        this.timeSubscription.unsubscribe();
-        if(this.hostIsConnectedSubscription)
-        this.hostIsConnectedSubscription.unsubscribe();
+        if (this.scoreSubscription) this.scoreSubscription.unsubscribe();
+        if (this.hasWonSubscription) this.hasWonSubscription.unsubscribe();
+        if (this.teamNameSubscription) this.teamNameSubscription.unsubscribe();
+        if (this.gameDifficultySubscription)
+            this.gameDifficultySubscription.unsubscribe();
+        if (this.hostIsConnectedSubscription)
+            this.hostIsConnectedSubscription.unsubscribe();
+        if (this.timeSubscription) this.timeSubscription.unsubscribe();
+        if (this.hostIsConnectedSubscription)
+            this.hostIsConnectedSubscription.unsubscribe();
     }
 
     /**

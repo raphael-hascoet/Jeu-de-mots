@@ -1,7 +1,9 @@
 .definitions {
   margin-top: 5px;
-  font-size: 0.8em;
-  color: #333333;
+}
+
+.word {
+  font-weight: bold;
 }
 
 .definitionsViewport {
@@ -17,4 +19,6 @@
 
 .definitionsViewport p {
   margin: 0;
+  color: #333333;
+  font-size: 0.8em;
 }
