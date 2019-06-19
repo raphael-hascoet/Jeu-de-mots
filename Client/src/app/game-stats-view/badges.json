@@ -8,17 +8,17 @@
         "hellfest": {
             "name": "HellFest",
             "img": "assets/hellfest.png",
-            "description": "HellFest - Tu étais un peu absent dans cette partie, probablement occupé à aller aux hellfest"
+            "description": "HellFest - Tu étais un peu absent dans cette partie, probablement occupé à aller au hellfest"
         },
         "rambo": {
             "name": "Rambo",
             "img": "assets/rambo.png",
-            "description": "Rambo - Tu as déchargé une quantitée phénoménal de mot, de manière plus ou moins efficace."
+            "description": "Rambo - Tu as déchargé une quantitée phénoménale de mots, de manière plus ou moins efficace."
         },
         "champion": {
             "name": "Champion",
             "img": "assets/champion.png",
-            "description": "Champion - Bravo tu es le gagnant!"
+            "description": "Champion - Bravo, tu es le gagnant!"
         },
         "ecrivain": {
             "name": "Ecrivain",
