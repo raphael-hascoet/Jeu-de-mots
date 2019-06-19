@@ -197,13 +197,18 @@ io.on('connection', function(socket: any) {
         }
     });
 
+    /**
+     * Reçois une demande de la part d'un joueur pour abandonner la partie
+     * Renvois la réponse et le booléen indiquant si c'est l'host qui a abandonné
+     * Si l'host abandonne, stop le timer
+     */
     socket.on('getAnswer', function() {
-        Game.getInstance().stopGame();
         if (userIsHost) {
-            io.emit('answer', [Game.getInstance().getWordToFind()]);
+            Game.getInstance().stopGame();
+            io.emit('answer', [Game.getInstance().getWordToFind(), true]);
         } else {
             io.emit('notification', userId + ' a quitté la partie');
-            socket.emit('answer', [Game.getInstance().getWordToFind()]);
+            socket.emit('answer', [Game.getInstance().getWordToFind(), false]);
         }
     });
 

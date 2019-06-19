@@ -13,9 +13,11 @@ export class AnswerDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: DialogData
     ) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 }
 
 interface DialogData {
     answer: string;
+    hostSurrendered: boolean;
 }

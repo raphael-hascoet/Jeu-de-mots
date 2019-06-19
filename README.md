@@ -1,13 +1,22 @@
-# Jeu-de-mots
+# :pencil: Jeu-de-mots
+:books: Projet Semestre 2 FILA1
+Le projet Jeu de Mots est un jeu multijoueurs crée dans le cadre de la formation FIL à l'IMT Atlantique.
+Le but du jeu est de trouver le mot du serveur.
+
+## Instructions Joueur
+
+:link: Pour acceder au jeu : https://jeu-de-mots.firebaseapp.com/
+
+:warning: L'utilisation de Chrome est conseillée
+
+## Instructions Développeur
 
 [![Build Status](https://travis-ci.com/raphael-hascoet/Jeu-de-mots.png)](https://travis-ci.com/raphael-hascoet/Jeu-de-mots)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Jeu-de-mots&metric=alert_status)](https://sonarcloud.io/dashboard?id=Jeu-de-mots)
 
-:books: Projet Semestre 2 FILA1
-
 **NB** : Pour exécuter les commandes sur environnements windows il est conseillé de passer par un terminal style unix tel **git bash**
 
-## Dépendences
+### Dépendences
 
 -   **Node.js et npm** :
 
@@ -21,14 +30,14 @@
 
     Exécuter `npm install -g @angular/cli`
 
-## Lancement du projet Angular (Client de l'application)
+### Lancement du projet Angular (Client de l'application)
 
 Afin d'installer les dépendences npm du projet,
-se placer dans le dossier de l'application et exécuter `npm install`
+se placer dans le dossier principal de l'application et exécuter `npm install`
 
-Après l'installation, l'application solo peut être lancée avec la commande `npm run solo`
+Après l'installation, l'application peut être lancée en local avec la commande `npm run solo`
 
-## Développement
+### Développement
 
 Le serveur nécéssite des variables d'environnement. Pour les lui fournir, il faut créer un fichier `.env` dans le dossier `server/` et le remplir avec le code suivant :
 
@@ -42,7 +51,7 @@ Pour lancer le serveur en mode développement, aller dans le dossier `server/` e
 
 Enfin **Lancer le serveur de l'application** : Dans le terminal, aller dans le dossier de l'application et executer `ng serve --host <ip local>`, pour accéder à l'application il faut, depuis un navigateur, requêter l'adresse donnée au port 4200 (ex: 192.168.0.2:4200)
 
-## Liens utils
+### Liens utils
 
 **KanbanFlow** : https://kanbanflow.com/board/sL8RYT
 
