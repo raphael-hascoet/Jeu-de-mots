@@ -93,12 +93,20 @@ export class GameViewComponent implements OnInit {
     }
 
     ngOnDestroy() {
+        if(this.scoreSubscription)
         this.scoreSubscription.unsubscribe();
+        if(this.hasWonSubscription)
         this.hasWonSubscription.unsubscribe();
+        if(this.teamNameSubscription)
         this.teamNameSubscription.unsubscribe();
+        if(this.gameDifficultySubscription)
         this.gameDifficultySubscription.unsubscribe();
+        if(this.hostIsConnectedSubscription)
         this.hostIsConnectedSubscription.unsubscribe();
+        if(this.timeSubscription)
         this.timeSubscription.unsubscribe();
+        if(this.hostIsConnectedSubscription)
+        this.hostIsConnectedSubscription.unsubscribe();
     }
 
     /**

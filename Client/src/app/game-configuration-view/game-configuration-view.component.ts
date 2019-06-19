@@ -49,10 +49,13 @@ export class GameConfigurationViewComponent implements OnInit {
     teamNameValue : string = "";
 
     ngOnInit() {
-        if(!this.gameService.getUserName() || this.gameService.getUserName().localeCompare('')==0){
+        if (
+            !this.gameService.getUserName() ||
+            this.gameService.getUserName().localeCompare('') == 0
+        ) {
             this.routingService.changeViewToDashboard();
             return;
-        } 
+        }
 
         this.userName = this.gameService.getUserName();
 
@@ -99,7 +102,9 @@ export class GameConfigurationViewComponent implements OnInit {
     }
 
     ngOnDestroy(){
+        if(this.hostIsConnectedSubscription)
         this.hostIsConnectedSubscription.unsubscribe();
+        if(this.gameIsLaunchedSubscription)
         this.gameIsLaunchedSubscription.unsubscribe();
     }
 

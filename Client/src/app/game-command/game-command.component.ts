@@ -103,7 +103,7 @@ export class GameCommandComponent implements OnInit {
                                 this.gameService.askForAnswer();
                             } else {
                                 this.gameService.setUserName('');
-                                this.routingService.changeViewToDashboard();
+                                this.gameService.askForAnswer();
                             }
                         });
                 }
