@@ -1,4 +1,5 @@
 <mat-dialog-content>
+  <p *ngIf="data.hostSurrendered">L'hôte a abandonné la partie</p>
   Le mot à trouver était : {{ data.answer }}
 
   <app-definitions-box [word]="data.answer"></app-definitions-box>
