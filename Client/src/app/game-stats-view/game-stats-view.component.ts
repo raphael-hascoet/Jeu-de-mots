@@ -30,6 +30,9 @@ export class GameStatsViewComponent implements OnInit {
         xAxis: {
             categories: [],
         },
+        legend: {
+            enabled: false,
+        },
         yAxis: {
             title: {
                 text: 'Score du mot',
@@ -40,6 +43,7 @@ export class GameStatsViewComponent implements OnInit {
         },
         series: [
             {
+                name: '',
                 data: [],
             } as Highcharts.SeriesSplineOptions,
         ],
@@ -61,7 +65,10 @@ export class GameStatsViewComponent implements OnInit {
         description: string;
     }[] = [];
 
-    constructor(private gameService: GameService, private routingService : RoutingService) {}
+    constructor(
+        private gameService: GameService,
+        private routingService: RoutingService
+    ) {}
 
     ngOnInit() {
         if (
@@ -98,9 +105,6 @@ export class GameStatsViewComponent implements OnInit {
                 },
                 title: {
                     text: 'Nombre de propositions par nombre de lettres',
-                },
-                subtitle: {
-                    text: '1111',
                 },
                 xAxis: {
                     categories: msg[0][0],
