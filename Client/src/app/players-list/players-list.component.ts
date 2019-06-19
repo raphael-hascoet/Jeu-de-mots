@@ -4,25 +4,33 @@ import { GameService } from '../service/game.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-players-list',
-  templateUrl: './players-list.component.html',
-  styleUrls: ['./players-list.component.css']
+    selector: 'app-players-list',
+    templateUrl: './players-list.component.html',
+    styleUrls: ['./players-list.component.css'],
 })
 export class PlayersListComponent implements OnInit {
-  private connectedPlayersSubscription: Subscription;
+    private connectedPlayersSubscription: Subscription;
 
-  players : Player[];
+    host: Player;
+    players: Player[];
 
-  constructor(private gameService : GameService) { }
+    constructor(private gameService: GameService) {}
 
-  ngOnInit() {
-    this.connectedPlayersSubscription = this.gameService.getConnectedPlayers().subscribe(players =>{
-      this.players = players;
-    });
-  }
+    ngOnInit() {
+        this.connectedPlayersSubscription = this.gameService
+            .getConnectedPlayers()
+            .subscribe(playersObj => {
+                console.log(playersObj['host']);
+                if (!!playersObj['host']) {
+                    this.host = playersObj['host'];
+                    this.players = playersObj['players'];
+                } else {
+                    this.players = playersObj as Player[];
+                }
+            });
+    }
 
-  ngOnDestroy(){
-    this.connectedPlayersSubscription.unsubscribe();
-  }
-
+    ngOnDestroy() {
+        this.connectedPlayersSubscription.unsubscribe();
+    }
 }
