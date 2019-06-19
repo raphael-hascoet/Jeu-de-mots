@@ -64,7 +64,7 @@ export class GameCommandComponent implements OnInit {
             .subscribe(msg => {
                 this.routingService.changeViewToGameConfig();
                 this.matDialog.open(AnswerDialogComponent, {
-                    data: { answer: msg[0] },
+                    data: { answer: msg[0], hostSurrendered: msg[1] },
                 });
             });
     }
