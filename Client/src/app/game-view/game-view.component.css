@@ -1,0 +1,26 @@
+button {
+  font-weight: bold;
+}
+
+#response {
+  text-align: left;
+}
+
+#infos {
+  position: absolute;
+  top: 10px;
+  right: 5vw;
+  width: 15vw;
+}
+
+#game {
+  padding-top: 2vh;
+}
+
+.nbBPlacees {
+  color: darkgreen
+}
+
+.nbMPlacees {
+  color: darkred;
+}

@@ -1,21 +1,49 @@
+
 matrix:
     include:
-        - language: node_js
+        - if: type != pull_request
+          language: node_js
           node_js:
               - '8'
           dist: trusty
+          cache:
+              directories:
+                  - 'node_modules'
           sudo: required
           before_script:
               - cd Client/
               - npm install -g @angular/cli
               - npm install
           script:
-              - ng build
+              - ng build --configuration hosting
+          deploy:
+            skip_cleanup: true
+            provider: firebase
+            token:
+              secure: "1/54ugx5kc6tDBNSxF4hAMw7vZoGSqx_8JGq_PuDczorg"
+            on:
+              branch: develop
 
-        - language: node_js
+        - if: type != pull_request
+          language: node_js
           node_js:
               - '8'
+          cache:
+              directories:
+                  - "node_modules"
           before_script:
               - cd server/
+              - npm install
           script:
-              - node index.js
+              - npm run build
+        - if: type != pull_request
+          language: java
+          sudo: required
+          addons:
+            sonarcloud:
+              organization: "raphael-hascoet-github"
+          before_script:
+            - git fetch origin develop
+            - npm install
+          script:
+            - sonar-scanner

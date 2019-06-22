@@ -1,0 +1,29 @@
+<h2>
+  Configuration de la partie
+</h2>
+<form>
+  <mat-form-field>
+    <mat-label>Nom d'équipe</mat-label>
+    <input #teamName matInput [readonly]="!userIsHost" value="{{teamNameValue}}"
+      (input)="updateTeamName(teamName.value)" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Niveau de difficulté</mat-label>
+    <input #gameDifficulty matInput type="number" min="{{ getMinDifficulty() }}" max="{{ getMaxDifficulty() }}"
+      [formControl]="difficultyFormControl" [readonly]="!userIsHost" value="{{gameDifficultyValue}}"
+      (input)="updateGameDifficulty(gameDifficulty.value)" />
+    <mat-error *ngIf="difficultyFormControl.invalid">
+      Entrez un niveau de difficulté entre {{ getMinDifficulty() }} et
+      {{ getMaxDifficulty() }}
+    </mat-error>
+  </mat-form-field>
+  <button (click)="createGame(teamName.value, gameDifficulty.value)" mat-raised-button
+    [disabled]="difficultyFormControl.invalid || !userIsHost" *ngIf="userIsHost">
+    Valider
+  </button>
+  <p *ngIf="!userIsHost">L'hôte configure la partie...</p>
+</form>
+
+<h2>Lobby</h2>
+<p>Pseudonyme : <span class="pseudo">{{ userName }}</span></p>
+<app-players-list></app-players-list>

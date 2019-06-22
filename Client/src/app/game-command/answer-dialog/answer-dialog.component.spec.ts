@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { JeuSoloComponent } from './jeu-solo.component';
+import { AnswerDialogComponent } from './answer-dialog.component';
 
-describe('JeuSoloComponent', () => {
-  let component: JeuSoloComponent;
-  let fixture: ComponentFixture<JeuSoloComponent>;
+describe('AnswerDialogComponent', () => {
+  let component: AnswerDialogComponent;
+  let fixture: ComponentFixture<AnswerDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ JeuSoloComponent ]
+      declarations: [ AnswerDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(JeuSoloComponent);
+    fixture = TestBed.createComponent(AnswerDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,19 @@
+<form>
+    <mat-form-field>
+        <mat-label>Pseudonyme</mat-label>
+        <input #name matInput [formControl]="nameFormControl" />
+        <mat-error *ngIf="nameFormControl.invalid">
+            Entrez un pseudonyme
+        </mat-error>
+    </mat-form-field>
+
+    <button
+        (click)="goToGameConfig(name.value)"
+        mat-raised-button
+        [disabled]="nameFormControl.invalid || gameIsLaunched"
+    >
+        {{buttonText}}
+    </button>
+
+    <mat-error *ngIf="nameAlreadyUsed">Ce nom est déjà utilisé</mat-error>
+</form>

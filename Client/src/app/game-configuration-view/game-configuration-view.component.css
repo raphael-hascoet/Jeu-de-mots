@@ -1,0 +1,19 @@
+form>* {
+  display: block;
+}
+
+form {
+  margin-left: auto;
+  margin-right: auto;
+  width: 25%;
+}
+
+button {
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
+}
+
+.pseudo {
+  font-weight: bold;
+}
